@@ -1,4 +1,4 @@
-package com.mahang.nga_open_source;
+package com.mahang.androidnga;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

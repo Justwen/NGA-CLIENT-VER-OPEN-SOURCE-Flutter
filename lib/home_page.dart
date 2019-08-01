@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sprintf/sprintf.dart';
 
 import 'common/component_index.dart';
 
@@ -8,6 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  static const String URL_BOARD_ICON =
+      "http://img4.nga.178.com/ngabbs/nga_classic/f/app/%s.png";
+
   String title;
 
   TabController tabController;
@@ -63,27 +68,36 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildBoardItem(Board board) {
-    return Container(
-        padding: EdgeInsets.all(8),
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            _getBoardIcon(board),
-            Container(
-                padding: EdgeInsets.only(top: 4), child: Text(board.name)),
-          ],
-        ));
+    return InkWell(
+        onTap: () => print(board.name),
+        child: Container(
+            padding: EdgeInsets.all(8),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: _getBoardIcon(board),
+                  width: 48,
+                  height: 48,
+                ),
+                Container(
+                    padding: EdgeInsets.only(top: 4), child: Text(board.name)),
+              ],
+            )));
   }
 
-  Image _getBoardIcon(Board board) {
-
-    Image image = Image.asset(Resources.getDrawable(_getImageName(board)),
-        width: 48, height: 48);
-    if (image == null) {
-      image = Image.asset(Resources.getDrawable("default_board_icon"),
-          width: 48, height: 48);
-    }
-    return image;
+  Widget _getBoardIcon(Board board) {
+    return CachedNetworkImage(
+      width: 48,
+      height: 48,
+      imageUrl: sprintf(URL_BOARD_ICON, [board.fid.toString()]),
+      placeholder: (context, url) => Image.asset(
+        Resources.getDrawable("default_board_icon"),
+        width: 48,
+        height: 48,
+      ),
+    );
   }
 
   String _getImageName(Board board) {
