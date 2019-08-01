@@ -1,13 +1,5 @@
-import 'package:fluintl/fluintl.dart';
-import 'package:fluintl/src/intl_util.dart';
-import 'package:flutter/material.dart';
-
 class AppStrings {
   static const String appName = "app_name";
-
-  static getString(BuildContext context, String id) {
-    return IntlUtil.getString(context, id);
-  }
 
   static Map<String, Map<String, String>> localizedSimpleValues = {
     'zh': {

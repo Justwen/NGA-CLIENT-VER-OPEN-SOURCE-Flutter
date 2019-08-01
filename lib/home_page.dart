@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.getString(context, title)),
+        title: Text(Resources.getString(context, title)),
         bottom: _buildTabBar(),
       ),
       body: _buildTabBody(),
