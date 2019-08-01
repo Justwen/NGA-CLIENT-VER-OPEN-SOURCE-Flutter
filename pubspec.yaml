@@ -20,6 +20,17 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
+  fluintl: ^0.1.3
+
+  flukit: ^1.0.0
+
+  json_annotation: ^2.0.0
+
+  build_runner: ^1.0.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -28,6 +39,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  json_serializable: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -39,6 +51,102 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/data/category_old.json
+
+    - assets/images/default_board_icon.png
+    - assets/images/p124.png
+    - assets/images/p181.png
+    - assets/images/p182.png
+    - assets/images/p183.png
+    - assets/images/p184.png
+    - assets/images/p185.png
+    - assets/images/p186.png
+    - assets/images/p187.png
+    - assets/images/p188.png
+    - assets/images/p189.png
+    - assets/images/p318.png
+    - assets/images/p320.png
+    - assets/images/p321.png
+    - assets/images/p334.png
+    - assets/images/p390.png
+    - assets/images/p406.png
+    - assets/images/p414.png
+    - assets/images/p420.png
+    - assets/images/p422.png
+    - assets/images/p426.png
+    - assets/images/p428.png
+    - assets/images/p431.png
+    - assets/images/p436.png
+    - assets/images/p441.png
+    - assets/images/p443.png
+    - assets/images/p452.png
+    - assets/images/p453.png
+    - assets/images/p459.png
+    - assets/images/p465.png
+    - assets/images/p477.png
+    - assets/images/p481.png
+    - assets/images/p482.png
+    - assets/images/p485.png
+    - assets/images/p486.png
+    - assets/images/p489.png
+    - assets/images/p490.png
+    - assets/images/p492.png
+    - assets/images/p494.png
+    - assets/images/p495.png
+    - assets/images/p513.png
+    - assets/images/p514.png
+    - assets/images/p515.png
+    - assets/images/p516.png
+    - assets/images/p538.png
+    - assets/images/p540.png
+    - assets/images/p549.png
+    - assets/images/p551.png
+    - assets/images/p555.png
+    - assets/images/p559.png
+    - assets/images/p560.png
+    - assets/images/p563.png
+    - assets/images/p564.png
+    - assets/images/p568.png
+    - assets/images/p593.png
+    - assets/images/p598.png
+    - assets/images/p611.png
+    - assets/images/p614.png
+    - assets/images/p615.png
+    - assets/images/p616.png
+    - assets/images/p617.png
+    - assets/images/p7.png
+    - assets/images/p_10308342.png
+    - assets/images/p_103330.png
+    - assets/images/p_149110.png
+    - assets/images/p_15219445.png
+    - assets/images/p_152678.png
+    - assets/images/p_1534666.png
+    - assets/images/p_235147.png
+    - assets/images/p_2371813.png
+    - assets/images/p_343809.png
+    - assets/images/p_353371.png
+    - assets/images/p_362960.png
+    - assets/images/p_373173.png
+    - assets/images/p_447601.png
+    - assets/images/p_4567100.png
+    - assets/images/p_46468.png
+    - assets/images/p_47218.png
+    - assets/images/p_5080470.png
+    - assets/images/p_547859.png
+    - assets/images/p_576177.png
+    - assets/images/p_608808.png
+    - assets/images/p_6194253.png
+    - assets/images/p_65653.png
+    - assets/images/p_7.png
+    - assets/images/p_7202235.png
+    - assets/images/p_7861121.png
+    - assets/images/p_8180483.png
+    - assets/images/p_81981.png
+    - assets/images/p_8725919.png
+
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
