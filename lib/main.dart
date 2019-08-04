@@ -1,7 +1,6 @@
 import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'repository/board_repository.dart';
 import 'home_page.dart';
 
 import 'res/app_strings.dart';
@@ -35,7 +34,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     setLocalizedSimpleValues(AppStrings.localizedSimpleValues);
     super.initState();
-    BoardManager.getInstance();
   }
 
 
