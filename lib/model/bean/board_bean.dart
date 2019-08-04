@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'board_bean.g.dart';
+part 'package:nga_open_source/model/bean/board_bean.g.dart';
 
 List<BoardBean> getBoardBeanList(List<dynamic> list) {
   List<BoardBean> result = [];
