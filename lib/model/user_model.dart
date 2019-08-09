@@ -1,5 +1,4 @@
 class UserModel {
-
   static UserModel _sInstance;
 
   List<UserInfo> userList = new List();
@@ -19,21 +18,27 @@ class UserModel {
 
   void addUser(String uName, String uid) {
     for (UserInfo user in userList) {
-       if (user.uid == uid && user.uName == uName) {
-         return;
-       }
-
+      if (user.uid == uid && user.uName == uName) {
+        return;
+      }
     }
-    userList.add(new UserInfo(uName,uid));
+    userList.add(new UserInfo(uName, uid));
   }
 
   bool isEmpty() {
     return userList.isEmpty;
   }
+
+  String getCookie() {
+    if (!isEmpty()) {
+      return "ngaPassportUid=${userList[0].uid}";
+    } else {
+      return "";
+    }
+  }
 }
 
 class UserInfo {
-
   UserInfo(this.uName, this.uid);
 
   String uName;

@@ -6,6 +6,7 @@ import 'common/component_index.dart';
 import 'login_page.dart';
 import 'model/board_model.dart';
 import 'model/user_model.dart';
+import 'topic_list_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget _buildBoardItem(Board board) {
     return InkWell(
-        onTap: () => _startTopicListPage(),
+        onTap: () => _startTopicListPage(board),
         child: Container(
             padding: EdgeInsets.all(8),
             alignment: Alignment.center,
@@ -88,14 +89,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             )));
   }
 
-  void _startTopicListPage() {
-    if (UserModel.getInstance().isEmpty()) {
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new LoginWidget()));
-    } else{
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new LoginWidget()));
-    }
+  void _startTopicListPage(Board board) {
+    Widget nextWidget = UserModel.getInstance().isEmpty()
+        ? new LoginWidget()
+        : new TopicListWidget(board);
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => nextWidget));
   }
 
   Widget _getBoardIcon(Board board) {

@@ -35,18 +35,18 @@ class LoginWidget extends StatelessWidget {
     FlutterWebviewPlugin plugin = new FlutterWebviewPlugin();
     plugin.getCookies().then((Map<String,String> cookies) {
 
-      print(cookies.keys.toList().toString());
       // key 会莫名其妙首尾带空格
       String uid;
       String uName;
       for (String key in cookies.keys) {
         if (key.trim() == COOKIE_KEY_UID) {
-          print(key.length);
           uid = cookies[key];
         } else if (key.trim() == COOKIE_KEY_UNAME) {
           uName = cookies[key];
         }
       }
+      print(uid);
+      print(uName);
       if (uid != null && uName != null) {
         UserModel.getInstance().addUser(uName, uid);
       }
