@@ -20,14 +20,13 @@ class TopicModel {
 
     buffer.write("http://bbs.nga.cn/thread.php?");
 
-    print(board.stid.toString() + " 4");
     if (board.stid != 0) {
-      buffer.write("&stid=${board.stid}");
+      buffer.write("stid=${board.stid}&");
     } else if (board.fid != 0) {
-      buffer.write("&fid=${board.fid}");
+      buffer.write("fid=${board.fid}&");
     }
 
-    buffer.write("&page=$page");
+    buffer.write("page=$page&");
 
     return buffer.toString();
   }

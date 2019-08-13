@@ -24,11 +24,11 @@ class BoardManager {
       List<BoardBean> boardBean = getBoardBeanList(list);
       for (BoardBean bean in boardBean) {
         Category category = new Category(bean.name);
-
         for (Content content in bean.content) {
-          Board board = new Board(content.fid,
-              content.nameS != null ? content.nameS : content.name);
-          board.stid = content.stid;
+          Board board = new Board(
+              fid: content.fid != null ? content.fid : 0,
+              stid: content.stid != null ? content.stid : 0,
+              name: content.nameS != null ? content.nameS : content.name);
           category.boards.add(board);
         }
         _categoryList.add(category);
@@ -54,11 +54,11 @@ class Category {
 }
 
 class Board {
-  int fid;
+  int fid = 0;
 
-  int stid;
+  int stid = 0;
 
   String name;
 
-  Board(this.fid, this.name);
+  Board({this.fid, this.stid, @required this.name});
 }
