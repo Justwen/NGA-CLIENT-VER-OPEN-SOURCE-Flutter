@@ -16,13 +16,13 @@ class UserModel {
 
   _initialize() {}
 
-  void addUser(String uName, String uid) {
+  void addUser(String uName, String uid, String cid) {
     for (UserInfo user in userList) {
       if (user.uid == uid && user.uName == uName) {
         return;
       }
     }
-    userList.add(new UserInfo(uName, uid));
+    userList.add(new UserInfo(uName, uid, cid));
   }
 
   bool isEmpty() {
@@ -39,9 +39,11 @@ class UserModel {
 }
 
 class UserInfo {
-  UserInfo(this.uName, this.uid);
+  UserInfo(this.uName, this.uid, this.cid);
 
   String uName;
 
   String uid;
+
+  String cid;
 }

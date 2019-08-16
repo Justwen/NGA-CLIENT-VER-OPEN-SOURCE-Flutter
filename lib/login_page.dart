@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+
 import 'model/user_model.dart';
 
 class LoginWidget extends StatelessWidget {
@@ -9,6 +10,8 @@ class LoginWidget extends StatelessWidget {
   static const String COOKIE_KEY_UID = "ngaPassportUid";
 
   static const String COOKIE_KEY_UNAME = "ngaPassportUrlencodedUname";
+
+  static const String COOKIE_KEY_CID = "ngaPassportCid";
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +36,24 @@ class LoginWidget extends StatelessWidget {
 
   Future<bool> _parseCookie() {
     FlutterWebviewPlugin plugin = new FlutterWebviewPlugin();
-    plugin.getCookies().then((Map<String,String> cookies) {
-
+    plugin.getCookies().then((Map<String, String> cookies) {
       // key 会莫名其妙首尾带空格
       String uid;
       String uName;
+      String cid;
       for (String key in cookies.keys) {
         if (key.trim() == COOKIE_KEY_UID) {
           uid = cookies[key];
         } else if (key.trim() == COOKIE_KEY_UNAME) {
           uName = cookies[key];
+        } else if (key.trim() == COOKIE_KEY_CID) {
+          cid = cookies[key];
         }
       }
       print(uid);
       print(uName);
       if (uid != null && uName != null) {
-        UserModel.getInstance().addUser(uName, uid);
+        UserModel.getInstance().addUser(uName, uid, cid);
       }
     });
     return new Future.value(true);
