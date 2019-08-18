@@ -42,6 +42,7 @@ class LoginWidget extends StatelessWidget {
       String uName;
       String cid;
       for (String key in cookies.keys) {
+        print("$key : ${cookies[key]}");
         if (key.trim() == COOKIE_KEY_UID) {
           uid = cookies[key];
         } else if (key.trim() == COOKIE_KEY_UNAME) {
@@ -50,9 +51,7 @@ class LoginWidget extends StatelessWidget {
           cid = cookies[key];
         }
       }
-      print(uid);
-      print(uName);
-      if (uid != null && uName != null) {
+      if (uid != null && uName != null && cid != null) {
         UserModel.getInstance().addUser(uName, uid, cid);
       }
     });
