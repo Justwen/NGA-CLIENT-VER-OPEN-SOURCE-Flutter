@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 import 'model/user_model.dart';
+import 'plugin/WebViewPlugin.dart';
 
 class LoginWidget extends StatelessWidget {
   static const String LOGIN_WEB_PAGE_URL =
@@ -13,8 +14,15 @@ class LoginWidget extends StatelessWidget {
 
   static const String COOKIE_KEY_CID = "ngaPassportCid";
 
+  WebViewPlugin webViewPlugin = new WebViewPlugin();
+
   @override
   Widget build(BuildContext context) {
+    FlutterWebviewPlugin flutterWebViewPlugin = new FlutterWebviewPlugin();
+    flutterWebViewPlugin.onUrlChanged.listen((url) {
+      _parseCookie(url);
+    });
+
     return WillPopScope(
       child: WebviewScaffold(
         //加载的URL
@@ -30,31 +38,28 @@ class LoginWidget extends StatelessWidget {
           ),
         ), //设置初始化界面
       ),
-      onWillPop: () => _parseCookie(),
+      onWillPop: () => new Future.value(true),
     );
   }
 
-  Future<bool> _parseCookie() {
-    FlutterWebviewPlugin plugin = new FlutterWebviewPlugin();
-    plugin.getCookies().then((Map<String, String> cookies) {
-      // key 会莫名其妙首尾带空格
+  void _parseCookie(String url) {
+    webViewPlugin.getCookie(url).then((String cookiesString) {
       String uid;
       String uName;
       String cid;
-      for (String key in cookies.keys) {
-        print("$key : ${cookies[key]}");
-        if (key.trim() == COOKIE_KEY_UID) {
-          uid = cookies[key];
-        } else if (key.trim() == COOKIE_KEY_UNAME) {
-          uName = cookies[key];
-        } else if (key.trim() == COOKIE_KEY_CID) {
-          cid = cookies[key];
+      cookiesString.split(';').forEach((String cookie) {
+        final split = cookie.split('=');
+        if (split[0] == COOKIE_KEY_UID) {
+          uid = split[1];
+        } else if (split[0] == COOKIE_KEY_UNAME) {
+          uName = split[1];
+        } else if (split[0] == COOKIE_KEY_CID) {
+          cid = split[1];
         }
-      }
+      });
       if (uid != null && uName != null && cid != null) {
         UserModel.getInstance().addUser(uName, uid, cid);
       }
     });
-    return new Future.value(true);
   }
 }

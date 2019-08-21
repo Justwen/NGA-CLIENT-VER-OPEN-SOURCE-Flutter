@@ -41,6 +41,7 @@ dependencies:
 
   # webview 插件
   flutter_webview_plugin: ^0.3.1
+  webview_flutter: ^0.3.13
 
   # 网络请求库
   dio: 2.1.13  #latest version
