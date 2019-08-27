@@ -11,7 +11,6 @@ class TopicListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(board.fid.toString() + " 1");
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
@@ -28,7 +27,6 @@ class _TopicListContentWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    print(board.fid.toString() + " 2");
     return _TopicListContentState();
   }
 }
@@ -41,7 +39,6 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
 
   @override
   void initState() {
-    print(widget.board.fid.toString() + " 3");
     TopicModel().loadPage(widget.board, 1, () {});
     super.initState();
   }

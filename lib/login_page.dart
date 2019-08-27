@@ -49,14 +49,15 @@ class LoginWidget extends StatelessWidget {
       String cid;
       cookiesString.split(';').forEach((String cookie) {
         final split = cookie.split('=');
-        if (split[0] == COOKIE_KEY_UID) {
-          uid = split[1];
-        } else if (split[0] == COOKIE_KEY_UNAME) {
-          uName = split[1];
-        } else if (split[0] == COOKIE_KEY_CID) {
-          cid = split[1];
+        if (split[0].trim() == COOKIE_KEY_UID) {
+          uid = split[1].trim();
+        } else if (split[0].trim() == COOKIE_KEY_UNAME) {
+          uName = split[1].trim();
+        } else if (split[0].trim() == COOKIE_KEY_CID) {
+          cid = split[1].trim();
         }
       });
+      print("uid=$uid, uName=$uName, cid=$cid");
       if (uid != null && uName != null && cid != null) {
         UserModel.getInstance().addUser(uName, uid, cid);
       }

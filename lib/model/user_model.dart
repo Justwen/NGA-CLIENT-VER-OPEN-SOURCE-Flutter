@@ -31,7 +31,7 @@ class UserModel {
 
   String getCookie() {
     if (!isEmpty()) {
-      return "ngaPassportUid=${userList[0].uid}";
+      return "ngaPassportUid=${userList[0].uid}; ngaPassportCid=${userList[0].cid}";
     } else {
       return "";
     }
