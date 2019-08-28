@@ -46,6 +46,9 @@ dependencies:
   # 网络请求库
   dio: 2.1.13  #latest version
 
+  # GBK解析库
+  gbk2utf8: ^1.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

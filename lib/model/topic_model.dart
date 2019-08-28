@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-//import 'package:nga_open_source/plugin/UtilsPlugin.dart';
+import 'package:nga_open_source/plugin/UtilsPlugin.dart';
 
 import 'board_model.dart';
 import 'user_model.dart';
@@ -12,14 +12,14 @@ class TopicModel {
     print(url);
     Options options = new Options();
     options.headers = _buildHeader();
+    options.responseType = ResponseType.plain;
     try {
       Response response = await dio.get(url,
           options: options, queryParameters: _buildParam(board, page));
-//      UtilsPlugin utilsPlugin = new UtilsPlugin();
-//      print(response.toString());
-//      utilsPlugin.gbk(response.data.toString()).then((result){
-//        print(result);
-//      });
+
+      UtilsPlugin().unicodeDecoding(response.data).then((result) {
+        print(result);
+      });
     } catch (e) {
       print(e);
     }
@@ -33,7 +33,7 @@ class TopicModel {
 
   Map<String, dynamic> _buildParam(Board board, int page) {
     Map<String, dynamic> param = Map();
-    param["__output"] = "8";
+    param["__output"] = "14";
     param["page"] = page;
     if (board.stid != 0) {
       param["stid"] = board.stid;
