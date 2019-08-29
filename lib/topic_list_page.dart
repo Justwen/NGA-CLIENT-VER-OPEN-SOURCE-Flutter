@@ -32,14 +32,40 @@ class _TopicListContentWidget extends StatefulWidget {
 }
 
 class _TopicListContentState extends State<_TopicListContentWidget> {
+  List<TopicEntity> list;
+
   @override
   Widget build(BuildContext context) {
-    return ProgressBarEx();
+    return list == null || list.isEmpty ? ProgressBarEx() : _buildTopicList();
+  }
+
+  Widget _buildTopicList() {
+    return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (context, i) {
+          return _buildTopicListItem(list[i]);
+        });
+  }
+
+  Widget _buildTopicListItem(TopicEntity entity) {
+    return InkWell(
+        onTap: () => {},
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            entity.title,
+            style: TextStyle(fontSize: 17),
+          ),
+        ));
   }
 
   @override
   void initState() {
-    TopicModel().loadPage(widget.board, 1, () {});
+    TopicModel().loadPage(widget.board, 1, (List data) {
+      setState(() {
+        list = data;
+      });
+    });
     super.initState();
   }
 }

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:nga_open_source/plugin/UtilsPlugin.dart';
 
+import 'bean/entity_factory.dart';
+import 'bean/topic_list_bean_entity.dart';
 import 'board_model.dart';
 import 'user_model.dart';
 
@@ -19,6 +23,17 @@ class TopicModel {
 
       UtilsPlugin().unicodeDecoding(response.data).then((result) {
         print(result);
+        TopicListBeanEntity bean =
+            EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(result));
+        List<TopicEntity> topicList = new List();
+        bean.result.lT.forEach((bean) {
+          TopicEntity topicEntity = new TopicEntity();
+          topicEntity.title = bean.subject;
+          topicEntity.tid = bean.tid;
+          topicList.add(topicEntity);
+        });
+        print(topicList.toString());
+        callback(topicList);
       });
     } catch (e) {
       print(e);
@@ -47,5 +62,23 @@ class TopicModel {
     Map<String, String> header = Map();
     header["Cookie"] = UserModel.getInstance().getCookie();
     return header;
+  }
+}
+
+class TopicEntity {
+  String title;
+
+  int tid;
+
+  Map toJson() {
+    Map map = new Map();
+    map["title"] = this.title;
+    map["tid"] = this.tid;
+    return map;
+  }
+
+  @override
+  String toString() {
+    return toJson().toString();
   }
 }
