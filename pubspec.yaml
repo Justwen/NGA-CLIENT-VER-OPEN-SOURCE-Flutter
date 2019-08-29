@@ -49,6 +49,9 @@ dependencies:
   # GBK解析库
   gbk2utf8: ^1.0.1
 
+  #数据存储
+  shared_preferences: ^0.5.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
