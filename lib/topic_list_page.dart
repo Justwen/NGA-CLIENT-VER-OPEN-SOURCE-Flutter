@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nga_open_source/common/component_index.dart';
+import 'package:nga_open_source/topic_content_page.dart';
 
 import 'model/board_model.dart';
 import 'model/topic_model.dart';
@@ -49,7 +50,7 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
 
   Widget _buildTopicListItem(TopicEntity entity) {
     return InkWell(
-        onTap: () => {},
+        onTap: (){ _showTopicContentPage(entity.tid);},
         child: Container(
           padding: EdgeInsets.all(16),
           child: Text(
@@ -57,6 +58,12 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
             style: TextStyle(fontSize: 17),
           ),
         ));
+  }
+
+  void _showTopicContentPage(int tid) {
+    Widget nextWidget  = TopicContentWidget(tid);
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => nextWidget));
   }
 
   @override
