@@ -7,6 +7,8 @@ class UserModel {
 
   List<UserInfo> userList;
 
+  SharedPreferences preferences;
+
   static UserModel getInstance() {
     if (_sInstance == null) {
       _sInstance = new UserModel();
@@ -19,13 +21,18 @@ class UserModel {
   }
 
   _initialize() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String data = sp.getString("user");
-    List<dynamic> list = jsonDecode(data);
+    preferences = await SharedPreferences.getInstance();
     userList = new List();
-    list.forEach((item) {
-      userList.add(UserInfo.fromJson(item));
-    });
+    String data = preferences.getString("user");
+    if (data != null) {
+      List<dynamic> list = jsonDecode(data);
+      if (list != null) {
+        list.forEach((item) {
+          userList.add(UserInfo.fromJson(item));
+        });
+      }
+    }
+    print(userList.toString());
   }
 
   void addUser(String uName, String uid, String cid) {
@@ -50,11 +57,10 @@ class UserModel {
     }
   }
 
-  void _save() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
+  void _save() {
     String data = jsonEncode(userList);
     print(data);
-    sp.setString("user", data);
+    preferences.setString("user", data);
   }
 }
 
@@ -70,14 +76,14 @@ class UserInfo {
   Map toJson() {
     Map map = new Map();
     map["uName"] = this.uName;
-    map["value"] = this.cid;
+    map["uid"] = this.uid;
     map["cid"] = this.cid;
     return map;
   }
 
   factory UserInfo.fromJson(Map<String, dynamic> srcJson) {
     UserInfo userInfo =
-        new UserInfo(srcJson["uName"], srcJson["value"], srcJson["cid"]);
+        new UserInfo(srcJson["uName"], srcJson["uid"], srcJson["cid"]);
     return userInfo;
   }
 

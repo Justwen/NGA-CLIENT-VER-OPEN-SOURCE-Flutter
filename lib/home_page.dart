@@ -89,8 +89,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             )));
   }
 
-  void _startTopicListPage(Board board) {
-    Widget nextWidget = UserModel.getInstance().isEmpty()
+  void _startTopicListPage(Board board) async {
+    bool empty = UserModel.getInstance().isEmpty();
+
+    Widget nextWidget = empty
         ? new LoginWidget()
         : new TopicListWidget(board);
     Navigator.push(

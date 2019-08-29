@@ -1,6 +1,7 @@
 import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nga_open_source/model/user_model.dart';
 import 'home_page.dart';
 
 import 'res/app_strings.dart';
@@ -8,6 +9,7 @@ import 'res/app_strings.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
@@ -32,6 +34,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    UserModel.getInstance();
     setLocalizedSimpleValues(AppStrings.localizedSimpleValues);
     super.initState();
   }
