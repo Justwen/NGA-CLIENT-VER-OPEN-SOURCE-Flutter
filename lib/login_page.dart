@@ -47,7 +47,7 @@ class LoginWidget extends StatelessWidget {
       String uid;
       String uName;
       String cid;
-      cookiesString.split(';').forEach((String cookie) {
+      cookiesString?.split(';')?.forEach((String cookie) {
         final split = cookie.split('=');
         if (split[0].trim() == COOKIE_KEY_UID) {
           uid = split[1].trim();

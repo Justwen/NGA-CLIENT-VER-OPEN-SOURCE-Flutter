@@ -165,7 +165,11 @@ class TopicListBeanResultT {
     type = json['type'];
     tid = json['tid'];
     replies = json['replies'];
-    lastposter = json['lastposter'];
+    if (json['lastposter'] is bool) {
+      lastposter = "";
+    } else{
+      lastposter = json['lastposter'];
+    }
     lastpost = json['lastpost'];
     titlefont = json['titlefont'];
     topicMisc = json['topic_misc'];

@@ -1,4 +1,5 @@
 import 'topic_list_bean_entity.dart';
+import 'topic_content_bean_entity.dart';
 
 class EntityFactory {
   static T generateOBJ<T>(json) {
@@ -6,6 +7,8 @@ class EntityFactory {
       return null;
     } else if (T.toString() == "TopicListBeanEntity") {
       return TopicListBeanEntity.fromJson(json) as T;
+    } else if (T.toString() == "TopicContentBeanEntity") {
+      return TopicContentBeanEntity.fromJson(json) as T;
     } else {
       return null;
     }
