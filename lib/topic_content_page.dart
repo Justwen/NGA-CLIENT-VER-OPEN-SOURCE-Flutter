@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class TopicContentWidget extends StatelessWidget {
   final int tid;
@@ -57,14 +58,13 @@ class _TopicContentState extends State<_TopicContentWidget> {
   }
 
   Widget _buildTopicContentItem(TopicContentEntity entity) {
-    return InkWell(
-        onTap: () {},
-        child: Container(
+    return Container(
+          width: double.infinity,
+          height: 100,
           padding: EdgeInsets.all(16),
-          child: Text(
-            entity.content,
-            style: TextStyle(fontSize: 17),
+          child: WebView(
+            initialUrl:new Uri.dataFromString(entity.content,mimeType: 'text/html').toString() ,
           ),
-        ));
+        );
   }
 }

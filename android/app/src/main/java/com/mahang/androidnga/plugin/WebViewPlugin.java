@@ -22,6 +22,11 @@ public class WebViewPlugin implements MethodChannel.MethodCallHandler {
                 CookieManager cookieManager = CookieManager.getInstance();
                 String cookie = cookieManager.getCookie(methodCall.argument("url"));
                 result.success(cookie);
+            case "convertHtml":
+                List<String> source = methodCall.argument("url");
+                for (int i=0; i<source.size(); i++) {
+
+                }
                 break;
             default:
                 result.notImplemented();

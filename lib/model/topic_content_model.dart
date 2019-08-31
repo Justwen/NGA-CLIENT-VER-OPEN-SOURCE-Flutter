@@ -5,11 +5,14 @@ import 'package:nga_open_source/model/bean/entity_factory.dart';
 import 'package:nga_open_source/model/user_model.dart';
 import 'package:nga_open_source/plugin/UtilsPlugin.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
+import 'package:nga_open_source/plugin/WebViewPlugin.dart';
 
 import 'bean/topic_content_bean_entity.dart';
 
 class TopicContentModel {
   Dio dio = new Dio();
+
+  WebViewPlugin webViewPlugin = new WebViewPlugin();
 
   void loadContent(int tid, int page, Function callback) async {
     String url = _buildUrl();
@@ -25,13 +28,24 @@ class TopicContentModel {
       TopicContentBeanEntity bean = EntityFactory.generateOBJ<TopicContentBeanEntity>(jsonDecode(result));
       List<TopicContentEntity> dataList = new List();
 
+      List<String> sourceContent = new List();
+
+
       bean.data.tR.listData.forEach((dataBean) {
         TopicContentEntity entity = new TopicContentEntity();
-        entity.content = dataBean.content;
+        sourceContent.add(dataBean.content);
         dataList.add(entity);
-
       });
-      callback(dataList);
+
+      webViewPlugin.convertHtml(sourceContent).then((result) {
+
+        for (int i =0; i<result.length; i++) {
+          dataList[i].content = result[i];
+        }
+
+        callback(dataList);
+      });
+
 
     } catch (e) {
       print(e);
