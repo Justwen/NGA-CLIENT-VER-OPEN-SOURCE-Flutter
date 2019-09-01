@@ -231,22 +231,22 @@ class TopicContentBeanDataUid {
 		rvrc = json['rvrc'];
 		yz = json['yz'];
 		bitData = json['bit_data'];
-		signature = json['signature'];
+		signature = json['signature'].toString();
 		groupid = json['groupid'];
 		honor = json['honor'];
 		postnum = json['postnum'];
 		reputation = json['reputation'];
-		avatar = json['avatar'];
+		avatar = json['avatar'].toString();
 		uid = json['uid'];
 		site = json['site'];
 		money = json['money'];
 		thisvisit = json['thisvisit'];
-		medal = json['medal'];
+		medal = json['medal'].toString();
 		regdate = json['regdate'];
 		nickname = json['nickname'];
 		muteTime = json['mute_time'];
 		credit = json['credit'];
-		username = json['username'];
+		username = json['username'].toString();
 		memberid = json['memberid'];
 	}
 
@@ -430,7 +430,7 @@ class TopicContentBeanDataT {
 		subject = json['subject'];
 		quoteFrom = json['quote_from'];
 		author = json['author'];
-		quoteTo = json['quote_to'];
+		quoteTo = json['quote_to'].toString();
 		postdate = json['postdate'];
 		recommend = json['recommend'];
 		type = json['type'];

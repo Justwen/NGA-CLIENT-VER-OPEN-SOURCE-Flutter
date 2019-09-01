@@ -2,6 +2,8 @@ package com.mahang.androidnga.plugin;
 
 import android.webkit.CookieManager;
 
+import java.util.List;
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
@@ -24,9 +26,6 @@ public class WebViewPlugin implements MethodChannel.MethodCallHandler {
                 result.success(cookie);
             case "convertHtml":
                 List<String> source = methodCall.argument("url");
-                for (int i=0; i<source.size(); i++) {
-
-                }
                 break;
             default:
                 result.notImplemented();

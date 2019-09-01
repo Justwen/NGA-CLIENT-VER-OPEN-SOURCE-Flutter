@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import "package:flutter/material.dart";
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
@@ -50,21 +52,12 @@ class _TopicContentState extends State<_TopicContentWidget> {
   }
 
   Widget _buildContentWidget() {
-    return ListView.builder(
-        itemCount: widget.dataList.length,
-        itemBuilder: (context, i) {
-          return _buildTopicContentItem(widget.dataList[i]);
-        });
-  }
-
-  Widget _buildTopicContentItem(TopicContentEntity entity) {
-    return Container(
-          width: double.infinity,
-          height: 100,
-          padding: EdgeInsets.all(16),
-          child: WebView(
-            initialUrl:new Uri.dataFromString(entity.content,mimeType: 'text/html').toString() ,
-          ),
-        );
+    return Scaffold(
+      body: WebView(
+        initialUrl: new Uri.dataFromString(widget.dataList[0].content,
+                mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
+            .toString(),
+      ),
+    );
   }
 }

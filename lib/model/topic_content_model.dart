@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:nga_open_source/core/html_convert_factory.dart';
 import 'package:nga_open_source/model/bean/entity_factory.dart';
 import 'package:nga_open_source/model/user_model.dart';
 import 'package:nga_open_source/plugin/UtilsPlugin.dart';
@@ -15,6 +16,7 @@ class TopicContentModel {
   WebViewPlugin webViewPlugin = new WebViewPlugin();
 
   void loadContent(int tid, int page, Function callback) async {
+    //tid = 18335755;
     String url = _buildUrl();
     print(url);
     Options options = new Options();
@@ -24,31 +26,26 @@ class TopicContentModel {
       Response response = await dio.get(url,
           options: options, queryParameters: _buildParam(tid, page));
 
-      String result = gbk.decode(response.data).replaceAll("]	", "]");
+      String result = gbk.decode(response.data).replaceAll("	", " ");
       TopicContentBeanEntity bean = EntityFactory.generateOBJ<TopicContentBeanEntity>(jsonDecode(result));
       List<TopicContentEntity> dataList = new List();
 
-      List<String> sourceContent = new List();
+      List<String> contentList = new List();
 
-
-      bean.data.tR.listData.forEach((dataBean) {
+      bean.data.tR.listData.forEach((dataBean) async {
         TopicContentEntity entity = new TopicContentEntity();
-        sourceContent.add(dataBean.content);
         dataList.add(entity);
-      });
-
-      webViewPlugin.convertHtml(sourceContent).then((result) {
-
-        for (int i =0; i<result.length; i++) {
-          dataList[i].content = result[i];
-        }
-
-        callback(dataList);
+        contentList.add(dataBean.content);
       });
 
 
-    } catch (e) {
+      dataList[0].content = await HtmlConvertFactory.convertList2Html(contentList);
+      callback(dataList);
+
+
+    } catch (e,s) {
       print(e);
+      print(s);
     }
   }
 
