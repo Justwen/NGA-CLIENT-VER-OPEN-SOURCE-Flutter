@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:nga_open_source/core/emoticon_constants.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -21,6 +23,30 @@ class _BasicHtmlDecoder implements HtmlDecoder {
 
   static const String REPLACE_URL_WITH_HTTP = "<a href='%s'>%s</a>";
 
+  static const Map<String, String> BASIC_REGEX_MAP = {
+    "\\[h](.+?)\\[/h]": "<b>%s</b>",
+    "\\[b](.+?)\\[/b]": "<b>%s</b>",
+    "\\[i](.+?)\\[/i]": "<i style='font-style:italic'>%s</i>",
+    "\\[list](.+?)\\[/list]": "<li>%s</li>",
+    "\\[del](.+?)\\[/del]": "<del>%s</del>",
+    "\\[u](.+?)\\[/u]":"<u>%s</u>",
+    "\\[item](.+?)\\[/item]":"<item>%s</item>",
+    "\\[table](.*?)\\[/table]":"<div><table cellspacing='0px'><tbody>%s</tbody></table></div>",
+    "\\[tr](.*?)\\[/tr]":"<tr>%s</tr>",
+    "\\[l](.*?)\\[/l]":"<div style='float:left' >%s</div>",
+    "\\[r](.*?)\\[/r]":"<div style='float:right' >%s</div>",
+    "\\[flash=video](.*?)\\[/flash]":"<video src='http://img.ngacn.cc/attachments%s' controls='controls'></video>",
+    "\\[flash=audio](.*?)\\[/flash]":"<audio src='http://img.ngacn.cc/attachments%s&filename=nga_audio.mp3' controls='controls'></audio>",
+  };
+
+  static const Map<String, String> BASIC_REPLACE_MAP = {
+    "\\[align=right]": "<div style='text-align:right' >",
+    "\\[align=left]": "<div style='text-align:left' >",
+    "\\[align=center]": "<div style='text-align:right' >",
+    "\\[/align]": "</div>",
+    "&amp;":"&",
+  };
+
   @override
   String decode(String data) {
     RegExp(REGEX_URL_WITH_HTTP).allMatches(data).forEach((regExpMatch) {
@@ -28,6 +54,19 @@ class _BasicHtmlDecoder implements HtmlDecoder {
         regExpMatch[0],
         sprintf(REPLACE_URL_WITH_HTTP, [regExpMatch[1], regExpMatch[1]]),
       );
+    });
+
+    BASIC_REPLACE_MAP.forEach((key, replace) {
+      data = data.replaceAll(key, replace);
+    });
+
+    BASIC_REGEX_MAP.forEach((key, value) {
+      RegExp(key).allMatches(data).forEach((regExpMatch) {
+        data = data.replaceAll(
+          regExpMatch[0],
+          sprintf(value, [regExpMatch[1]]),
+        );
+      });
     });
 
     return data;
@@ -87,7 +126,9 @@ class _EmoticonHtmlDecoder implements HtmlDecoder {
       }
       data = data.replaceAll(
         regExpMatch[0],
-        sprintf("<img src='file:///asset/emoticon/$emoticon/%s'>", [image]),
+        sprintf(
+            "<img src='file:///android_asset/flutter_assets/assets/emoticon/$emoticon/%s'>",
+            [image]),
       );
     });
     return data;
