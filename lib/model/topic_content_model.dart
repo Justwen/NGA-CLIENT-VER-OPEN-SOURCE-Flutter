@@ -28,20 +28,17 @@ class TopicContentModel {
 
       String result = gbk.decode(response.data).replaceAll("	", " ");
       TopicContentBeanEntity bean = EntityFactory.generateOBJ<TopicContentBeanEntity>(jsonDecode(result));
-      List<TopicContentEntity> dataList = new List();
 
-      List<String> contentList = new List();
+      TopicContentEntity entity = new TopicContentEntity();
 
       bean.data.tR.listData.forEach((dataBean) async {
-        TopicContentEntity entity = new TopicContentEntity();
-        dataList.add(entity);
-        contentList.add(dataBean.content);
+        entity.contentList.add(dataBean.content);
       });
 
+      entity.subject = bean.data.tR.listData[0].subject;
 
-      dataList[0].content = await HtmlConvertFactory.convertList2Html(contentList);
-      callback(dataList);
-
+      entity.content = await HtmlConvertFactory.convert2Html(entity: entity);
+      callback(entity);
 
     } catch (e,s) {
       print(e);
@@ -75,5 +72,9 @@ class TopicContentEntity{
   String content;
 
   String author;
+
+  String subject;
+
+  List<String> contentList = new List();
 
 }

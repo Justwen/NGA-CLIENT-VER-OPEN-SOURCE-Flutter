@@ -40,10 +40,10 @@ class _BasicHtmlDecoder implements HtmlDecoder {
   };
 
   static const Map<String, String> BASIC_REPLACE_MAP = {
-    "\\[align=right]": "<div style='text-align:right' >",
-    "\\[align=left]": "<div style='text-align:left' >",
-    "\\[align=center]": "<div style='text-align:right' >",
-    "\\[/align]": "</div>",
+    "[align=right]": "<div style='text-align:right' >",
+    "[align=left]": "<div style='text-align:left' >",
+    "[align=center]": "<div style='text-align:right' >",
+    "[/align]": "</div>",
     "&amp;":"&",
   };
 

@@ -23,7 +23,8 @@ class TopicContentWidget extends StatelessWidget {
 }
 
 class _TopicContentWidget extends StatefulWidget {
-  List<TopicContentEntity> dataList;
+
+  TopicContentEntity topicContentEntity;
 
   int tid;
 
@@ -38,14 +39,14 @@ class _TopicContentWidget extends StatefulWidget {
 class _TopicContentState extends State<_TopicContentWidget> {
   @override
   Widget build(BuildContext context) {
-    return widget.dataList == null ? ProgressBarEx() : _buildContentWidget();
+    return widget.topicContentEntity == null ? ProgressBarEx() : _buildContentWidget();
   }
 
   @override
   void initState() {
-    new TopicContentModel().loadContent(widget.tid, 1, (List data) {
+    new TopicContentModel().loadContent(widget.tid, 1, (data) {
       setState(() {
-        widget.dataList = data;
+        widget.topicContentEntity = data;
       });
     });
     super.initState();
@@ -54,7 +55,7 @@ class _TopicContentState extends State<_TopicContentWidget> {
   Widget _buildContentWidget() {
     return Scaffold(
       body: WebView(
-        initialUrl: new Uri.dataFromString(widget.dataList[0].content,
+        initialUrl: new Uri.dataFromString(widget.topicContentEntity.content,
                 mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
             .toString(),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:sprintf/sprintf.dart';
 
 class HtmlBuilder {
@@ -9,7 +10,7 @@ class HtmlBuilder {
       sHtmlTemplate =
           await rootBundle.loadString('assets/template/content_template.html');
     }
-    String html = sprintf(sHtmlTemplate, [19, body]);
+    String html = sprintf(sHtmlTemplate, [18, body]);
     return html;
   }
 }

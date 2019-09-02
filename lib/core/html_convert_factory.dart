@@ -1,3 +1,5 @@
+import 'package:nga_open_source/model/topic_content_model.dart';
+
 import 'html_builder.dart';
 import 'html_decoder.dart';
 
@@ -6,21 +8,21 @@ class HtmlConvertFactory {
 
   static HtmlDecoder sHtmlDecoder = new HtmlDecoder();
 
-  static Future<String> convert2Html(String data) async {
-    String body = sHtmlDecoder.decode(data);
-    String html = await sHtmlBuilder.build(body);
-    return html;
-  }
-
-  static Future<String> convertList2Html(List<String> dataList) async {
-    StringBuffer buffer = new StringBuffer();
-
-    dataList.forEach((data) {
-      buffer.write(sHtmlDecoder.decode(data));
-      buffer.write("</br></br>");
-    });
-
-    String html = await sHtmlBuilder.build(buffer.toString());
+  static Future<String> convert2Html(
+      {String data, TopicContentEntity entity}) async {
+    String html;
+    if (data != null) {
+      String body = sHtmlDecoder.decode(data);
+      html = await sHtmlBuilder.build(body);
+    } else {
+      StringBuffer buffer = new StringBuffer();
+      buffer.write("<div class='title'>${entity.subject}</div><br>");
+      entity.contentList.forEach((data) {
+        buffer.write(sHtmlDecoder.decode(data));
+        buffer.write("</br></br><hr>");
+      });
+      html = await sHtmlBuilder.build(buffer.toString());
+    }
     return html;
   }
 }
