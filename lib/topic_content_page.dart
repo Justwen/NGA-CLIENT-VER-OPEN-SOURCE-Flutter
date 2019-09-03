@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import "package:flutter/material.dart";
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class TopicContentWidget extends StatelessWidget {
   final int tid;
@@ -23,7 +23,6 @@ class TopicContentWidget extends StatelessWidget {
 }
 
 class _TopicContentWidget extends StatefulWidget {
-
   TopicContentEntity topicContentEntity;
 
   int tid;
@@ -39,7 +38,9 @@ class _TopicContentWidget extends StatefulWidget {
 class _TopicContentState extends State<_TopicContentWidget> {
   @override
   Widget build(BuildContext context) {
-    return widget.topicContentEntity == null ? ProgressBarEx() : _buildContentWidget();
+    return widget.topicContentEntity == null
+        ? ProgressBarEx()
+        : _buildContentWidget();
   }
 
   @override
@@ -53,12 +54,12 @@ class _TopicContentState extends State<_TopicContentWidget> {
   }
 
   Widget _buildContentWidget() {
-    return Scaffold(
-      body: WebView(
-        initialUrl: new Uri.dataFromString(widget.topicContentEntity.content,
-                mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
-            .toString(),
-      ),
+    return WebviewScaffold(
+      url: new Uri.dataFromString(widget.topicContentEntity.content,
+              mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
+          .toString(),
+      withJavascript: true,
+      withLocalUrl: true,
     );
   }
 }

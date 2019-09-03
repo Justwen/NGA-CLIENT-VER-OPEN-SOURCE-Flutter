@@ -10,18 +10,22 @@ class HtmlConvertFactory {
 
   static Future<String> convert2Html(
       {String data, TopicContentEntity entity}) async {
+    await sHtmlBuilder.init();
+
     String html;
     if (data != null) {
       String body = sHtmlDecoder.decode(data);
-      html = await sHtmlBuilder.build(body);
+      html = sHtmlBuilder.build(body);
     } else {
       StringBuffer buffer = new StringBuffer();
-      buffer.write("<div class='title'>${entity.subject}</div><br>");
+
+      if (entity.subject != null && entity.subject.isNotEmpty) {
+        sHtmlBuilder.buildSubject(buffer, entity.subject);
+      }
       entity.contentList.forEach((data) {
-        buffer.write(sHtmlDecoder.decode(data));
-        buffer.write("</br></br><hr>");
+        sHtmlBuilder.buildBody(buffer, sHtmlDecoder.decode(data));
       });
-      html = await sHtmlBuilder.build(buffer.toString());
+      html = sHtmlBuilder.build(buffer.toString());
     }
     return html;
   }

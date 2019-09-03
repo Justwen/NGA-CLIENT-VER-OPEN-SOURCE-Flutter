@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:core';
 
 import 'package:nga_open_source/core/emoticon_constants.dart';
@@ -37,6 +38,8 @@ class _BasicHtmlDecoder implements HtmlDecoder {
     "\\[r](.*?)\\[/r]":"<div style='float:right' >%s</div>",
     "\\[flash=video](.*?)\\[/flash]":"<video src='http://img.ngacn.cc/attachments%s' controls='controls'></video>",
     "\\[flash=audio](.*?)\\[/flash]":"<audio src='http://img.ngacn.cc/attachments%s&filename=nga_audio.mp3' controls='controls'></audio>",
+    "\\[quote](.*?)\\[/quote]":"<div class='quote' >%s</div>",
+    "\\[code](.*?)\\[/code]":"<div class='quote' >%s</div>",
   };
 
   static const Map<String, String> BASIC_REPLACE_MAP = {

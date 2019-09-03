@@ -72,7 +72,9 @@ flutter:
 
   assets:
     - assets/data/category_old.json
-    - assets/template/content_template.html
+    - assets/template/html_template.html
+
+    - assets/emoticon/pg/pg01.png
 
     - assets/images/default_board_icon.png
     - assets/images/p124.png
