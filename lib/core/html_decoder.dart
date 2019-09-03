@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:core';
 
 import 'package:nga_open_source/core/emoticon_constants.dart';
@@ -30,16 +29,19 @@ class _BasicHtmlDecoder implements HtmlDecoder {
     "\\[i](.+?)\\[/i]": "<i style='font-style:italic'>%s</i>",
     "\\[list](.+?)\\[/list]": "<li>%s</li>",
     "\\[del](.+?)\\[/del]": "<del>%s</del>",
-    "\\[u](.+?)\\[/u]":"<u>%s</u>",
-    "\\[item](.+?)\\[/item]":"<item>%s</item>",
-    "\\[table](.*?)\\[/table]":"<div><table cellspacing='0px'><tbody>%s</tbody></table></div>",
-    "\\[tr](.*?)\\[/tr]":"<tr>%s</tr>",
-    "\\[l](.*?)\\[/l]":"<div style='float:left' >%s</div>",
-    "\\[r](.*?)\\[/r]":"<div style='float:right' >%s</div>",
-    "\\[flash=video](.*?)\\[/flash]":"<video src='http://img.ngacn.cc/attachments%s' controls='controls'></video>",
-    "\\[flash=audio](.*?)\\[/flash]":"<audio src='http://img.ngacn.cc/attachments%s&filename=nga_audio.mp3' controls='controls'></audio>",
-    "\\[quote](.*?)\\[/quote]":"<div class='quote' >%s</div>",
-    "\\[code](.*?)\\[/code]":"<div class='quote' >%s</div>",
+    "\\[u](.+?)\\[/u]": "<u>%s</u>",
+    "\\[item](.+?)\\[/item]": "<item>%s</item>",
+    "\\[table](.*?)\\[/table]":
+        "<div><table cellspacing='0px'><tbody>%s</tbody></table></div>",
+    "\\[tr](.*?)\\[/tr]": "<tr>%s</tr>",
+    "\\[l](.*?)\\[/l]": "<div style='float:left' >%s</div>",
+    "\\[r](.*?)\\[/r]": "<div style='float:right' >%s</div>",
+    "\\[flash=video](.*?)\\[/flash]":
+        "<video src='http://img.ngacn.cc/attachments%s' controls='controls'></video>",
+    "\\[flash=audio](.*?)\\[/flash]":
+        "<audio src='http://img.ngacn.cc/attachments%s&filename=nga_audio.mp3' controls='controls'></audio>",
+    "\\[quote](.*?)\\[/quote]": "<div class='quote' >%s</div>",
+    "\\[code](.*?)\\[/code]": "<div class='quote' >%s</div>",
   };
 
   static const Map<String, String> BASIC_REPLACE_MAP = {
@@ -47,11 +49,29 @@ class _BasicHtmlDecoder implements HtmlDecoder {
     "[align=left]": "<div style='text-align:left' >",
     "[align=center]": "<div style='text-align:right' >",
     "[/align]": "</div>",
-    "&amp;":"&",
+    "&amp;": "&",
   };
 
   @override
   String decode(String data) {
+    String ngaHost = "http://bbs.nga.cn";
+
+    data = data = data.replaceAllMapped(
+        new RegExp("\\[b]Reply to \\[pid=(.+?),(.+?),(.+?)]Reply\\[/pid](.+?)\\[/b]"),
+            (Match m) =>
+            "[quote]回复${m[4]}</br>[/quote]</br>");
+       // "[quote]Reply to [b]<a href='${ngaHost}read.php?searchpost=1&pid=${m[1]}' style='font-weight: bold;'>[Reply]</a> ${m[4]}[/b][/quote]");
+
+    data = data = data.replaceAllMapped(
+        new RegExp("\\[pid=(.+?),(.+?),(.+?)]Reply\\[/pid]"),
+            (Match m) => "回复");
+
+    data = data = data.replaceAllMapped(
+        new RegExp("Post by \\[uid=(.*?)](.*?)\\[/uid]"),
+            (Match m) =>
+        "<a href='$ngaHost/nuke.php?func=ucp&uid=${m[1]}' style='font-weight: bold;'>${m[2]}</a>");
+
+
     RegExp(REGEX_URL_WITH_HTTP).allMatches(data).forEach((regExpMatch) {
       data = data.replaceAll(
         regExpMatch[0],

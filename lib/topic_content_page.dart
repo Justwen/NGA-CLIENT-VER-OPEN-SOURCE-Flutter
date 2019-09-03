@@ -38,19 +38,16 @@ class _TopicContentWidget extends StatefulWidget {
 class _TopicContentState extends State<_TopicContentWidget> {
   @override
   Widget build(BuildContext context) {
+    if (widget.topicContentEntity == null) {
+      new TopicContentModel().loadContent(widget.tid, 1, (data) {
+        setState(() {
+          widget.topicContentEntity = data;
+        });
+      });
+    }
     return widget.topicContentEntity == null
         ? ProgressBarEx()
         : _buildContentWidget();
-  }
-
-  @override
-  void initState() {
-    new TopicContentModel().loadContent(widget.tid, 1, (data) {
-      setState(() {
-        widget.topicContentEntity = data;
-      });
-    });
-    super.initState();
   }
 
   Widget _buildContentWidget() {
