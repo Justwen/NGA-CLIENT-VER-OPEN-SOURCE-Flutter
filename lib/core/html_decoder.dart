@@ -56,21 +56,30 @@ class _BasicHtmlDecoder implements HtmlDecoder {
   String decode(String data) {
     String ngaHost = "http://bbs.nga.cn";
 
-    data = data = data.replaceAllMapped(
-        new RegExp("\\[b]Reply to \\[pid=(.+?),(.+?),(.+?)]Reply\\[/pid](.+?)\\[/b]"),
-            (Match m) =>
-            "[quote]回复${m[4]}</br>[/quote]</br>");
-       // "[quote]Reply to [b]<a href='${ngaHost}read.php?searchpost=1&pid=${m[1]}' style='font-weight: bold;'>[Reply]</a> ${m[4]}[/b][/quote]");
+    data = data.replaceAllMapped(
+        new RegExp(
+            "\\[b]Reply to \\[pid=(.+?),(.+?),(.+?)]Reply\\[/pid](.+?)\\[/b]"),
+        (Match m) => "[quote]回复${m[4]}</br>[/quote]</br>");
 
-    data = data = data.replaceAllMapped(
+    data = data.replaceAllMapped(
         new RegExp("\\[pid=(.+?),(.+?),(.+?)]Reply\\[/pid]"),
-            (Match m) => "回复");
+        (Match m) => "回复");
 
-    data = data = data.replaceAllMapped(
+    data = data.replaceAllMapped(
         new RegExp("Post by \\[uid=(.*?)](.*?)\\[/uid]"),
-            (Match m) =>
-        "<a href='$ngaHost/nuke.php?func=ucp&uid=${m[1]}' style='font-weight: bold;'>${m[2]}</a>");
+        (Match m) =>
+            "<a href='$ngaHost/nuke.php?func=ucp&uid=${m[1]}' style='font-weight: bold;'>${m[2]}</a>");
 
+    data = data.replaceAllMapped(
+        new RegExp("\\[tid=\\d+]Topic\\[/tid]"), (Match m) => "回复");
+
+    data = data.replaceAllMapped(
+        new RegExp("\\[size=(\\d+)%](.*?)\\[/size]"),
+        (Match m) =>
+            "<span style='font-size:${m[1]}%;line-height:${m[1]}%'>${m[2]}</span>");
+
+    data = data.replaceAllMapped(new RegExp("\\[color=(.*?)](.*?)\\[/color]"),
+        (Match m) => "<span style='color:${m[1]}'>${m[2]}</span>");
 
     RegExp(REGEX_URL_WITH_HTTP).allMatches(data).forEach((regExpMatch) {
       data = data.replaceAll(
