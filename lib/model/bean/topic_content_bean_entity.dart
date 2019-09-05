@@ -136,11 +136,11 @@ class TopicContentBeanDataRR {
 		authorid = json['authorid'];
 		type = json['type'];
 		tid = json['tid'];
-		content = json['content'];
+		content = json['content'].toString();
 		score = json['score'];
 		lou = json['lou'];
 		alterinfo = json['alterinfo'];
-		contentLength = json['content_length'];
+		contentLength = json['content_length'] == "" ? 0 : json['content_length'];
 	}
 
 	Map<String, dynamic> toJson() {
