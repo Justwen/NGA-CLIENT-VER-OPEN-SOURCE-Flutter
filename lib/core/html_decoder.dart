@@ -40,7 +40,6 @@ class _BasicHtmlDecoder implements HtmlDecoder {
         "<video src='http://img.ngacn.cc/attachments%s' controls='controls'></video>",
     "\\[flash=audio](.*?)\\[/flash]":
         "<audio src='http://img.ngacn.cc/attachments%s&filename=nga_audio.mp3' controls='controls'></audio>",
-    "\\[quote](.*?)\\[/quote]": "<div class='quote' >%s</div>",
     "\\[code](.*?)\\[/code]": "<div class='quote' >%s</div>",
   };
 
@@ -49,6 +48,8 @@ class _BasicHtmlDecoder implements HtmlDecoder {
     "[align=left]": "<div style='text-align:left' >",
     "[align=center]": "<div style='text-align:right' >",
     "[/align]": "</div>",
+    "[quote]": "<div class='quote'>",
+    "[/quote]": "</div>",
     "&amp;": "&",
   };
 
