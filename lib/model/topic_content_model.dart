@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:nga_open_source/core/html_convert_factory.dart';
 import 'package:nga_open_source/model/bean/entity_factory.dart';
 import 'package:nga_open_source/model/user_model.dart';
-import 'package:nga_open_source/plugin/UtilsPlugin.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:nga_open_source/plugin/WebViewPlugin.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'bean/topic_content_bean_entity.dart';
 
@@ -18,7 +19,7 @@ class TopicContentModel {
   void loadContent(int tid, int page, Function callback) async {
     //tid = 18335755;
     String url = _buildUrl();
-    print(url);
+    print(url + "&page=1&tid=$tid");
     Options options = new Options();
     options.headers = _buildHeader();
     options.responseType = ResponseType.bytes;
@@ -26,7 +27,8 @@ class TopicContentModel {
       Response response = await dio.get(url,
           options: options, queryParameters: _buildParam(tid, page));
 
-      String result = gbk.decode(response.data).replaceAll("	", " ");
+      String result = _correct(gbk.decode(response.data));
+
       TopicContentBeanEntity bean = EntityFactory.generateOBJ<TopicContentBeanEntity>(jsonDecode(result));
 
       TopicContentEntity entity = new TopicContentEntity();
@@ -44,6 +46,18 @@ class TopicContentModel {
       print(e);
       print(s);
     }
+  }
+
+  void printLog(String log) async {
+      Directory tempDir = await getTemporaryDirectory();
+      var file = File('${tempDir.path}/counter.txt');
+      file.writeAsString(log);
+  }
+
+  String _correct(String data) {
+    // 处理全角空格
+    // 处理空字符
+    return data.replaceAll("	", " ").replaceAll(String.fromCharCode(0), " ");
   }
 
   String _buildUrl() {

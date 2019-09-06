@@ -50,8 +50,11 @@ dependencies:
   # GBK解析库
   gbk2utf8: ^1.0.1
 
-  #数据存储
+  # 数据存储
   shared_preferences: ^0.5.3
+
+  # 数据文件读写
+  path_provider: ^1.2.2
 
 dev_dependencies:
   flutter_test:
