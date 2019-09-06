@@ -52,7 +52,7 @@ class _TopicContentState extends State<_TopicContentWidget> {
 
   Widget _buildContentWidget() {
     return WebviewScaffold(
-      url: new Uri.dataFromString(widget.topicContentEntity.content,
+      url: new Uri.dataFromString(widget.topicContentEntity.htmlContent,
               mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
           .toString(),
       withJavascript: true,

@@ -113,7 +113,7 @@ class TopicContentBeanDataRR {
 	int pid;
 	int recommend;
 	int postdatetimestamp;
-	int authorid;
+	String authorid;
 	int type;
 	int tid;
 	String content;
@@ -133,7 +133,7 @@ class TopicContentBeanDataRR {
 		pid = json['pid'];
 		recommend = json['recommend'];
 		postdatetimestamp = json['postdatetimestamp'];
-		authorid = json['authorid'];
+		authorid = json['authorid'].toString();
 		type = json['type'];
 		tid = json['tid'];
 		content = json['content'].toString();
@@ -170,7 +170,7 @@ class TopicContentBeanDataU {
 	TopicContentBeanDataUMedals tMedals;
 	TopicContentBeanDataUReputations tReputations;
 
-	Map<int,TopicContentBeanDataUid> dataMap;
+	Map<dynamic,TopicContentBeanDataUid> dataMap;
 
 	TopicContentBeanDataU({this.dataMap, this.tGroups,this.tMedals, this.tReputations});
 
@@ -182,7 +182,7 @@ class TopicContentBeanDataU {
 
 		json.entries.forEach((entry) {
 			if (entry.key != '__GROUPS' && entry.key != '__MEDALS' && entry.key != '__REPUTATIONS') {
-				dataMap[int.parse(entry.key)] =
+				dataMap[entry.key.toString()] =
 				new TopicContentBeanDataUid.fromJson(entry.value);
 			}
 		});
@@ -248,6 +248,11 @@ class TopicContentBeanDataUid {
 		credit = json['credit'];
 		username = json['username'].toString();
 		memberid = json['memberid'];
+		print(username);
+	}
+
+	String toString() {
+		return toJson().toString();
 	}
 
 	Map<String, dynamic> toJson() {

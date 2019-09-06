@@ -142,7 +142,6 @@ class _EmoticonHtmlDecoder implements HtmlDecoder {
   String decode(String data) {
     data = _decodeEmoticon(data, "pg", EmoticonConstants.UBB_CODE_PENGUIN,
         EmoticonConstants.UBB_IMAGE_PENGUIN);
-    print(data);
     return data;
   }
 

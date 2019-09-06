@@ -33,13 +33,18 @@ class TopicContentModel {
 
       TopicContentEntity entity = new TopicContentEntity();
 
-      bean.data.tR.listData.forEach((dataBean) async {
-        entity.contentList.add(dataBean.content);
+      bean.data.tR.listData.forEach((dataBean)  {
+        TopicRowEntity rowEntity = new TopicRowEntity();
+        rowEntity.content = dataBean.content;
+        rowEntity.subject = dataBean.subject;
+        String uid = dataBean.authorid;
+        String userName = bean.data.tU.dataMap[uid].username;
+        String avatarUrl = bean.data.tU.dataMap[uid].avatar;
+        rowEntity.author = new TopicAuthorEntity(userName: userName,avatarUrl: avatarUrl,uid: uid);
+        entity.contentList.add(rowEntity);
       });
 
-      entity.subject = bean.data.tR.listData[0].subject;
-
-      entity.content = await HtmlConvertFactory.convert2Html(entity: entity);
+      entity.htmlContent = await HtmlConvertFactory.convert2Html(entity: entity);
       callback(entity);
 
     } catch (e,s) {
@@ -81,14 +86,41 @@ class TopicContentModel {
   }
 }
 
-class TopicContentEntity{
+class TopicContentEntity {
+
+  List<TopicRowEntity> contentList = new List();
+
+  String htmlContent;
+
+}
+
+class TopicRowEntity {
 
   String content;
 
-  String author;
+  TopicAuthorEntity author;
+
+  int floor;
+
+  int deviceType;
+
+  String postDate;
 
   String subject;
 
-  List<String> contentList = new List();
+}
+
+class TopicAuthorEntity {
+
+  String userName;
+
+  bool isAnonymous;
+
+  String uid;
+
+  String avatarUrl;
+
+  TopicAuthorEntity({this.userName,this.uid,this.avatarUrl,this.isAnonymous});
 
 }
+

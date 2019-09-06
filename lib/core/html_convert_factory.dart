@@ -1,4 +1,5 @@
 import 'package:nga_open_source/model/topic_content_model.dart';
+import 'package:nga_open_source/utils/utils.dart';
 
 import 'html_builder.dart';
 import 'html_decoder.dart';
@@ -15,17 +16,21 @@ class HtmlConvertFactory {
     String html;
     if (data != null) {
       String body = sHtmlDecoder.decode(data);
-      html = sHtmlBuilder.build(body);
+      html = sHtmlBuilder.complete(body);
     } else {
+
       StringBuffer buffer = new StringBuffer();
 
-      if (entity.subject != null && entity.subject.isNotEmpty) {
-        sHtmlBuilder.buildSubject(buffer, entity.subject);
-      }
-      entity.contentList.forEach((data) {
-        sHtmlBuilder.buildBody(buffer, sHtmlDecoder.decode(data));
+      entity.contentList.forEach((contentEntity){
+        sHtmlBuilder.buildAuthor(buffer, contentEntity);
+        if (!StringUtils.isEmpty(contentEntity.subject)) {
+          sHtmlBuilder.buildSubject(buffer, contentEntity.subject);
+        }
+        sHtmlBuilder.buildBody(buffer, sHtmlDecoder.decode(contentEntity.content));
+
       });
-      html = sHtmlBuilder.build(buffer.toString());
+
+      html = sHtmlBuilder.complete(buffer.toString());
     }
     return html;
   }
