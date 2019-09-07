@@ -29,7 +29,9 @@ class HtmlBuilder {
   StringBuffer buildAuthor(StringBuffer buffer, TopicRowEntity entity) {
     buffer.write(sprintf(sHtmlAuthorTemplate, [
       entity.author.avatarUrl,
-      entity.author.userName,
+      entity.author.isAnonymous
+          ? "${entity.author.userName}<span style='color:red'>(匿名)</span>"
+          : entity.author.userName,
       entity.postDate,
       entity.author.toDescriptionString(),
       _getDeviceTypeImage(entity.deviceType),
@@ -65,8 +67,7 @@ class HtmlBuilder {
 //        "</tr>"
 //        "</table>";
 
-    sHtmlAuthorTemplate =
-    "<table width='100%%'>"
+    sHtmlAuthorTemplate = "<table width='100%%'>"
         "<tr>"
         "  <td  width='48px   '><img style='float:left;width:48px;height:48px;border-radius:48px;' src='%s' /></td>"
         "  <td style='padding-left:8px'>"
@@ -78,6 +79,5 @@ class HtmlBuilder {
         "  </td>"
         "</tr>"
         "</table>";
-
   }
 }

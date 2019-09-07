@@ -248,7 +248,6 @@ class TopicContentBeanDataUid {
 		credit = json['credit'];
 		username = json['username'].toString();
 		memberid = json['memberid'];
-		print(username);
 	}
 
 	String toString() {
