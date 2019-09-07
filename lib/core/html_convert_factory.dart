@@ -18,16 +18,16 @@ class HtmlConvertFactory {
       String body = sHtmlDecoder.decode(data);
       html = sHtmlBuilder.complete(body);
     } else {
-
       StringBuffer buffer = new StringBuffer();
 
-      entity.contentList.forEach((contentEntity){
+      entity.contentList.forEach((contentEntity) {
         sHtmlBuilder.buildAuthor(buffer, contentEntity);
         if (!StringUtils.isEmpty(contentEntity.subject)) {
           sHtmlBuilder.buildSubject(buffer, contentEntity.subject);
         }
-        sHtmlBuilder.buildBody(buffer, sHtmlDecoder.decode(contentEntity.content));
-
+        sHtmlBuilder.buildBody(
+            buffer, sHtmlDecoder.decode(contentEntity.content),
+            isHidden: contentEntity.isHidden);
       });
 
       html = sHtmlBuilder.complete(buffer.toString());

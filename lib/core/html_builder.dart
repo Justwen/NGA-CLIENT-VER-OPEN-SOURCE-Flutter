@@ -19,9 +19,15 @@ class HtmlBuilder {
     return buffer;
   }
 
-  StringBuffer buildBody(StringBuffer buffer, String body) {
+  StringBuffer buildBody(StringBuffer buffer, String body,
+      {bool isHidden = false}) {
     buffer.write("</br>");
-    buffer.write(body);
+    if (isHidden) {
+      buffer.write("<h5>隐藏</h5>");
+    } else {
+      buffer.write(body);
+    }
+
     buffer.write("</br></br><hr>");
     return buffer;
   }
@@ -67,17 +73,17 @@ class HtmlBuilder {
 //        "</tr>"
 //        "</table>";
 
-    sHtmlAuthorTemplate = "<table width='100%%'>"
-        "<tr>"
-        "  <td  width='48px   '><img style='float:left;width:48px;height:48px;border-radius:48px;' src='%s' /></td>"
-        "  <td style='padding-left:8px'>"
-        "  <span style='font-size:16px'>%s</span>"
-        "  <span style='font-size:15px;color:#C4BEAE;float:right'>%s</span>"
-        "  <br>"
-        "  <span style='font-size:15px;color:#C4BEAE;'>%s</span>"
-        "  <span style='font-size:15px;color:#C4BEAE;float:right'><img class=author_device src='%s'/>%s</span>"
-        "  </td>"
-        "</tr>"
-        "</table>";
+//    sHtmlAuthorTemplate = "<table width='100%%'>"
+//        "<tr>"
+//        "  <td  width='48px   '><img style='float:left;width:48px;height:48px;border-radius:48px;' src='%s' /></td>"
+//        "  <td style='padding-left:8px'>"
+//        "  <span style='font-size:16px'>%s</span>"
+//        "  <span style='font-size:15px;color:#C4BEAE;float:right'>%s</span>"
+//        "  <br>"
+//        "  <span style='font-size:15px;color:#C4BEAE;'>%s</span>"
+//        "  <span style='font-size:15px;color:#C4BEAE;float:right'><img class=author_device src='%s'/>%s</span>"
+//        "  </td>"
+//        "</tr>"
+//        "</table>";
   }
 }

@@ -56,6 +56,8 @@ class TopicContentModel {
         int memberId = uidBeanData.memberid;
         rowEntity.author.level = bean.data.tU.tGroups.dataMap[memberId].level;
 
+        rowEntity.isHidden = rowEntity.content == "" && dataBean.alterinfo == "";
+
         entity.contentList.add(rowEntity);
       });
 
@@ -106,7 +108,6 @@ class TopicContentEntity {
 
   String htmlContent;
 
-  bool isHidden;
 }
 
 class TopicRowEntity {
@@ -121,6 +122,8 @@ class TopicRowEntity {
   String postDate;
 
   String subject;
+
+  bool isHidden;
 }
 
 class TopicAuthorEntity {
