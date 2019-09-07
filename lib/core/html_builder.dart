@@ -14,7 +14,7 @@ class HtmlBuilder {
 
   StringBuffer buildSubject(StringBuffer buffer, String subject) {
     buffer.write("</br>");
-    buffer.write("<div class='title'>$subject</div><br>");
+    buffer.write("<div class='title'>$subject</div>");
 
     return buffer;
   }
