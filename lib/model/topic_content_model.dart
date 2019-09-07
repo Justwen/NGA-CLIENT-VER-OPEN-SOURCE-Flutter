@@ -33,16 +33,31 @@ class TopicContentModel {
 
       TopicContentEntity entity = new TopicContentEntity();
 
-      bean.data.tR.listData.forEach((dataBean)  {
-        TopicRowEntity rowEntity = new TopicRowEntity();
-        rowEntity.content = dataBean.content;
-        rowEntity.subject = dataBean.subject;
-        String uid = dataBean.authorid;
-        String userName = bean.data.tU.dataMap[uid].username;
-        String avatarUrl = bean.data.tU.dataMap[uid].avatar;
-        rowEntity.author = new TopicAuthorEntity(userName: userName,avatarUrl: avatarUrl,uid: uid);
-        entity.contentList.add(rowEntity);
-      });
+      if (bean.data.tR == null) {
+        entity.isHidden = true;
+      } else {
+        bean.data.tR.listData.forEach((dataBean) {
+          TopicRowEntity rowEntity = new TopicRowEntity();
+          rowEntity.content = dataBean.content;
+          rowEntity.subject = dataBean.subject;
+          rowEntity.postDate = dataBean.postdate;
+          rowEntity.floor = "[${dataBean.lou}楼]";
+
+          String uid = dataBean.authorid;
+          TopicContentBeanDataUid uidBeanData = bean.data.tU.dataMap[uid];
+          String userName = uidBeanData.username;
+          String avatarUrl = uidBeanData.avatar;
+          rowEntity.author = new TopicAuthorEntity(
+              userName: userName, avatarUrl: avatarUrl, uid: uid);
+          rowEntity.author.postCount = uidBeanData.postnum;
+          rowEntity.author.reputation = uidBeanData.rvrc / 10.0;
+
+          int memberId = uidBeanData.memberid;
+          rowEntity.author.level = bean.data.tU.tGroups.dataMap[memberId].level;
+
+          entity.contentList.add(rowEntity);
+        });
+      }
 
       entity.htmlContent = await HtmlConvertFactory.convert2Html(entity: entity);
       callback(entity);
@@ -92,6 +107,8 @@ class TopicContentEntity {
 
   String htmlContent;
 
+  bool isHidden;
+
 }
 
 class TopicRowEntity {
@@ -100,7 +117,7 @@ class TopicRowEntity {
 
   TopicAuthorEntity author;
 
-  int floor;
+  String floor;
 
   int deviceType;
 
@@ -120,7 +137,17 @@ class TopicAuthorEntity {
 
   String avatarUrl;
 
+  String level;
+
+  int postCount;
+
+  double reputation;
+
   TopicAuthorEntity({this.userName,this.uid,this.avatarUrl,this.isAnonymous});
+
+  String toDescriptionString() {
+    return "级别: $level 威望: $reputation 发帖: $postCount";
+  }
 
 }
 
