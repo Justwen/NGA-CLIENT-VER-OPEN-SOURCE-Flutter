@@ -24,11 +24,15 @@ class HtmlBuilder {
     buffer.write("</br>");
     if (isHidden) {
       buffer.write("<h5>隐藏</h5>");
-    } else {
+    } else if (body != null && body != "null") {
       buffer.write(body);
     }
 
-    buffer.write("</br></br><hr>");
+    if (body != null && body != "null") {
+      buffer.write("</br></br><hr>");
+    } else {
+      buffer.write("<hr>");
+    }
     return buffer;
   }
 
