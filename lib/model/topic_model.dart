@@ -23,7 +23,6 @@ class TopicModel {
           options: options, queryParameters: _buildParam(board, page));
 
       String result = await UtilsPlugin().unicodeDecoding(response.data);
-      print(result);
       TopicListBeanEntity bean =
       EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(result));
       bean.result.lT.forEach((bean) {
