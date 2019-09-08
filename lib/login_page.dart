@@ -16,10 +16,13 @@ class LoginWidget extends StatelessWidget {
 
   WebViewPlugin webViewPlugin = new WebViewPlugin();
 
+  String url;
+
   @override
   Widget build(BuildContext context) {
     FlutterWebviewPlugin flutterWebViewPlugin = new FlutterWebviewPlugin();
     flutterWebViewPlugin.onUrlChanged.listen((url) {
+      this.url = url;
       _parseCookie(url);
     });
 
@@ -38,29 +41,29 @@ class LoginWidget extends StatelessWidget {
           ),
         ), //设置初始化界面
       ),
-      onWillPop: () => new Future.value(true),
+      onWillPop: () => _parseCookie(url),
     );
   }
 
-  void _parseCookie(String url) {
-    webViewPlugin.getCookie(url).then((String cookiesString) {
-      String uid;
-      String uName;
-      String cid;
-      cookiesString?.split(';')?.forEach((String cookie) {
-        final split = cookie.split('=');
-        if (split[0].trim() == COOKIE_KEY_UID) {
-          uid = split[1].trim();
-        } else if (split[0].trim() == COOKIE_KEY_UNAME) {
-          uName = split[1].trim();
-        } else if (split[0].trim() == COOKIE_KEY_CID) {
-          cid = split[1].trim();
-        }
-      });
-      print("uid=$uid, uName=$uName, cid=$cid");
-      if (uid != null && uName != null && cid != null) {
-        UserModel.getInstance().addUser(uName, uid, cid);
+  Future<bool> _parseCookie(String url) async {
+    String cookiesString = await webViewPlugin.getCookie(url);
+    String uid;
+    String uName;
+    String cid;
+    cookiesString?.split(';')?.forEach((String cookie) {
+      final split = cookie.split('=');
+      if (split[0].trim() == COOKIE_KEY_UID) {
+        uid = split[1].trim();
+      } else if (split[0].trim() == COOKIE_KEY_UNAME) {
+        uName = split[1].trim();
+      } else if (split[0].trim() == COOKIE_KEY_CID) {
+        cid = split[1].trim();
       }
     });
+    print("uid=$uid, uName=$uName, cid=$cid");
+    if (uid != null && uName != null && cid != null) {
+      UserModel.getInstance().addUser(uName, uid, cid);
+    }
+    return new Future.value(true);
   }
 }
