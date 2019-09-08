@@ -19,7 +19,7 @@ class TopicContentModel {
   void loadContent(int tid, int page, Function callback) async {
     //tid = 18335755;
     String url = _buildUrl();
-    print(url + "&page=1&tid=$tid");
+    print(url + "&page=$page&tid=$tid");
     Options options = new Options();
     options.headers = _buildHeader();
     options.responseType = ResponseType.bytes;
@@ -48,19 +48,22 @@ class TopicContentModel {
         rowEntity.author = new TopicAuthorEntity(
             userName: userName, avatarUrl: avatarUrl, uid: uid);
         rowEntity.author.postCount = uidBeanData.postnum;
-        print(uidBeanData.rvrc);
         if (uidBeanData.rvrc != null) {
           rowEntity.author.reputation = uidBeanData.rvrc / 10.0;
         }
 
         int memberId = uidBeanData.memberid;
         rowEntity.author.level = bean.data.tU.tGroups.dataMap[memberId].level;
-
-        rowEntity.isHidden = rowEntity.content == "" && dataBean.alterinfo == "";
+        rowEntity.isHidden =
+            rowEntity.content == "" && dataBean.alterinfo == "";
 
         entity.contentList.add(rowEntity);
       });
 
+      entity.totalPage = bean.data.iRows ~/ 20;
+      if (bean.data.iRows % 20 != 0) {
+        entity.totalPage++;
+      }
       entity.htmlContent =
           await HtmlConvertFactory.convert2Html(entity: entity);
       callback(entity);
@@ -108,6 +111,7 @@ class TopicContentEntity {
 
   String htmlContent;
 
+  int totalPage;
 }
 
 class TopicRowEntity {
