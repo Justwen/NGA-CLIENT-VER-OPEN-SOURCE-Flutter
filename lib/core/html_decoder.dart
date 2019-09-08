@@ -51,6 +51,7 @@ class _BasicHtmlDecoder implements HtmlDecoder {
     "[quote]": "<div class='quote'>",
     "[/quote]": "</div>",
     "&amp;": "&",
+    "[/td]": "</td>"
   };
 
   @override
@@ -75,9 +76,18 @@ class _BasicHtmlDecoder implements HtmlDecoder {
         new RegExp("\\[tid=\\d+]Topic\\[/tid]"), (Match m) => "回复");
 
     data = data.replaceAllMapped(
+        new RegExp("\\[url=([^\\[|\\]]+)\\]\\s*(.+?)\\s*\\[/url]"),
+        (Match m) => "<a href='${m[1]}'>${m[2]}</a>");
+
+    data = data.replaceAllMapped(
         new RegExp("\\[size=(\\d+)%](.*?)\\[/size]"),
         (Match m) =>
             "<span style='font-size:${m[1]}%;line-height:${m[1]}%'>${m[2]}</span>");
+
+    data = data.replaceAllMapped(
+        new RegExp("\\[td[ ]*(\\d+)]"),
+            (Match m) =>
+        "<td style='border-left:1px solid #aaa;border-bottom:1px solid #aaa'>");
 
     data = data.replaceAllMapped(new RegExp("\\[color=(.*?)](.*?)\\[/color]"),
         (Match m) => "<span style='color:${m[1]}'>${m[2]}</span>");
