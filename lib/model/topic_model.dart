@@ -11,33 +11,31 @@ import 'user_model.dart';
 class TopicModel {
   Dio dio = new Dio();
 
-  void loadPage(Board board, int page, Function callback) async {
+  Future<List<TopicEntity>> loadPage(Board board, int page) async {
     String url = _buildUrl(board, page);
     print(url);
     Options options = new Options();
     options.headers = _buildHeader();
     options.responseType = ResponseType.plain;
+    List<TopicEntity> topicList = new List();
     try {
       Response response = await dio.get(url,
           options: options, queryParameters: _buildParam(board, page));
 
-      UtilsPlugin().unicodeDecoding(response.data).then((result) {
-        print(result);
-        TopicListBeanEntity bean =
-            EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(result));
-        List<TopicEntity> topicList = new List();
-        bean.result.lT.forEach((bean) {
-          TopicEntity topicEntity = new TopicEntity();
-          topicEntity.title = bean.subject;
-          topicEntity.tid = bean.tid;
-          topicList.add(topicEntity);
-        });
-        print(topicList.toString());
-        callback(topicList);
+      String result = await UtilsPlugin().unicodeDecoding(response.data);
+      print(result);
+      TopicListBeanEntity bean =
+      EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(result));
+      bean.result.lT.forEach((bean) {
+        TopicEntity topicEntity = new TopicEntity();
+        topicEntity.title = bean.subject;
+        topicEntity.tid = bean.tid;
+        topicList.add(topicEntity);
       });
     } catch (e) {
       print(e);
     }
+    return topicList;
   }
 
   String _buildUrl(Board board, int page) {

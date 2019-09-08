@@ -35,22 +35,37 @@ class _TopicListContentWidget extends StatefulWidget {
 class _TopicListContentState extends State<_TopicListContentWidget> {
   List<TopicEntity> list;
 
+  TopicModel topicModel = new TopicModel();
+
   @override
   Widget build(BuildContext context) {
     return list == null || list.isEmpty ? ProgressBarEx() : _buildTopicList();
   }
 
   Widget _buildTopicList() {
-    return ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, i) {
-          return _buildTopicListItem(list[i]);
-        });
+    return new RefreshIndicator(
+        onRefresh: () => _handleRefresh(),
+        child: ListView.builder(
+            itemCount: list.length,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, i) {
+              return _buildTopicListItem(list[i]);
+            }));
+  }
+
+  Future<Null> _handleRefresh() async {
+    List data = await topicModel.loadPage(widget.board, 1);
+      setState(() {
+        list = data;
+      });
+    return null;
   }
 
   Widget _buildTopicListItem(TopicEntity entity) {
     return InkWell(
-        onTap: (){ _showTopicContentPage(entity.tid);},
+        onTap: () {
+          _showTopicContentPage(entity.tid);
+        },
         child: Container(
           padding: EdgeInsets.all(16),
           child: Text(
@@ -61,18 +76,14 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
   }
 
   void _showTopicContentPage(int tid) {
-    Widget nextWidget  = TopicContentWidget(tid);
+    Widget nextWidget = TopicContentWidget(tid);
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => nextWidget));
   }
 
   @override
   void initState() {
-    TopicModel().loadPage(widget.board, 1, (List data) {
-      setState(() {
-        list = data;
-      });
-    });
+    _handleRefresh();
     super.initState();
   }
 }
