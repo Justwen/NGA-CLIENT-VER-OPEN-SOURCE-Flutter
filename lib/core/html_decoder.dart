@@ -89,6 +89,11 @@ class _BasicHtmlDecoder implements HtmlDecoder {
             (Match m) =>
         "<td style='border-left:1px solid #aaa;border-bottom:1px solid #aaa'>");
 
+    data = data.replaceAllMapped(
+        new RegExp("\\[font=([^\\[|\\]]+)](.*?)\\[/font]"),
+            (Match m) =>
+        "<span style='font-family:${m[1]}'>${m[2]}</span>");
+
     data = data.replaceAllMapped(new RegExp("\\[color=(.*?)](.*?)\\[/color]"),
         (Match m) => "<span style='color:${m[1]}'>${m[2]}</span>");
 
