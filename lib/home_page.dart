@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       height: 48,
       imageUrl: sprintf(URL_BOARD_ICON, [board.fid.toString()]),
       placeholder: (context, url) => Image.asset(
-        Resources.getDrawable("default_board_icon"),
+        ResourceUtils.getDrawable("default_board_icon"),
         width: 48,
         height: 48,
       ),
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Resources.getString(context, title)),
+        title: Text(ResourceUtils.getString(context, title)),
         bottom: _buildTabBar(),
       ),
       body: _buildTabBody(),

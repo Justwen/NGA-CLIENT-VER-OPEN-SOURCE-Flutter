@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nga_open_source/common/component_index.dart';
+import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/topic_content_page.dart';
 
 import 'model/board_model.dart';
@@ -17,6 +18,7 @@ class TopicListWidget extends StatelessWidget {
           automaticallyImplyLeading: true,
           title: Text(board.name),
         ),
+        backgroundColor: AppColors.BACKGROUND_COLOR,
         body: _TopicListContentWidget(board));
   }
 }
@@ -55,9 +57,9 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
 
   Future<Null> _handleRefresh() async {
     List data = await topicModel.loadPage(widget.board, 1);
-      setState(() {
-        list = data;
-      });
+    setState(() {
+      list = data;
+    });
     return null;
   }
 
@@ -67,11 +69,56 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
           _showTopicContentPage(entity.tid);
         },
         child: Container(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            entity.title,
-            style: TextStyle(fontSize: 17),
-          ),
+          padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+                padding: EdgeInsets.only(bottom: 8),
+                child: Text(
+                  entity.title,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 17),
+                )),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(right: 4),
+                    child: Image.asset(
+                      ResourceUtils.getDrawable("ic_persion"),
+                      width: 15,
+                      height: 15,
+                    )),
+                Text(
+                  entity.author,
+                  style: TextStyle(fontSize: 12),
+                ),
+                Spacer(),
+                Padding(
+                    padding: EdgeInsets.only(right: 4),
+                    child: Image.asset(
+                      ResourceUtils.getDrawable("ic_time"),
+                      width: 15,
+                      height: 15,
+                    )),
+                Text(
+                  entity.lastReplyTime,
+                  style: TextStyle(fontSize: 12),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(left: 4, right: 4),
+                    child: Image.asset(
+                      ResourceUtils.getDrawable("ic_reply"),
+                      width: 15,
+                      height: 15,
+                    )),
+                Text(
+                  entity.replyCount.toString(),
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            )
+          ]),
         ));
   }
 

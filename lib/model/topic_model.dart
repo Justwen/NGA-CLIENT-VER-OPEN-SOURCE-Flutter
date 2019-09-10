@@ -24,17 +24,46 @@ class TopicModel {
 
       String result = await UtilsPlugin().unicodeDecoding(response.data);
       TopicListBeanEntity bean =
-      EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(result));
+          EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(result));
       bean.result.lT.forEach((bean) {
         TopicEntity topicEntity = new TopicEntity();
         topicEntity.title = bean.subject;
         topicEntity.tid = bean.tid;
+        topicEntity.author = bean.author;
+        topicEntity.replyCount = bean.replies;
+        topicEntity.lastReplyTime = _buildDate(bean.lastpost);
         topicList.add(topicEntity);
       });
     } catch (e) {
       print(e);
     }
     return topicList;
+  }
+
+  String _buildDate(int milliseconds) {
+    var now = DateTime.now();
+    var postDate = DateTime.fromMillisecondsSinceEpoch(milliseconds * 1000);
+
+    Duration diff = now.difference(postDate);
+
+    if (diff.inDays >= 365) {
+      return postDate.toString();
+    } else if (diff.inDays >= 1) {
+      String month =
+          postDate.month < 10 ? "0${postDate.month}" : "${postDate.month}";
+      String day = postDate.day < 10 ? "0${postDate.day}" : "${postDate.day}";
+      String hour =
+          postDate.hour < 10 ? "0${postDate.hour}" : "${postDate.hour}";
+      String minute =
+          postDate.month < 10 ? "0${postDate.minute}" : "${postDate.minute}";
+      return "$month-$day $hour:$minute";
+    } else if (diff.inHours >= 1) {
+      return "${diff.inHours}小时前";
+    } else if (diff.inMinutes >= 1) {
+      return "${diff.inMinutes}分钟前";
+    } else {
+      return "刚刚";
+    }
   }
 
   String _buildUrl(Board board, int page) {
@@ -66,6 +95,12 @@ class TopicEntity {
   String title;
 
   int tid;
+
+  String author;
+
+  int replyCount;
+
+  String lastReplyTime;
 
   Map toJson() {
     Map map = new Map();

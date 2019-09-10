@@ -78,6 +78,10 @@ flutter:
     - assets/template/html_template.html
     - assets/template/html_author_template.html
 
+    - assets/images/ic_persion.png
+    - assets/images/ic_reply.png
+    - assets/images/ic_time.png
+
     - assets/emoticon/pg/pg01.png
 
     - assets/images/default_board_icon.png
