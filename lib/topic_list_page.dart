@@ -69,11 +69,11 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
           _showTopicContentPage(entity.tid);
         },
         child: Container(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          padding: EdgeInsets.only(left: 14, right: 14, top: 16, bottom: 16),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
-                padding: EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.only(bottom: 16),
                 child: Text(
                   entity.title,
                   textAlign: TextAlign.left,
