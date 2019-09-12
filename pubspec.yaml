@@ -80,6 +80,7 @@ flutter:
 
     - assets/images/ic_persion.png
     - assets/images/ic_reply.png
+    - assets/images/ic_reply_count.png
     - assets/images/ic_time.png
 
     - assets/emoticon/pg/pg01.png

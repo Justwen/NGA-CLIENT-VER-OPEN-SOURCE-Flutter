@@ -33,15 +33,14 @@ class TopicListBeanResult {
   int iTRowsPage;
   int iRRowsPage;
 
-  TopicListBeanResult(
-      {this.iTRows,
-      this.iRows,
-      this.lT,
-      this.tF,
-      this.tGlobal,
-      this.tCu,
-      this.iTRowsPage,
-      this.iRRowsPage});
+  TopicListBeanResult({this.iTRows,
+    this.iRows,
+    this.lT,
+    this.tF,
+    this.tGlobal,
+    this.tCu,
+    this.iTRowsPage,
+    this.iRRowsPage});
 
   TopicListBeanResult.fromJson(Map<String, dynamic> json) {
     iTRows = json['__T__ROWS'];
@@ -119,27 +118,26 @@ class TopicListBeanResultT {
   String topicMisc;
   int lastmodify;
 
-  TopicListBeanResultT(
-      {this.fid,
-      this.parent,
-      this.tpcurl,
-      this.quoteFrom,
-      this.author,
-      this.subject,
-      this.quoteTo,
-      this.icon,
-      this.postdate,
-      this.topicMiscVar,
-      this.recommend,
-      this.authorid,
-      this.type,
-      this.tid,
-      this.replies,
-      this.lastposter,
-      this.lastpost,
-      this.titlefont,
-      this.topicMisc,
-      this.lastmodify});
+  TopicListBeanResultT({this.fid,
+    this.parent,
+    this.tpcurl,
+    this.quoteFrom,
+    this.author,
+    this.subject,
+    this.quoteTo,
+    this.icon,
+    this.postdate,
+    this.topicMiscVar,
+    this.recommend,
+    this.authorid,
+    this.type,
+    this.tid,
+    this.replies,
+    this.lastposter,
+    this.lastpost,
+    this.titlefont,
+    this.topicMisc,
+    this.lastmodify});
 
   TopicListBeanResultT.fromJson(Map<String, dynamic> json) {
     fid = json['fid'];
@@ -150,8 +148,8 @@ class TopicListBeanResultT {
     quoteFrom = json['quote_from'];
     if (json['author'] is bool) {
       author = "";
-    } else{
-      author = json['author'];
+    } else {
+      author = json['author'] ?? "";
     }
     subject = json['subject'];
     quoteTo = json['quote_to'];
@@ -167,7 +165,7 @@ class TopicListBeanResultT {
     replies = json['replies'];
     if (json['lastposter'] is bool) {
       lastposter = "";
-    } else{
+    } else {
       lastposter = json['lastposter'];
     }
     lastpost = json['lastpost'];

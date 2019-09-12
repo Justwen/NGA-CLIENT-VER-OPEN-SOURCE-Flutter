@@ -47,16 +47,15 @@ class TopicModel {
     Duration diff = now.difference(postDate);
 
     if (diff.inDays >= 365) {
-      return postDate.toString();
+      String month =
+          postDate.month < 10 ? "0${postDate.month}" : "${postDate.month}";
+      String day = postDate.day < 10 ? "0${postDate.day}" : "${postDate.day}";
+      return "${postDate.year}-$month-$day";
     } else if (diff.inDays >= 1) {
       String month =
           postDate.month < 10 ? "0${postDate.month}" : "${postDate.month}";
       String day = postDate.day < 10 ? "0${postDate.day}" : "${postDate.day}";
-      String hour =
-          postDate.hour < 10 ? "0${postDate.hour}" : "${postDate.hour}";
-      String minute =
-          postDate.month < 10 ? "0${postDate.minute}" : "${postDate.minute}";
-      return "$month-$day $hour:$minute";
+      return "$month-$day";
     } else if (diff.inHours >= 1) {
       return "${diff.inHours}小时前";
     } else if (diff.inMinutes >= 1) {

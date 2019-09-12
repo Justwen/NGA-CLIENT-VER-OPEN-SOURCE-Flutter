@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/topic_content_page.dart';
@@ -80,7 +82,7 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
                   style: TextStyle(fontSize: 17),
                 )),
             Row(
-              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Padding(
                     padding: EdgeInsets.only(right: 4),
@@ -108,7 +110,7 @@ class _TopicListContentState extends State<_TopicListContentWidget> {
                 Padding(
                     padding: EdgeInsets.only(left: 4, right: 4),
                     child: Image.asset(
-                      ResourceUtils.getDrawable("ic_reply"),
+                      ResourceUtils.getDrawable("ic_reply_count"),
                       width: 15,
                       height: 15,
                     )),
