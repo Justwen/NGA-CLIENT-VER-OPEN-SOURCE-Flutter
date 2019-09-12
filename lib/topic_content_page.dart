@@ -6,6 +6,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/plugin/WebViewPlugin.dart';
+import 'package:nga_open_source/post_page.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -54,6 +55,21 @@ class TopicContentState extends State<TopicContentWidget>
             automaticallyImplyLeading: true,
             title: Text("主题详情"),
             bottom: _buildTabBar(),
+            actions: <Widget>[
+              InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context, new MaterialPageRoute(builder: (context) => PostWidget(widget.tid,"reply")));
+                  },
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 16),
+                      child: Center(
+                        child: Text(
+                          "回帖",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ))),
+            ],
           ),
           body: widget._topicContentWidget);
     }
@@ -114,7 +130,7 @@ class _TopicContentState extends State<_TopicContentWidget> {
 
   TopicContentModel model = new TopicContentModel();
 
-  FlutterWebviewPlugin plugin;
+  FlutterWebviewPlugin plugin = new FlutterWebviewPlugin();
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +160,6 @@ class _TopicContentState extends State<_TopicContentWidget> {
   }
 
   Widget _buildContentWidget() {
-    plugin = new FlutterWebviewPlugin();
     return WebviewScaffold(
       url: new Uri.dataFromString(widget.topicContentEntity.htmlContent,
               mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))

@@ -1,18 +1,20 @@
 package com.mahang.androidnga.plugin;
 
+import com.mahang.androidnga.util.UriEncoderWithCharset;
+
 import java.io.UnsupportedEncodingException;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
-public class UtilsPlugin implements MethodChannel.MethodCallHandler {
+public class StringPlugins implements MethodChannel.MethodCallHandler {
 
-    private static final String PLUGIN_NAME = "util_plugin";
+    private static final String PLUGIN_NAME = "string_plugin";
 
     public static void registerWith(PluginRegistry registrar) {
         final MethodChannel channel = new MethodChannel(registrar.registrarFor(PLUGIN_NAME).messenger(), PLUGIN_NAME);
-        channel.setMethodCallHandler(new UtilsPlugin());
+        channel.setMethodCallHandler(new StringPlugins());
     }
 
     @Override
@@ -30,11 +32,20 @@ public class UtilsPlugin implements MethodChannel.MethodCallHandler {
             case "unicodeDecoding":
                 result.success(ascii2native(methodCall.argument("data")));
                 break;
+            case "uriEncode":
+                uriEncode(methodCall, result);
+                break;
             default:
                 result.notImplemented();
                 break;
 
         }
+    }
+
+    private void uriEncode(MethodCall methodCall, MethodChannel.Result result) {
+        String encode = methodCall.argument("charset");
+        String data = UriEncoderWithCharset.encode(methodCall.argument("data"), null, encode);
+        result.success(data);
     }
 
     private String ascii2native(String asciicode) {

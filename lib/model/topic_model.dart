@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:nga_open_source/plugin/UtilsPlugin.dart';
+import 'package:nga_open_source/plugin/StringPlugins.dart';
 
 import 'bean/entity_factory.dart';
 import 'bean/topic_list_bean_entity.dart';
