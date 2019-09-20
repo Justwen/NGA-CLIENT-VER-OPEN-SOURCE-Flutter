@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/model/Topic_post_model.dart';
-import 'package:nga_open_source/model/topic_model.dart';
 
 class PostWidget extends StatefulWidget {
-
   int tid;
 
   String action;
@@ -18,7 +16,6 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostState extends State<PostWidget> {
-
   FlutterWebviewPlugin webviewPlugin = new FlutterWebviewPlugin();
 
   TopicPostModel topicModel = new TopicPostModel();
@@ -51,7 +48,9 @@ class _PostState extends State<PostWidget> {
               onTap: () {
                 if (controller.text.isNotEmpty) {
                   postEntity.postContent = controller.text;
-                  topicModel.post(postEntity);
+                  topicModel.post(postEntity).then((bool) {
+                    Navigator.pop(context);
+                  });
                 }
               },
               child: Padding(
