@@ -24,6 +24,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   List<Category> categoryList;
 
+  int currentTabIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +38,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildTabBar() {
-    tabController = TabController(length: categoryList.length, vsync: this);
+    tabController = TabController(initialIndex:currentTabIndex, length: categoryList.length, vsync: this);
+    tabController.addListener(() {
+      currentTabIndex = tabController.index;
+
+    });
     Widget tabBar = TabBar(
       isScrollable: true,
       controller: tabController,
@@ -65,7 +71,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return GridView.builder(
         shrinkWrap: true,
         gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 1.25),
         itemCount: category.boards.length,
         itemBuilder: (context, i) {
           return _buildBoardItem(category.boards[i]);
@@ -76,7 +82,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return InkWell(
         onTap: () => _startTopicListPage(board),
         child: Container(
-            padding: EdgeInsets.all(8),
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

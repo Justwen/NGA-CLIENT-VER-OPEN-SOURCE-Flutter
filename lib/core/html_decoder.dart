@@ -86,13 +86,12 @@ class _BasicHtmlDecoder implements HtmlDecoder {
 
     data = data.replaceAllMapped(
         new RegExp("\\[td[ ]*(\\d+)]"),
-            (Match m) =>
-        "<td style='border-left:1px solid #aaa;border-bottom:1px solid #aaa'>");
+        (Match m) =>
+            "<td style='border-left:1px solid #aaa;border-bottom:1px solid #aaa'>");
 
     data = data.replaceAllMapped(
         new RegExp("\\[font=([^\\[|\\]]+)](.*?)\\[/font]"),
-            (Match m) =>
-        "<span style='font-family:${m[1]}'>${m[2]}</span>");
+        (Match m) => "<span style='font-family:${m[1]}'>${m[2]}</span>");
 
     data = data.replaceAllMapped(new RegExp("\\[color=(.*?)](.*?)\\[/color]"),
         (Match m) => "<span style='color:${m[1]}'>${m[2]}</span>");
@@ -153,30 +152,28 @@ class _ImageHtmlDecoder implements HtmlDecoder {
 }
 
 class _EmoticonHtmlDecoder implements HtmlDecoder {
+  static Map<String, Map> emoticonMap = {
+    "pg": EmoticonConstants.UBB_CODE_PENGUIN_MAP,
+    "ac": EmoticonConstants.UBB_CODE_ACNIANG_MAP,
+    "a2": EmoticonConstants.UBB_CODE_ACNIANG_NEW_MAP,
+    "pst": EmoticonConstants.UBB_CODE_PST_MAP,
+    "dt": EmoticonConstants.UBB_CODE_DT_MAP,
+  };
+
   @override
   String decode(String data) {
-    data = _decodeEmoticon(data, "pg", EmoticonConstants.UBB_CODE_PENGUIN,
-        EmoticonConstants.UBB_IMAGE_PENGUIN);
+    emoticonMap.forEach((key, value) {
+      data = _decodeEmoticon(data, key, value);
+    });
     return data;
   }
 
-  String _decodeEmoticon(String data, String emoticon, List<String> uddCodes,
-      List<String> images) {
+  String _decodeEmoticon(String data, String emoticon, Map emoticonMap) {
     RegExp("\\[s:$emoticon:(.*?)]").allMatches(data).forEach((regExpMatch) {
       String code = regExpMatch[1];
-      String image;
-      for (int i = 0; i < uddCodes.length; i++) {
-        if (uddCodes[i] == code) {
-          image = images[i];
-          break;
-        }
-      }
-      data = data.replaceAll(
-        regExpMatch[0],
-        sprintf(
-            "<img src='file:///android_asset/flutter_assets/assets/emoticon/$emoticon/%s'>",
-            [image]),
-      );
+      String image = emoticonMap[code];
+      data = data.replaceAll(regExpMatch[0],
+          "<img src='https://img4.nga.178.com/ngabbs/post/smile/$image.png' />");
     });
     return data;
   }

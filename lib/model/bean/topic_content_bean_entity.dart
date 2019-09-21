@@ -441,7 +441,7 @@ class TopicContentBeanDataT {
 		authorid = json['authorid'];
 		tid = json['tid'];
 		replies = json['replies'];
-		lastposter = json['lastposter'];
+		lastposter = json['lastposter'].toString();
 		digest = json['digest'];
 		lastpost = json['lastpost'];
 		locked = json['locked'];

@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:nga_open_source/utils/utils.dart';
 
 void main() {
 //  String url = "https://bbs.nga.cn/read.php?tid=18335755&page=1&__output=8";
@@ -37,9 +34,9 @@ void main() {
 //    print("刚刚");
 //  }
 
-}
 
-void test() async {
- String data= await StringUtils.uriEncode("反正多喝水看医生是没问题的", "GBK");
- print(data);
+   Map data = {"1":"2"};
+   Map<String ,Map> data2 = {"1":data};
+   print(data2);
+
 }

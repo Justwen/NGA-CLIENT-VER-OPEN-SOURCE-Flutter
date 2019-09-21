@@ -1,11 +1,15 @@
 import 'package:flutter/services.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
+import 'package:nga_open_source/utils/utils.dart';
 import 'package:sprintf/sprintf.dart';
 
 class HtmlBuilder {
   static String sHtmlTemplate;
 
   static String sHtmlAuthorTemplate;
+
+  static const String DEFAULT_AVATAR_URL =
+      "http://img.nga.178.com/attachments/mon_201909/21/9bQ5-5i2kKyToS5b-5b.png.thumb_s.jpg";
 
   String complete(String body) {
     String html = sprintf(sHtmlTemplate, [18, body]);
@@ -37,8 +41,11 @@ class HtmlBuilder {
   }
 
   StringBuffer buildAuthor(StringBuffer buffer, TopicRowEntity entity) {
+    String avatarUrl = StringUtils.isEmpty(entity.author.avatarUrl)
+        ? DEFAULT_AVATAR_URL
+        : entity.author.avatarUrl;
     buffer.write(sprintf(sHtmlAuthorTemplate, [
-      entity.author.avatarUrl,
+      avatarUrl,
       entity.author.isAnonymous
           ? "${entity.author.userName}<span style='color:red'>(匿名)</span>"
           : entity.author.userName,
