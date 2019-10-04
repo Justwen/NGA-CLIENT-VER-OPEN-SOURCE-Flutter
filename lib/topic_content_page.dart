@@ -165,7 +165,6 @@ class _TopicContentState extends State<_TopicContentWidget> {
               mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
           .toString(),
       withJavascript: true,
-      withLocalUrl: true,
     );
   }
 }
