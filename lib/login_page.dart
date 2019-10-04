@@ -23,7 +23,7 @@ class LoginWidget extends StatelessWidget {
     FlutterWebviewPlugin flutterWebViewPlugin = new FlutterWebviewPlugin();
     flutterWebViewPlugin.onUrlChanged.listen((url) {
       this.url = url;
-      _parseCookie(url);
+      _parseCookie(flutterWebViewPlugin, url);
     });
 
     return WillPopScope(
@@ -41,12 +41,12 @@ class LoginWidget extends StatelessWidget {
           ),
         ), //设置初始化界面
       ),
-      onWillPop: () => _parseCookie(url),
+      onWillPop: () => _parseCookie(flutterWebViewPlugin, url),
     );
   }
 
-  Future<bool> _parseCookie(String url) async {
-    String cookiesString = await webViewPlugin.getCookie(url);
+  Future<bool> _parseCookie(FlutterWebviewPlugin webviewPlugin, String url) async {
+    String cookiesString = await webviewPlugin.getAllCookies(url);
     String uid;
     String uName;
     String cid;
