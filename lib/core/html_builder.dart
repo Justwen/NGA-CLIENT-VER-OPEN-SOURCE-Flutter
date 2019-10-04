@@ -9,10 +9,10 @@ class HtmlBuilder {
   static String sHtmlAuthorTemplate;
 
   static const String DEFAULT_AVATAR_URL =
-      "http://img.nga.178.com/attachments/mon_201909/21/9bQ5-5i2kKyToS5b-5b.png.thumb_s.jpg";
+      "https://img.nga.178.com/attachments/mon_201909/21/9bQ5-5i2kKyToS5b-5b.png.thumb_s.jpg";
 
   String complete(String body) {
-    String html = sprintf(sHtmlTemplate, [18, body]);
+    String html = sprintf(sHtmlTemplate, [18, body]).replaceAll("http:", "https:");
     return html;
   }
 
