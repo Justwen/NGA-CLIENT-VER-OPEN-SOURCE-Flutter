@@ -22,9 +22,8 @@ class TopicModel {
       Response response = await dio.get(url,
           options: options, queryParameters: _buildParam(board, page));
 
-      String result = await UtilsPlugin().unicodeDecoding(response.data);
       TopicListBeanEntity bean =
-          EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(result));
+          EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(response.data));
       bean.result.lT.forEach((bean) {
         TopicEntity topicEntity = new TopicEntity();
         topicEntity.title = bean.subject;
