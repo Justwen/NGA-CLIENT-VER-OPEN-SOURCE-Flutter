@@ -57,6 +57,11 @@ dependencies:
   # 数据文件读写
   path_provider: ^1.2.2
 
+  # redux
+  redux: ^3.0.0
+  flutter_redux: ^0.5.3
+  redux_thunk: ^0.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -32,7 +32,6 @@ class UserModel {
         });
       }
     }
-    print(userList.toString());
   }
 
   void addUser(String uName, String uid, String cid) {
@@ -51,7 +50,8 @@ class UserModel {
 
   String getCookie() {
     if (!isEmpty()) {
-      return "ngaPassportUid=${userList[0].uid}; ngaPassportCid=${userList[0].cid}";
+      return "ngaPassportUid=${userList[0].uid}; ngaPassportCid=${userList[0]
+          .cid}";
     } else {
       return "";
     }
@@ -83,7 +83,7 @@ class UserInfo {
 
   factory UserInfo.fromJson(Map<String, dynamic> srcJson) {
     UserInfo userInfo =
-        new UserInfo(srcJson["uName"], srcJson["uid"], srcJson["cid"]);
+    new UserInfo(srcJson["uName"], srcJson["uid"], srcJson["cid"]);
     return userInfo;
   }
 
@@ -91,4 +91,12 @@ class UserInfo {
   String toString() {
     return toJson().toString();
   }
+
+  @override
+  bool operator ==(other) {
+    return other is UserInfo && uName == other.uName && uid == other.uid;
+  }
+
+  @override
+  int get hashCode => int.parse(uid);
 }

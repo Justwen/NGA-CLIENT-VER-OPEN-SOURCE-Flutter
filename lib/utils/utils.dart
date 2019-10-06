@@ -1,4 +1,5 @@
 import 'package:nga_open_source/plugin/StringPlugins.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StringUtils {
 
@@ -8,3 +9,4 @@ class StringUtils {
     return await UtilsPlugin.uriEncode(data, charset);
   }
 }
+

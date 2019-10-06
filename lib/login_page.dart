@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:nga_open_source/main.dart';
+import 'package:nga_open_source/redux/user/user_action.dart';
 
 import 'model/user_model.dart';
 import 'plugin/WebViewPlugin.dart';
@@ -25,7 +27,6 @@ class LoginWidget extends StatelessWidget {
       this.url = url;
       _parseCookie(flutterWebViewPlugin, url);
     });
-
     return WillPopScope(
       child: WebviewScaffold(
         //加载的URL
@@ -45,7 +46,8 @@ class LoginWidget extends StatelessWidget {
     );
   }
 
-  Future<bool> _parseCookie(FlutterWebviewPlugin webviewPlugin, String url) async {
+  Future<bool> _parseCookie(
+      FlutterWebviewPlugin webviewPlugin, String url) async {
     String cookiesString = await webviewPlugin.getAllCookies(url);
     String uid;
     String uName;
@@ -62,6 +64,7 @@ class LoginWidget extends StatelessWidget {
     });
     print("uid=$uid, uName=$uName, cid=$cid");
     if (uid != null && uName != null && cid != null) {
+      ReduxApp.store.dispatch(UserAddAction([UserInfo(uName, uid, cid)]));
       UserModel.getInstance().addUser(uName, uid, cid);
     }
     return new Future.value(true);

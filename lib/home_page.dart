@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:nga_open_source/redux/app_state.dart';
+import 'package:nga_open_source/redux/user/user_state.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -38,10 +41,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildTabBar() {
-    tabController = TabController(initialIndex:currentTabIndex, length: categoryList.length, vsync: this);
+    tabController = TabController(
+      initialIndex: currentTabIndex,
+      length: categoryList.length,
+      vsync: this,
+    );
     tabController.addListener(() {
       currentTabIndex = tabController.index;
-
     });
     Widget tabBar = TabBar(
       isScrollable: true,
@@ -70,8 +76,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget _buildBoardListView(Category category) {
     return GridView.builder(
         shrinkWrap: true,
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 1.25),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, childAspectRatio: 1.25),
         itemCount: category.boards.length,
         itemBuilder: (context, i) {
           return _buildBoardItem(category.boards[i]);
@@ -79,9 +85,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildBoardItem(Board board) {
-    return InkWell(
-        onTap: () => _startTopicListPage(board),
-        child: Container(
+    return StoreConnector<AppState, UserState>(
+      converter: (store) => store.state.userState,
+      builder: (context, userState) {
+        return InkWell(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  userState.isEmpty() ? LoginWidget() : TopicListWidget(board),
+            ),
+          ),
+          child: Container(
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -92,17 +107,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 Container(
                     padding: EdgeInsets.only(top: 4), child: Text(board.name)),
               ],
-            )));
-  }
-
-  void _startTopicListPage(Board board) async {
-    bool empty = UserModel.getInstance().isEmpty();
-
-    Widget nextWidget = empty
-        ? new LoginWidget()
-        : new TopicListWidget(board);
-    Navigator.push(
-        context, new MaterialPageRoute(builder: (context) => nextWidget));
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget _getBoardIcon(Board board) {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:nga_open_source/plugin/StringPlugins.dart';
 
+import '../main.dart';
 import 'bean/entity_factory.dart';
 import 'bean/topic_list_bean_entity.dart';
 import 'board_model.dart';
@@ -84,7 +85,7 @@ class TopicModel {
 
   Map<String, String> _buildHeader() {
     Map<String, String> header = Map();
-    header["Cookie"] = UserModel.getInstance().getCookie();
+    header["Cookie"] = ReduxApp.store.state.userState.getCookie();
     return header;
   }
 }
