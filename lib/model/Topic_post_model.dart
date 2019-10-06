@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
-import 'package:nga_open_source/model/user_model.dart';
+import 'package:nga_open_source/main.dart';
 
 class TopicPostModel {
   Dio dio = new Dio();
@@ -31,7 +31,7 @@ class TopicPostModel {
 
   Map<String, String> _buildHeader(TopicPostEntity postEntity) {
     Map<String, String> header = Map();
-    header["Cookie"] = UserModel.getInstance().getCookie();
+    header["Cookie"] = ReduxApp.store.state.userState.getCookie();//UserModel.getInstance().getCookie();
     header["Accept-Charset"] = "GBK";
     header["Content-Type"] = "application/x-www-form-urlencode";
     header["User-Agent"] =

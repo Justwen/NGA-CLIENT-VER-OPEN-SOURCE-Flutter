@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:nga_open_source/model/user_model.dart';
+import 'package:nga_open_source/model/entity/user_info.dart';
 
 @immutable
 class UserState {

@@ -1,13 +1,9 @@
-import 'dart:convert';
-
-import 'package:nga_open_source/model/user_model.dart';
-import 'package:redux/redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nga_open_source/model/entity/user_info.dart';
 
 class UserAddAction {
-  List<UserInfo> userList;
+  UserInfo userInfo;
 
-  UserAddAction(this.userList);
+  UserAddAction(this.userInfo);
 }
 
 class UserSwitchAction {
@@ -17,28 +13,8 @@ class UserSwitchAction {
 }
 
 class UserInitAction {
-//  List<UserInfo> userList;
-//
-//  int index;
-//
-//  UserInitAction(this.userList, this.index);
+  List<UserInfo> userList;
 
-//  static final void Function(Store store) action = userInitAction;
-//
-//  static void userInitAction(Store store) async {
-//    SharedPreferences sp = await SharedPreferences.getInstance();
-//    String data = sp.getString("user");
-//    if (data != null) {
-//      List<dynamic> list = jsonDecode(data);
-//      if (list != null) {
-//        List<UserInfo> userList = new List();
-//        list.forEach((item) {
-//          userList.add(UserInfo.fromJson(item));
-//        });
-//        print(userList.toString());
-//        int index = sp.getInt("user_index") ?? 0;
-//        store.dispatch(UserInitAction(userList, index));
-//      }
-//    }
-//  }
+  int index;
+
 }

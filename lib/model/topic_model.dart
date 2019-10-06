@@ -7,7 +7,6 @@ import '../main.dart';
 import 'bean/entity_factory.dart';
 import 'bean/topic_list_bean_entity.dart';
 import 'board_model.dart';
-import 'user_model.dart';
 
 class TopicModel {
   Dio dio = new Dio();

@@ -9,7 +9,6 @@ import 'package:sprintf/sprintf.dart';
 import 'common/component_index.dart';
 import 'login_page.dart';
 import 'model/board_model.dart';
-import 'model/user_model.dart';
 import 'topic_list_page.dart';
 
 class HomePage extends StatefulWidget {

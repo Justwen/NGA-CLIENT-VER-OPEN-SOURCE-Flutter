@@ -3,7 +3,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/main.dart';
 import 'package:nga_open_source/redux/user/user_action.dart';
 
-import 'model/user_model.dart';
+import 'model/entity/user_info.dart';
 import 'plugin/WebViewPlugin.dart';
 
 class LoginWidget extends StatelessWidget {
@@ -64,8 +64,7 @@ class LoginWidget extends StatelessWidget {
     });
     print("uid=$uid, uName=$uName, cid=$cid");
     if (uid != null && uName != null && cid != null) {
-      ReduxApp.store.dispatch(UserAddAction([UserInfo(uName, uid, cid)]));
-      UserModel.getInstance().addUser(uName, uid, cid);
+      ReduxApp.store.dispatch(UserAddAction(UserInfo(uName, uid, cid)));
     }
     return new Future.value(true);
   }
