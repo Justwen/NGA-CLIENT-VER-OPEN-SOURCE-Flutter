@@ -1,4 +1,4 @@
-import 'package:nga_open_source/model/board_model.dart';
+import 'package:nga_open_source/model/entity/board_info.dart';
 
 class TopicListBeanEntity {
   TopicListBeanResult result;

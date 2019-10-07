@@ -7,6 +7,7 @@ import 'package:nga_open_source/main.dart';
 import 'package:nga_open_source/model/bean/entity_factory.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:nga_open_source/plugin/WebViewPlugin.dart';
+import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'bean/topic_content_bean_entity.dart';
@@ -101,7 +102,7 @@ class TopicContentModel {
 
   Map<String, String> _buildHeader() {
     Map<String, String> header = Map();
-    header["Cookie"] = ReduxApp.store.state.userState.getCookie(); //UserModel.getInstance().getCookie();
+    header["Cookie"] = AppRedux.userState.getCookie(); //UserModel.getInstance().getCookie();
     return header;
   }
 }

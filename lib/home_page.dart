@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:nga_open_source/redux/app_state.dart';
-import 'package:nga_open_source/redux/user/user_state.dart';
+import 'package:nga_open_source/redux/board/board_state.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:sprintf/sprintf.dart';
 
 import 'common/component_index.dart';
 import 'login_page.dart';
-import 'model/board_model.dart';
+import 'model/entity/board_info.dart';
 import 'topic_list_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   TabController tabController;
 
-  List<Category> categoryList;
+//  List<Category> categoryList;
 
   int currentTabIndex = 0;
 
@@ -32,17 +33,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     title = AppStrings.appName;
-    categoryList = BoardManager.getInstance().initData(() {
-      setState(() {
-        categoryList = BoardManager.getInstance().getBoardCategory();
-      });
-    });
+//    categoryList = BoardManager.getInstance().initData(() {
+//      setState(() {
+//        categoryList = BoardManager.getInstance().getBoardCategory();
+//      });
+    //  });
   }
 
   Widget _buildTabBar() {
     tabController = TabController(
       initialIndex: currentTabIndex,
-      length: categoryList.length,
+      length: AppRedux.boardState.categoryList.length,
       vsync: this,
     );
     tabController.addListener(() {
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Widget tabBar = TabBar(
       isScrollable: true,
       controller: tabController,
-      tabs: categoryList.map((e) {
+      tabs: AppRedux.boardState.categoryList.map((e) {
         return Container(
           height: 48.0,
           alignment: Alignment.center,
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget _buildTabBody() {
     Widget tabBarBody = TabBarView(
-      children: categoryList.map((e) {
+      children: AppRedux.boardState.categoryList.map((e) {
         return _buildBoardListView(e);
       }).toList(),
       controller: tabController,
@@ -84,18 +85,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildBoardItem(Board board) {
-    return StoreConnector<AppState, UserState>(
-      converter: (store) => store.state.userState,
-      builder: (context, userState) {
-        return InkWell(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  userState.isEmpty() ? LoginWidget() : TopicListWidget(board),
-            ),
-          ),
-          child: Container(
+    return InkWell(
+        onTap: () => _startTopicListPage(board),
+        child: Container(
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -106,11 +98,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 Container(
                     padding: EdgeInsets.only(top: 4), child: Text(board.name)),
               ],
-            ),
-          ),
-        );
-      },
-    );
+            )));
+  }
+
+  void _startTopicListPage(Board board) async {
+    bool empty = AppRedux.userState.isEmpty();
+
+    Widget nextWidget = empty
+        ? new LoginWidget()
+        : new TopicListWidget(board);
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => nextWidget));
   }
 
   Widget _getBoardIcon(Board board) {
@@ -133,13 +131,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.BACKGROUND_COLOR,
-      appBar: AppBar(
-        title: Text(ResourceUtils.getString(context, title)),
-        bottom: _buildTabBar(),
-      ),
-      body: _buildTabBody(),
-    );
+    return StoreConnector<AppState, BoardState>(
+        converter: (store) => store.state.boardState,
+        builder: (context, boardState) {
+          print("length = " + boardState.categoryList.length.toString());
+          return Scaffold(
+            backgroundColor: AppColors.BACKGROUND_COLOR,
+            appBar: AppBar(
+              title: Text(ResourceUtils.getString(context, title)),
+              bottom: _buildTabBar(),
+            ),
+            body: _buildTabBody(),
+          );
+        });
   }
 }

@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:nga_open_source/plugin/StringPlugins.dart';
+import 'package:nga_open_source/redux/app_redux.dart';
 
 import '../main.dart';
 import 'bean/entity_factory.dart';
 import 'bean/topic_list_bean_entity.dart';
-import 'board_model.dart';
+import 'entity/board_info.dart';
 
 class TopicModel {
   Dio dio = new Dio();
@@ -84,7 +85,7 @@ class TopicModel {
 
   Map<String, String> _buildHeader() {
     Map<String, String> header = Map();
-    header["Cookie"] = ReduxApp.store.state.userState.getCookie();
+    header["Cookie"] = AppRedux.userState.getCookie();
     return header;
   }
 }
