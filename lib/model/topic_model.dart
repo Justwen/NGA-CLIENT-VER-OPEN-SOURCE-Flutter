@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:nga_open_source/plugin/StringPlugins.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
 
-import '../main.dart';
 import 'bean/entity_factory.dart';
 import 'bean/topic_list_bean_entity.dart';
 import 'entity/board_info.dart';

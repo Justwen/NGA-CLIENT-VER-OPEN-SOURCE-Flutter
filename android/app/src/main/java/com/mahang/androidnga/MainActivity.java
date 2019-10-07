@@ -2,7 +2,6 @@ package com.mahang.androidnga;
 
 import android.os.Bundle;
 
-import com.mahang.androidnga.plugin.StringPlugins;
 import com.mahang.androidnga.plugin.WebViewPlugin;
 
 import io.flutter.app.FlutterActivity;
@@ -14,6 +13,5 @@ public class MainActivity extends FlutterActivity {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
         WebViewPlugin.registerWith(this);
-        StringPlugins.registerWith(this);
     }
 }
