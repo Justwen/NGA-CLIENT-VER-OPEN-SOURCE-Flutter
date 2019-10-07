@@ -17,6 +17,7 @@ class TopicTitleModel {
   Dio dio = new Dio();
 
   Future<Null> loadPage(Board board, int page, {bool reset = false}) async {
+    print("page = " + page.toString());
     String url = _buildUrl(board, page);
     print(url);
     Options options = new Options();
@@ -38,10 +39,22 @@ class TopicTitleModel {
         topicEntity.lastReplyTime = _buildDate(bean.lastpost);
         wrapper.add(info: topicEntity);
       });
+      wrapper.pageIndex = page;
+      wrapper.hasNextPage = bean.result.iTRowsPage > page;
       bloc.addTopicTitles(wrapper, reset: reset);
     } catch (e) {
       print(e);
     }
+  }
+
+  bool loadNextPage(Board board)  {
+    if (bloc.bean.hasNextPage) {
+      loadPage(board, bloc.bean.pageIndex + 1);
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   String _buildDate(int milliseconds) {

@@ -27,6 +27,10 @@ class TopicTitleWrapper {
 
   List<TopicTitleInfo> get data => _topicTitleList;
 
+  int pageIndex = 0;
+
+  bool hasNextPage = true;
+
   void add({
     TopicTitleWrapper wrapper,
     List<TopicTitleInfo> list,
@@ -34,6 +38,7 @@ class TopicTitleWrapper {
   }) {
     if (wrapper != null) {
       _topicTitleList.addAll(wrapper.data);
+      pageIndex = wrapper.pageIndex;
     }
 
     if (list != null) {

@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/entity/topic_title_info.dart';
 import 'package:nga_open_source/res/app_colors.dart';
+import 'package:nga_open_source/widget/pull_to_refresh.dart';
 
 import '../model/entity/board_info.dart';
 import '../model/topic_title_model.dart';
@@ -49,18 +50,19 @@ class _TopicTitleContainer extends StatelessWidget {
   }
 
   Widget _buildTopicList(BuildContext context, TopicTitleWrapper wrapper) {
-    return new RefreshIndicator(
-        onRefresh: () => _handleRefresh(),
-        child: ListView.builder(
-            itemCount: wrapper.length,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (context, i) {
-              return _buildTopicListItem(context, wrapper.data[i]);
-            }));
+    return PullToRefreshWidget(wrapper.data, (context, i) {
+      return _buildTopicListItem(context, wrapper.data[i]);
+    }, refresh: () => _handleRefresh(), loadMore: () => _handleLoadMore());
+
   }
 
   Future<Null> _handleRefresh() async {
     topicModel.loadPage(board, 1, reset: true);
+  }
+
+  bool _handleLoadMore() {
+    topicModel.loadNextPage(board);
+    return true;
   }
 
   Widget _buildTopicListItem(BuildContext context, TopicTitleInfo entity) {
