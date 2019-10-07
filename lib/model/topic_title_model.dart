@@ -1,41 +1,47 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:nga_open_source/bloc/topic_title_bloc.dart';
+import 'package:nga_open_source/model/entity/topic_title_info.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
 
 import 'bean/entity_factory.dart';
 import 'bean/topic_list_bean_entity.dart';
 import 'entity/board_info.dart';
 
-class TopicModel {
+class TopicTitleModel {
+  TopicTitleBloc _bloc = TopicTitleBloc();
+
+  TopicTitleBloc get bloc => _bloc;
+
   Dio dio = new Dio();
 
-  Future<List<TopicEntity>> loadPage(Board board, int page) async {
+  Future<Null> loadPage(Board board, int page, {bool reset = false}) async {
     String url = _buildUrl(board, page);
     print(url);
     Options options = new Options();
     options.headers = _buildHeader();
     options.responseType = ResponseType.plain;
-    List<TopicEntity> topicList = new List();
+    TopicTitleWrapper wrapper = TopicTitleWrapper();
     try {
       Response response = await dio.get(url,
           options: options, queryParameters: _buildParam(board, page));
 
-      TopicListBeanEntity bean =
-          EntityFactory.generateOBJ<TopicListBeanEntity>(jsonDecode(response.data));
+      TopicListBeanEntity bean = EntityFactory.generateOBJ<TopicListBeanEntity>(
+          jsonDecode(response.data));
       bean.result.lT.forEach((bean) {
-        TopicEntity topicEntity = new TopicEntity();
+        TopicTitleInfo topicEntity = TopicTitleInfo();
         topicEntity.title = bean.subject;
         topicEntity.tid = bean.tid;
         topicEntity.author = bean.author;
         topicEntity.replyCount = bean.replies;
         topicEntity.lastReplyTime = _buildDate(bean.lastpost);
-        topicList.add(topicEntity);
+        wrapper.add(info: topicEntity);
       });
+      bloc.addTopicTitles(wrapper, reset: reset);
     } catch (e) {
       print(e);
     }
-    return topicList;
   }
 
   String _buildDate(int milliseconds) {
@@ -85,29 +91,5 @@ class TopicModel {
     Map<String, String> header = Map();
     header["Cookie"] = AppRedux.userState.getCookie();
     return header;
-  }
-}
-
-class TopicEntity {
-  String title;
-
-  int tid;
-
-  String author;
-
-  int replyCount;
-
-  String lastReplyTime;
-
-  Map toJson() {
-    Map map = new Map();
-    map["title"] = this.title;
-    map["tid"] = this.tid;
-    return map;
-  }
-
-  @override
-  String toString() {
-    return toJson().toString();
   }
 }

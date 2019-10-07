@@ -10,7 +10,7 @@ import 'package:sprintf/sprintf.dart';
 import '../common/component_index.dart';
 import 'login_page.dart';
 import '../model/entity/board_info.dart';
-import 'topic_list_page.dart';
+import 'topic_title_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     Widget nextWidget = empty
         ? new LoginWidget()
-        : new TopicListWidget(board);
+        : new TopicTitleWidget(board);
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => nextWidget));
   }
