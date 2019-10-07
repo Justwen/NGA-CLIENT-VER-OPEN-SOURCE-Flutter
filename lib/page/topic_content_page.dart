@@ -6,9 +6,10 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/plugin/WebViewPlugin.dart';
-import 'package:nga_open_source/post_page.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'post_page.dart';
 
 class TopicContentWidget extends StatefulWidget {
   final int tid;

@@ -3,9 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferenceUtils {
   static SharedPreferences preferences;
 
-  static Future<SharedPreferences> init() async {
+  static Future<Null> init() async {
     preferences = await SharedPreferences.getInstance();
-    return preferences;
   }
 
   static bool checkNotNull() {

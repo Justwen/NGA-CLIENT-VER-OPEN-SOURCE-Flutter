@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/res/app_colors.dart';
-import 'package:nga_open_source/topic_content_page.dart';
 
-import 'model/entity/board_info.dart';
-import 'model/topic_model.dart';
+import '../model/entity/board_info.dart';
+import '../model/topic_model.dart';
+import 'topic_content_page.dart';
 
 class TopicListWidget extends StatelessWidget {
   final Board board;

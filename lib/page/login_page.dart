@@ -4,8 +4,8 @@ import 'package:nga_open_source/main.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:nga_open_source/redux/user/user_action.dart';
 
-import 'model/entity/user_info.dart';
-import 'plugin/WebViewPlugin.dart';
+import '../model/entity/user_info.dart';
+import '../plugin/WebViewPlugin.dart';
 
 class LoginWidget extends StatelessWidget {
   static const String LOGIN_WEB_PAGE_URL =

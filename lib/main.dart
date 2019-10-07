@@ -7,7 +7,7 @@ import 'package:nga_open_source/redux/app_state.dart';
 import 'package:nga_open_source/redux/board/board_action.dart';
 import 'package:nga_open_source/redux/user/user_action.dart';
 
-import 'home_page.dart';
+import 'page/home_page.dart';
 import 'res/app_strings.dart';
 
 void main() {

@@ -7,9 +7,9 @@ import 'package:nga_open_source/redux/board/board_state.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:sprintf/sprintf.dart';
 
-import 'common/component_index.dart';
+import '../common/component_index.dart';
 import 'login_page.dart';
-import 'model/entity/board_info.dart';
+import '../model/entity/board_info.dart';
 import 'topic_list_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,19 +25,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   TabController tabController;
 
-//  List<Category> categoryList;
-
   int currentTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
     title = AppStrings.appName;
-//    categoryList = BoardManager.getInstance().initData(() {
-//      setState(() {
-//        categoryList = BoardManager.getInstance().getBoardCategory();
-//      });
-    //  });
   }
 
   Widget _buildTabBar() {
