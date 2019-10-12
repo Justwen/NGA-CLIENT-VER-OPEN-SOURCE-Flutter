@@ -3,6 +3,7 @@ import 'package:nga_open_source/model/entity/board_info.dart';
 class TopicListBeanEntity {
   TopicListBeanResult result;
   int code;
+  String msg;
 
   TopicListBeanEntity({this.result, this.code});
 
@@ -11,6 +12,7 @@ class TopicListBeanEntity {
         ? new TopicListBeanResult.fromJson(json['result'])
         : null;
     code = json['code'];
+    msg = json['msg'];
   }
 
   Map<String, dynamic> toJson() {

@@ -16,8 +16,11 @@ abstract class BaseBloc<T> {
   }
 
   void notifyDataChanged() {
-    if (bean != null) {
-      _controller.sink.add(bean);
-    }
+    _controller.sink.add(bean);
+  }
+
+  void reset() {
+    bean = null;
+    notifyDataChanged();
   }
 }

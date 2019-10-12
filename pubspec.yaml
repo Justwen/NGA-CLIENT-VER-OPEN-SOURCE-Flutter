@@ -62,6 +62,8 @@ dependencies:
   flutter_redux: ^0.5.3
   redux_thunk: ^0.2.1
 
+  toast: ^0.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

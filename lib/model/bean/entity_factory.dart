@@ -1,4 +1,4 @@
-import 'topic_list_bean_entity.dart';
+import 'topic_title_bean.dart';
 import 'topic_content_bean_entity.dart';
 
 class EntityFactory {

@@ -4,9 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:nga_open_source/bloc/topic_title_bloc.dart';
 import 'package:nga_open_source/model/entity/topic_title_info.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
+import 'package:toast/toast.dart';
 
 import 'bean/entity_factory.dart';
-import 'bean/topic_list_bean_entity.dart';
+import 'bean/topic_title_bean.dart';
 import 'entity/board_info.dart';
 
 class TopicTitleModel {
@@ -30,21 +31,31 @@ class TopicTitleModel {
 
       TopicListBeanEntity bean = EntityFactory.generateOBJ<TopicListBeanEntity>(
           jsonDecode(response.data));
-      bean.result.lT.forEach((bean) {
-        TopicTitleInfo topicEntity = TopicTitleInfo();
-        topicEntity.title = bean.subject;
-        topicEntity.tid = bean.tid;
-        topicEntity.author = bean.author;
-        topicEntity.replyCount = bean.replies;
-        topicEntity.lastReplyTime = _buildDate(bean.lastpost);
-        wrapper.add(info: topicEntity);
-      });
-      wrapper.pageIndex = page;
-      wrapper.hasNextPage = bean.result.iTRowsPage > page;
-      bloc.addTopicTitles(wrapper, reset: reset);
+      if (bean.code == 1) {
+        wrapper.errorMsg = bean.msg;
+        bloc.showErrorMsg(wrapper);
+      } else {
+        bean.result.lT.forEach((bean) {
+          TopicTitleInfo topicEntity = TopicTitleInfo();
+          topicEntity.title = bean.subject;
+          topicEntity.tid = bean.tid;
+          topicEntity.author = bean.author;
+          topicEntity.replyCount = bean.replies;
+          topicEntity.lastReplyTime = _buildDate(bean.lastpost);
+          wrapper.add(info: topicEntity);
+        });
+        wrapper.pageIndex = page;
+        wrapper.hasNextPage = bean.result.iTRowsPage > page;
+        bloc.addTopicTitles(wrapper, reset: reset);
+      }
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<Null> loadAgain(Board board, int page) async {
+    bloc.reset();
+    await loadPage(board, page);
   }
 
   bool hasNextPage() {

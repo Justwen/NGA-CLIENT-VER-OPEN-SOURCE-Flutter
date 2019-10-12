@@ -31,6 +31,8 @@ class TopicTitleWrapper {
 
   bool hasNextPage = true;
 
+  String errorMsg;
+
   void add({
     TopicTitleWrapper wrapper,
     List<TopicTitleInfo> list,

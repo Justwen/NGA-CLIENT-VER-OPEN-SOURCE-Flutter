@@ -4,7 +4,11 @@ import 'package:flutter/rendering.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/entity/topic_title_info.dart';
 import 'package:nga_open_source/res/app_colors.dart';
+import 'package:nga_open_source/utils/utils.dart';
+import 'package:nga_open_source/widget/empty_widget.dart';
 import 'package:nga_open_source/widget/pull_to_refresh.dart';
+import 'package:toast/toast.dart';
+import 'package:toast/toast.dart' as prefix0;
 
 import '../model/entity/board_info.dart';
 import '../model/topic_title_model.dart';
@@ -17,6 +21,7 @@ class TopicTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ContextUtils.buildContext = context;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
@@ -40,20 +45,30 @@ class _TopicTitleContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<TopicTitleWrapper>(
         stream: topicModel.bloc.data,
-        initialData: TopicTitleWrapper(),
+        initialData: null,
         builder:
             (BuildContext context, AsyncSnapshot<TopicTitleWrapper> snapshot) {
-          return snapshot.data.isEmpty
-              ? ProgressBarEx()
-              : _buildTopicList(context, snapshot.data);
+          return _buildTopicTitleContainer(context, snapshot.data);
         });
+  }
+
+  Widget _buildTopicTitleContainer(
+      BuildContext context, TopicTitleWrapper wrapper) {
+    if (wrapper == null) {
+      return ProgressBarEx();
+    } else if (wrapper.data.isNotEmpty) {
+      return _buildTopicList(context, wrapper);
+    } else {
+      return EmptyWidget(() {
+        topicModel.loadAgain(board, 1);
+      });
+    }
   }
 
   Widget _buildTopicList(BuildContext context, TopicTitleWrapper wrapper) {
     return PullToRefreshWidget(wrapper.data, (context, i) {
       return _buildTopicListItem(context, wrapper.data[i]);
     }, refresh: () => _handleRefresh(), loadMore: () => _handleLoadMore());
-
   }
 
   Future<Null> _handleRefresh() async {
