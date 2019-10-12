@@ -61,8 +61,12 @@ class _TopicTitleContainer extends StatelessWidget {
   }
 
   bool _handleLoadMore() {
-    topicModel.loadNextPage(board);
-    return true;
+    if (topicModel.hasNextPage()) {
+      topicModel.loadNextPage(board);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Widget _buildTopicListItem(BuildContext context, TopicTitleInfo entity) {

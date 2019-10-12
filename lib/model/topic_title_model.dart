@@ -47,14 +47,12 @@ class TopicTitleModel {
     }
   }
 
-  bool loadNextPage(Board board)  {
-    if (bloc.bean.hasNextPage) {
-      loadPage(board, bloc.bean.pageIndex + 1);
-      return true;
-    } else {
-      return false;
-    }
+  bool hasNextPage() {
+    return bloc.bean.hasNextPage;
+  }
 
+  Future<Null> loadNextPage(Board board) async {
+    await loadPage(board, bloc.bean.pageIndex + 1);
   }
 
   String _buildDate(int milliseconds) {
