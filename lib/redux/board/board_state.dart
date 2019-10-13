@@ -3,12 +3,30 @@ import 'package:nga_open_source/model/entity/board_info.dart';
 
 @immutable
 class BoardState {
-  final List<Category> categoryList;
+  final List<BoardCategory> boardCategoryList;
 
-  BoardState({this.categoryList});
+  final BoardCategory bookmarkCategory;
 
-  factory BoardState.initial() => BoardState(categoryList: new List());
+  BoardState({this.boardCategoryList, this.bookmarkCategory});
 
-  BoardState copyWith({List<Category> categoryList}) =>
-      BoardState(categoryList: categoryList ?? new List());
+  factory BoardState.initial() => BoardState(boardCategoryList: new List());
+
+  BoardState copyWith(
+          {List<BoardCategory> boardCategoryList,
+          BoardCategory bookmarkCategory}) =>
+      BoardState(
+          boardCategoryList: boardCategoryList ?? new List(),
+          bookmarkCategory: bookmarkCategory);
+
+  BoardState addBookmark(Board board) => copyWith(
+      boardCategoryList: boardCategoryList,
+      bookmarkCategory: bookmarkCategory.add(board));
+
+  BoardState removeBookmark(Board board) => copyWith(
+      boardCategoryList: boardCategoryList,
+      bookmarkCategory: bookmarkCategory.remove(board));
+
+  bool isBookmarkBoard(Board board) => bookmarkCategory.contains(board);
+
+  BoardCategory getBookmarkBoards() => bookmarkCategory;
 }

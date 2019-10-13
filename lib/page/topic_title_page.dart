@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/entity/topic_title_info.dart';
+import 'package:nga_open_source/redux/app_redux.dart';
+import 'package:nga_open_source/redux/app_state.dart';
+import 'package:nga_open_source/redux/board/board_action.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/empty_widget.dart';
-import 'package:nga_open_source/widget/pull_to_refresh.dart';
 import 'package:nga_open_source/widget/flutter_widget_ex.dart';
+import 'package:nga_open_source/widget/pull_to_refresh.dart';
 
 import '../model/entity/board_info.dart';
 import '../model/topic_title_model.dart';
@@ -25,9 +29,35 @@ class TopicTitleWidget extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text(board.name),
+          actions: <Widget>[
+            _buildStarWidget(board),
+          ],
         ),
         backgroundColor: AppColors.BACKGROUND_COLOR,
         body: _TopicTitleContainer(board));
+  }
+
+  Widget _buildStarWidget(Board board) {
+    return StoreConnector<AppState, bool>(
+      converter: (store) => store.state.boardState.isBookmarkBoard(board),
+      builder: (context, isBookmark) {
+        return GestureDetector(
+          onTap: () {
+            AppRedux.dispatch(
+                isBookmark ? BoardRemoveAction(board) : BoardAddAction(board));
+          },
+          child: Container(
+            padding: EdgeInsets.only(left: 16, right: 16),
+            child: Image.asset(
+              ResourceUtils.getDrawable(
+                  isBookmark ? "ic_star_on" : "ic_star_off"),
+              width: 32,
+              height: 32,
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -160,19 +190,20 @@ class _TopicTitleContainer extends StatelessWidget {
         ? next(info, index + 1)
         : TextSpan(
             text: text,
-            style: TextStyleEx(color: Color(0xFFC4BEAE),decoration: TextDecoration.none),
+            style: TextStyleEx(
+                color: Color(0xFFC4BEAE), decoration: TextDecoration.none),
             children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleLocked(TopicTitleInfo info, int index) {
-      String text = info.isLocked ? " [锁定]" : null;
-      var next = _buildRichTitleMethods[index + 1];
-      return StringUtils.isEmpty(text)
-          ? next(info, index + 1)
-          : TextSpan(
-          text: text,
-          style: TextStyleEx(color: Colors.red),
-          children: [next(info, index + 1)]);
+    String text = info.isLocked ? " [锁定]" : null;
+    var next = _buildRichTitleMethods[index + 1];
+    return StringUtils.isEmpty(text)
+        ? next(info, index + 1)
+        : TextSpan(
+            text: text,
+            style: TextStyleEx(color: Colors.red),
+            children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleAssemble(TopicTitleInfo info, int index) {
@@ -181,9 +212,9 @@ class _TopicTitleContainer extends StatelessWidget {
     return StringUtils.isEmpty(text)
         ? next(info, index + 1)
         : TextSpan(
-        text: text,
-        style: TextStyleEx(color: Colors.blue),
-        children: [next(info, index + 1)]);
+            text: text,
+            style: TextStyleEx(color: Colors.blue),
+            children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleComplete(TopicTitleInfo info, int index) {

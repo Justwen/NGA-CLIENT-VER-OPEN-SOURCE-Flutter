@@ -8,14 +8,36 @@ class Board {
   String name;
 
   Board({this.fid, this.stid, @required this.name});
+
+  factory Board.fromJson(Map<String, dynamic> srcJson) {
+    return Board(fid: srcJson["fid"], stid : srcJson["stid"], name : srcJson["name"]);
+  }
 }
 
-class Category {
+class BoardCategory {
   List<Board> boards;
 
   String name;
 
-  Category(this.name) {
+  BoardCategory(this.name) {
     boards = new List();
+  }
+
+  bool contains(Board board) {
+    return boards.contains(board);
+  }
+
+  BoardCategory add(Board board) {
+    if (!contains(board)) {
+      boards.add(board);
+    }
+    return this;
+  }
+
+  BoardCategory remove(Board board) {
+    if (contains(board)) {
+      boards.remove(board);
+    }
+    return this;
   }
 }

@@ -90,6 +90,8 @@ flutter:
     - assets/images/ic_reply.png
     - assets/images/ic_reply_count.png
     - assets/images/ic_time.png
+    - assets/images/ic_star_off.png
+    - assets/images/ic_star_on.png
 
     - assets/emoticon/pg/pg01.png
 

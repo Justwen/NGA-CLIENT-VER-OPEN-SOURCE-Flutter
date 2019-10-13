@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget _buildTabBar() {
     tabController = TabController(
       initialIndex: currentTabIndex,
-      length: AppRedux.boardState.categoryList.length,
+      length: AppRedux.boardState.boardCategoryList.length,
       vsync: this,
     );
     tabController.addListener(() {
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Widget tabBar = TabBar(
       isScrollable: true,
       controller: tabController,
-      tabs: AppRedux.boardState.categoryList.map((e) {
+      tabs: AppRedux.boardState.boardCategoryList.map((e) {
         return Container(
           height: 48.0,
           alignment: Alignment.center,
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Widget _buildTabBody() {
     Widget tabBarBody = TabBarView(
-      children: AppRedux.boardState.categoryList.map((e) {
+      children: AppRedux.boardState.boardCategoryList.map((e) {
         return _buildBoardListView(e);
       }).toList(),
       controller: tabController,
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return tabBarBody;
   }
 
-  Widget _buildBoardListView(Category category) {
+  Widget _buildBoardListView(BoardCategory category) {
     return GridView.builder(
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return StoreConnector<AppState, BoardState>(
         converter: (store) => store.state.boardState,
         builder: (context, boardState) {
-          print("length = " + boardState.categoryList.length.toString());
+          print("length = " + boardState.boardCategoryList.length.toString());
           return Scaffold(
             backgroundColor: AppColors.BACKGROUND_COLOR,
             appBar: AppBar(
