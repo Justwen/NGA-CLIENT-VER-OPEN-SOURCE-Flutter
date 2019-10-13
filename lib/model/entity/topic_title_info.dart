@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class TopicTitleInfo {
   String title;
 
@@ -8,6 +10,16 @@ class TopicTitleInfo {
   int replyCount;
 
   String lastReplyTime;
+
+  String parentBoard;
+
+  bool isAnonymous;
+
+  bool isLocked;
+
+  bool isAssemble;
+
+  TextStyle titleStyle;
 
   Map toJson() {
     Map map = new Map();

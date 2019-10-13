@@ -7,8 +7,7 @@ import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/empty_widget.dart';
 import 'package:nga_open_source/widget/pull_to_refresh.dart';
-import 'package:toast/toast.dart';
-import 'package:toast/toast.dart' as prefix0;
+import 'package:nga_open_source/widget/flutter_widget_ex.dart';
 
 import '../model/entity/board_info.dart';
 import '../model/topic_title_model.dart';
@@ -94,12 +93,9 @@ class _TopicTitleContainer extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
-                padding: EdgeInsets.only(bottom: 16),
-                child: Text(
-                  entity.title,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 17),
-                )),
+              padding: EdgeInsets.only(bottom: 16),
+              child: _buildTitleRichText(entity),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -110,10 +106,7 @@ class _TopicTitleContainer extends StatelessWidget {
                       width: 15,
                       height: 15,
                     )),
-                Text(
-                  entity.author,
-                  style: TextStyle(fontSize: 12),
-                ),
+                _buildAuthorName(entity),
                 Spacer(),
                 Padding(
                     padding: EdgeInsets.only(right: 4),
@@ -143,9 +136,78 @@ class _TopicTitleContainer extends StatelessWidget {
         ));
   }
 
+  static List<Function> _buildRichTitleMethods = [
+    _buildTitleLocked,
+    _buildTitleAssemble,
+    _buildTitleParentBoard,
+    _buildTitleComplete,
+  ];
+
+  Widget _buildTitleRichText(TopicTitleInfo info) {
+    return RichText(
+        text: TextSpan(
+      text: info.title,
+      style: info.titleStyle,
+      children: [_buildRichTitleMethods[0](info, 0)],
+    ));
+  }
+
+  static TextSpan _buildTitleParentBoard(TopicTitleInfo info, int index) {
+    String text =
+        StringUtils.isEmpty(info.parentBoard) ? null : " [${info.parentBoard}]";
+    var next = _buildRichTitleMethods[index + 1];
+    return StringUtils.isEmpty(text)
+        ? next(info, index + 1)
+        : TextSpan(
+            text: text,
+            style: TextStyleEx(color: Color(0xFFC4BEAE),decoration: TextDecoration.none),
+            children: [next(info, index + 1)]);
+  }
+
+  static TextSpan _buildTitleLocked(TopicTitleInfo info, int index) {
+      String text = info.isLocked ? " [锁定]" : null;
+      var next = _buildRichTitleMethods[index + 1];
+      return StringUtils.isEmpty(text)
+          ? next(info, index + 1)
+          : TextSpan(
+          text: text,
+          style: TextStyleEx(color: Colors.red),
+          children: [next(info, index + 1)]);
+  }
+
+  static TextSpan _buildTitleAssemble(TopicTitleInfo info, int index) {
+    String text = info.isAssemble ? " [合集]" : null;
+    var next = _buildRichTitleMethods[index + 1];
+    return StringUtils.isEmpty(text)
+        ? next(info, index + 1)
+        : TextSpan(
+        text: text,
+        style: TextStyleEx(color: Colors.blue),
+        children: [next(info, index + 1)]);
+  }
+
+  static TextSpan _buildTitleComplete(TopicTitleInfo info, int index) {
+    return TextSpan(text: "");
+  }
+
   void _showTopicContentPage(BuildContext context, int tid) {
     Widget nextWidget = TopicContentWidget(tid);
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => nextWidget));
+  }
+
+  Widget _buildAuthorName(TopicTitleInfo info) {
+    return RichText(
+        text: TextSpan(
+      text: info.author,
+      style: TextStyle(fontSize: 12, color: Colors.black),
+      children: [_buildAnonyName(info)],
+    ));
+  }
+
+  TextSpan _buildAnonyName(TopicTitleInfo info) {
+    String text = info.isAnonymous ? " (匿名)" : "";
+    return TextSpan(
+        text: text, style: TextStyle(color: Colors.red, fontSize: 12));
   }
 }
