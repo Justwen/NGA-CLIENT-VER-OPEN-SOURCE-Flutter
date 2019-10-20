@@ -119,6 +119,9 @@ class _TopicTitleContainer extends StatelessWidget {
           _showTopicContentPage(context, entity.tid);
         },
         child: Container(
+          decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(width: 0.5, color: Color(0xAA9E9E9E)))
+          ),
           padding: EdgeInsets.only(left: 14, right: 14, top: 16, bottom: 16),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
