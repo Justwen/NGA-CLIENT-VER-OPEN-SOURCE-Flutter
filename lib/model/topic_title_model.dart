@@ -72,8 +72,9 @@ class TopicTitleModel {
         wrapper.hasNextPage = bean.result.iTRowsPage > page;
         bloc.addTopicTitles(wrapper, reset: reset);
       }
-    } catch (e) {
+    } catch (e, s) {
       print(e);
+      print(s);
     }
   }
 
