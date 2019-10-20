@@ -9,10 +9,27 @@ class Board {
 
   String name;
 
+  bool recommend = false;
+
+  bool favor = false;
+
   Board({this.fid, this.stid, @required this.name});
 
   factory Board.fromJson(Map<String, dynamic> srcJson) {
     return Board(fid: srcJson["fid"], stid : srcJson["stid"], name : srcJson["name"]);
+  }
+
+  Board copyWith({bool recommend = false, bool favor = false}) {
+
+    if (favor) {
+      Board board = Board(name: '收藏夹',fid: 0,stid: 0);
+      board.favor = favor;
+      return board;
+    } else {
+      Board board = new Board(name: this.name, fid: this.fid, stid: this.stid);
+      board.recommend = recommend;
+      return board;
+    }
   }
 
   Map toJson() {
@@ -43,6 +60,7 @@ class Board {
       return "fid=$fid".hashCode;
     }
   }
+
 }
 
 class BoardCategory {

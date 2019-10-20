@@ -200,12 +200,23 @@ class TopicTitleModel {
   Map<String, dynamic> _buildParam(Board board, int page) {
     Map<String, dynamic> param = Map();
     param["__output"] = "14";
-    param["page"] = page;
-    if (board.stid != 0) {
-      param["stid"] = board.stid;
-    } else if (board.fid != 0) {
-      param["fid"] = board.fid;
+    if (board.favor) {
+      param["favor"] = "1";
+    } else {
+      param["page"] = page;
+      if (board.stid != 0) {
+        param["stid"] = board.stid;
+      } else if (board.fid != 0) {
+        param["fid"] = board.fid;
+      }
+
+      if (board.recommend) {
+        param["recommend"] = "1";
+        param["order_by"] = "postdatedesc";
+        param["user"] = "1";
+      }
     }
+
     return param;
   }
 

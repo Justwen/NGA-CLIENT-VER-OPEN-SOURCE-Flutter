@@ -46,7 +46,7 @@ class TopicListBeanResult {
 
   TopicListBeanResult.fromJson(Map<String, dynamic> json) {
     iTRows = json['__T__ROWS'];
-    iRows = json['__ROWS'];
+    iRows = int.parse(json['__ROWS'].toString());
     if (json['__T'] != null) {
       String type = json['__T'].runtimeType.toString();
       if (type.contains("List")) {

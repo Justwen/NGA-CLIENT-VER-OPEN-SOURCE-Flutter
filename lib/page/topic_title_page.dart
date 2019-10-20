@@ -11,6 +11,7 @@ import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/empty_widget.dart';
 import 'package:nga_open_source/widget/flutter_widget_ex.dart';
+import 'package:nga_open_source/widget/popup_menu.dart';
 import 'package:nga_open_source/widget/pull_to_refresh.dart';
 
 import '../model/entity/board_info.dart';
@@ -28,16 +29,25 @@ class TopicTitleWidget extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
-          title: Text(board.name),
-          actions: <Widget>[
-            _buildStarWidget(board),
-          ],
+          title: _buildTitle(board),
+          actions: _buildActionMenu(),
         ),
         backgroundColor: AppColors.BACKGROUND_COLOR,
         body: _TopicTitleContainer(board));
   }
 
-  Widget _buildStarWidget(Board board) {
+  Widget _buildTitle(Board board) {
+    return Text(board.recommend ? "${board.name} - 精华区" : board.name);
+  }
+
+  List<Widget> _buildActionMenu() {
+    return <Widget>[
+      _buildBookmarkIcon(board),
+      _buildPopupMenu(ContextUtils.buildContext),
+    ];
+  }
+
+  Widget _buildBookmarkIcon(Board board) {
     return StoreConnector<AppState, bool>(
       converter: (store) => store.state.boardState.isBookmarkBoard(board),
       builder: (context, isBookmark) {
@@ -58,6 +68,39 @@ class TopicTitleWidget extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget _buildPopupMenu(BuildContext context) {
+    return PopupMenuButton(
+        onSelected: (String value) {
+          switch (value) {
+            case "menu_recommend":
+              _navigateRecommendTopicList(context);
+              break;
+            case "menu_favor":
+              _navigateFavorTopicList(context);
+              break;
+
+          }},
+        itemBuilder: (BuildContext context) =>
+        <PopupMenuItem<String>>[
+          new PopupMenuItemEx.create("menu_recommend", '精华区'),
+          new PopupMenuItemEx.create("menu_favor", '收藏夹'),
+        ]);
+  }
+
+  void _navigateRecommendTopicList(BuildContext context) {
+    Board nextParam = board.copyWith(recommend: true);
+    Widget nextWidget = new TopicTitleWidget(nextParam);
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => nextWidget));
+  }
+
+  void _navigateFavorTopicList(BuildContext context) {
+    Board nextParam = board.copyWith(favor: true);
+    Widget nextWidget = new TopicTitleWidget(nextParam);
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => nextWidget));
   }
 }
 
@@ -81,8 +124,8 @@ class _TopicTitleContainer extends StatelessWidget {
         });
   }
 
-  Widget _buildTopicTitleContainer(
-      BuildContext context, TopicTitleWrapper wrapper) {
+  Widget _buildTopicTitleContainer(BuildContext context,
+      TopicTitleWrapper wrapper) {
     if (wrapper == null) {
       return ProgressBarEx();
     } else if (wrapper.data.isNotEmpty) {
@@ -120,11 +163,11 @@ class _TopicTitleContainer extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(width: 0.5, color: Color(0xAA9E9E9E)))
-          ),
+              border: Border(
+                  bottom: BorderSide(width: 0.5, color: Color(0xAA9E9E9E)))),
           padding: EdgeInsets.only(left: 14, right: 14, top: 16, bottom: 16),
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
               padding: EdgeInsets.only(bottom: 16),
               child: _buildTitleRichText(entity),
@@ -179,23 +222,23 @@ class _TopicTitleContainer extends StatelessWidget {
   Widget _buildTitleRichText(TopicTitleInfo info) {
     return RichText(
         text: TextSpan(
-      text: info.title,
-      style: info.titleStyle,
-      children: [_buildRichTitleMethods[0](info, 0)],
-    ));
+          text: info.title,
+          style: info.titleStyle,
+          children: [_buildRichTitleMethods[0](info, 0)],
+        ));
   }
 
   static TextSpan _buildTitleParentBoard(TopicTitleInfo info, int index) {
     String text =
-        StringUtils.isEmpty(info.parentBoard) ? null : " [${info.parentBoard}]";
+    StringUtils.isEmpty(info.parentBoard) ? null : " [${info.parentBoard}]";
     var next = _buildRichTitleMethods[index + 1];
     return StringUtils.isEmpty(text)
         ? next(info, index + 1)
         : TextSpan(
-            text: text,
-            style: TextStyleEx(
-                color: Color(0xFFC4BEAE), decoration: TextDecoration.none),
-            children: [next(info, index + 1)]);
+        text: text,
+        style: TextStyleEx(
+            color: Color(0xFFC4BEAE), decoration: TextDecoration.none),
+        children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleLocked(TopicTitleInfo info, int index) {
@@ -204,9 +247,9 @@ class _TopicTitleContainer extends StatelessWidget {
     return StringUtils.isEmpty(text)
         ? next(info, index + 1)
         : TextSpan(
-            text: text,
-            style: TextStyleEx(color: Colors.red),
-            children: [next(info, index + 1)]);
+        text: text,
+        style: TextStyleEx(color: Colors.red),
+        children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleAssemble(TopicTitleInfo info, int index) {
@@ -215,9 +258,9 @@ class _TopicTitleContainer extends StatelessWidget {
     return StringUtils.isEmpty(text)
         ? next(info, index + 1)
         : TextSpan(
-            text: text,
-            style: TextStyleEx(color: Colors.blue),
-            children: [next(info, index + 1)]);
+        text: text,
+        style: TextStyleEx(color: Colors.blue),
+        children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleComplete(TopicTitleInfo info, int index) {
@@ -233,10 +276,10 @@ class _TopicTitleContainer extends StatelessWidget {
   Widget _buildAuthorName(TopicTitleInfo info) {
     return RichText(
         text: TextSpan(
-      text: info.author,
-      style: TextStyle(fontSize: 12, color: Colors.black),
-      children: [_buildAnonyName(info)],
-    ));
+          text: info.author,
+          style: TextStyle(fontSize: 12, color: Colors.black),
+          children: [_buildAnonyName(info)],
+        ));
   }
 
   TextSpan _buildAnonyName(TopicTitleInfo info) {
