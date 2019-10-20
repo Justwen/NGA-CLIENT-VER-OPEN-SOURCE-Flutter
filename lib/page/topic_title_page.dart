@@ -8,6 +8,7 @@ import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:nga_open_source/redux/app_state.dart';
 import 'package:nga_open_source/redux/board/board_action.dart';
 import 'package:nga_open_source/res/app_colors.dart';
+import 'package:nga_open_source/res/app_theme.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/empty_widget.dart';
 import 'package:nga_open_source/widget/flutter_widget_ex.dart';
@@ -193,7 +194,7 @@ class _TopicTitleContainer extends StatelessWidget {
                     )),
                 Text(
                   entity.lastReplyTime,
-                  style: TextStyle(fontSize: 12),
+                  style: CommonTextStyle.TOPIC_SUB_TITLE,
                 ),
                 Padding(
                     padding: EdgeInsets.only(left: 4, right: 4),
@@ -204,7 +205,7 @@ class _TopicTitleContainer extends StatelessWidget {
                     )),
                 Text(
                   entity.replyCount.toString(),
-                  style: TextStyle(fontSize: 12),
+                  style: CommonTextStyle.TOPIC_SUB_TITLE,
                 ),
               ],
             )
@@ -277,7 +278,7 @@ class _TopicTitleContainer extends StatelessWidget {
     return RichText(
         text: TextSpan(
           text: info.author,
-          style: TextStyle(fontSize: 12, color: Colors.black),
+          style: CommonTextStyle.TOPIC_SUB_TITLE,
           children: [_buildAnonyName(info)],
         ));
   }
