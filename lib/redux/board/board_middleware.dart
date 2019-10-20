@@ -53,17 +53,16 @@ class BoardMiddleware extends MiddlewareClass<AppState> {
   }
 
   BoardCategory _getBookmarkCategory() {
-    BoardCategory bookmarkCategory = BoardCategory("我的收藏");
     String boardStr = PreferenceUtils.getString("board_bookmark", null);
-    print(boardStr);
-    if (boardStr != null) {
-      List<dynamic> list = json.decode(boardStr);
-      if (list != null && list.isNotEmpty) {
-        list.forEach((item) {
-          bookmarkCategory.add(Board.fromJson(item));
-        });
+    if (boardStr == null) {
+      return BoardCategory("我的收藏");
+    } else {
+      try {
+        return BoardCategory.fromJson(jsonDecode(boardStr));
+      } catch (e) {
+        print(e);
+        return BoardCategory("我的收藏");
       }
     }
-    return bookmarkCategory;
   }
 }

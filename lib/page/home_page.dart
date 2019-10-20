@@ -127,7 +127,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return StoreConnector<AppState, BoardState>(
         converter: (store) => store.state.boardState,
         builder: (context, boardState) {
-          print("length = " + boardState.boardCategoryList.length.toString());
           return Scaffold(
             backgroundColor: AppColors.BACKGROUND_COLOR,
             appBar: AppBar(
