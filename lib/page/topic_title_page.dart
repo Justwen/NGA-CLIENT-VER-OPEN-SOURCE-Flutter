@@ -58,12 +58,12 @@ class TopicTitleWidget extends StatelessWidget {
                 isBookmark ? BoardRemoveAction(board) : BoardAddAction(board));
           },
           child: Container(
-            padding: EdgeInsets.only(left: 16, right: 16),
+            alignment: Alignment.center,
             child: Image.asset(
               ResourceUtils.getDrawable(
                   isBookmark ? "ic_star_on" : "ic_star_off"),
-              width: 32,
-              height: 32,
+              width: 24,
+              height: 24,
             ),
           ),
         );
