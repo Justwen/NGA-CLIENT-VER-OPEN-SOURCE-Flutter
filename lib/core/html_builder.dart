@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/utils/utils.dart';
@@ -12,7 +14,10 @@ class HtmlBuilder {
       "https://img.nga.178.com/attachments/mon_201909/21/9bQ5-5i2kKyToS5b-5b.png.thumb_s.jpg";
 
   String complete(String body) {
-    String html = sprintf(sHtmlTemplate, [18, body]).replaceAll("http:", "https:");
+    String html = sprintf(sHtmlTemplate, [18, body]);
+    if (Platform.isIOS) {
+      html = html.replaceAll("http:", "https:");
+    }
     return html;
   }
 
@@ -41,7 +46,7 @@ class HtmlBuilder {
   }
 
   StringBuffer buildAuthor(StringBuffer buffer, TopicRowEntity entity) {
-    String avatarUrl = StringUtils.isEmpty(entity.author.avatarUrl)
+    String avatarUrl = StringUtils.isEmpty(entity.author.avatarUrl) || entity.author.isAnonymous
         ? DEFAULT_AVATAR_URL
         : entity.author.avatarUrl;
     buffer.write(sprintf(sHtmlAuthorTemplate, [
