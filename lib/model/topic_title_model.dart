@@ -40,7 +40,7 @@ class TopicTitleModel {
   // 合集 2^15
   static const int MASK_TYPE_ASSEMBLE = 32768;
 
-  static final RegExp REGEX_TCP_URL_TID = RegExp("/read.php?tid=(0-9)*");
+  static final RegExp REGEX_TCP_URL_TID = RegExp("tid=([0-9]+)");
 
   TopicTitleBloc _bloc = TopicTitleBloc();
 
