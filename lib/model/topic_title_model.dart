@@ -40,6 +40,8 @@ class TopicTitleModel {
   // 合集 2^15
   static const int MASK_TYPE_ASSEMBLE = 32768;
 
+  static final RegExp REGEX_TCP_URL_TID = RegExp("/read.php?tid=(0-9)*");
+
   TopicTitleBloc _bloc = TopicTitleBloc();
 
   TopicTitleBloc get bloc => _bloc;
@@ -102,6 +104,13 @@ class TopicTitleModel {
 
     String topicMisc = bean.topicMisc;
     topicEntity.titleStyle = _convertTextStyle(topicMisc);
+
+    if (bean.tpcurl != null) {
+      RegExpMatch match = REGEX_TCP_URL_TID.firstMatch(bean.tpcurl);
+      if (match != null && match.groupCount > 0) {
+        topicEntity.tid = int.parse(match.group(1));
+      }
+    }
 
     return topicEntity;
   }
