@@ -49,7 +49,6 @@ class TopicTitleModel {
   Dio dio = new Dio();
 
   Future<Null> loadPage(Board board, int page, {bool reset = false}) async {
-    print("page = " + page.toString());
     String url = _buildUrl(board, page);
     print(url);
     Options options = new Options();
@@ -213,7 +212,6 @@ class TopicTitleModel {
     if (board.favor) {
       param["favor"] = "1";
     } else {
-      param["page"] = page;
       if (board.stid != 0) {
         param["stid"] = board.stid;
       } else if (board.fid != 0) {
@@ -226,6 +224,8 @@ class TopicTitleModel {
         param["user"] = "1";
       }
     }
+    param["page"] = page;
+    print(param.toString());
 
     return param;
   }
