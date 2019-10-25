@@ -55,9 +55,9 @@ class HtmlBuilder {
           ? "${entity.author.userName}<span style='color:red'>(匿名)</span>"
           : entity.author.userName,
       entity.postDate,
-      entity.author.toDescriptionString(),
       _getDeviceTypeImage(entity.deviceType),
-      entity.floor
+      entity.floor,
+      entity.author.toDescriptionString(),
     ]));
     return buffer;
   }
