@@ -60,7 +60,7 @@ class TopicContentState extends State<TopicContentWidget>
               InkWell(
                   onTap: () {
                     Navigator.push(
-                        context, new MaterialPageRoute(builder: (context) => PostWidget(widget.tid,"reply")));
+                        context, new MaterialPageRoute(builder: (context) => PostWidget("reply",tid: widget.tid,)));
                   },
                   child: Padding(
                       padding: EdgeInsets.only(right: 16),

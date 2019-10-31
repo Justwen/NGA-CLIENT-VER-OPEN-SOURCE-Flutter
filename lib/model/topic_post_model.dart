@@ -11,7 +11,7 @@ class TopicPostModel {
 
   int length;
 
-  Future<bool> post(TopicPostEntity postEntity) async {
+  Future<bool> post(TopicPostParam postEntity) async {
     RequestOptions options = new RequestOptions();
     options.headers = _buildHeader(postEntity);
     options.followRedirects = false;
@@ -29,7 +29,7 @@ class TopicPostModel {
     return new Future.value(true);
   }
 
-  Map<String, String> _buildHeader(TopicPostEntity postEntity) {
+  Map<String, String> _buildHeader(TopicPostParam postEntity) {
     Map<String, String> header = Map();
     header["Cookie"] = AppRedux.userState.getCookie();
     header["Accept-Charset"] = "GBK";
@@ -40,12 +40,20 @@ class TopicPostModel {
   }
 }
 
-class TopicPostEntity {
+class TopicPostParam {
+  static const TOPIC_POST_ACTION_NEW = "new";
+
+  static const TOPIC_POST_ACTION_REPLY = "reply";
+
+  static const TOPIC_POST_ACTION_MODIFY = "modify";
+
   String postContent;
 
   int tid;
 
   int pid;
+
+  int fid;
 
   String action;
 
@@ -53,17 +61,25 @@ class TopicPostEntity {
 
   bool anonymous = false;
 
-  TopicPostEntity(this.tid, this.action,
-      {this.pid, this.subject, this.anonymous, this.postContent});
+  TopicPostParam(this.action,
+      {this.pid,
+      this.subject,
+      this.anonymous,
+      this.postContent,
+      this.tid,
+      this.fid});
 
   String toUrlString() {
     String gbkContent = Uri.encodeQueryComponent(postContent, encoding: gbk);
-    StringBuffer buffer =
-        new StringBuffer("step=2&post_content=$gbkContent&action=$action");
+    StringBuffer buffer = new StringBuffer("step=2&&__output=14");
 
-    buffer.write(subject != null ? "&subject=$subject" : "");
-    buffer.write(tid != null ? "&tid=$tid" : "");
-    buffer.write(pid != null ? "&pid=$pid" : "");
+    buffer
+      ..write("&post_content=$gbkContent")
+      ..write("&action=$action")
+      ..write("&subject=${subject ?? ""}")
+      ..write("&tid=${tid ?? ""}")
+      ..write("&fid=${fid ?? ""}")
+      ..write("&pid=${pid ?? ""}");
     return buffer.toString();
   }
 }

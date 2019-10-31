@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/model/topic_post_model.dart';
+import 'package:nga_open_source/utils/utils.dart';
 
 class PostWidget extends StatefulWidget {
-  int tid;
+  final int tid;
 
-  String action;
+  final String action;
 
-  PostWidget(this.tid, this.action);
+  final int fid;
+
+  PostWidget(this.action, {this.tid, this.fid});
 
   State<StatefulWidget> createState() {
     return new _PostState();
@@ -16,25 +18,39 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostState extends State<PostWidget> {
-  FlutterWebviewPlugin webviewPlugin = new FlutterWebviewPlugin();
-
   TopicPostModel topicModel = new TopicPostModel();
 
   TextEditingController controller = new TextEditingController();
 
-  TopicPostEntity postEntity;
+  TopicPostParam postEntity;
+
+  _PostState() {
+    postEntity =
+        new TopicPostParam(widget.action, tid: widget.tid, fid: widget.fid);
+  }
 
   @override
   void initState() {
-    postEntity = new TopicPostEntity(widget.tid, widget.action);
-    webviewPlugin.hide();
+    if (!_isActionNew()) {
+      WebViewUtils.hideWebView();
+    }
     super.initState();
   }
 
   @override
   void dispose() {
-    webviewPlugin.show();
+    if (!_isActionNew()) {
+      WebViewUtils.showWebView();
+    }
     super.dispose();
+  }
+
+  bool _isActionNew() {
+    return postEntity.action == TopicPostParam.TOPIC_POST_ACTION_NEW;
+  }
+
+  Widget _buildTitleWidget() {
+    return Text(_isActionNew() ? "发帖" : "回帖");
   }
 
   @override
@@ -42,7 +58,7 @@ class _PostState extends State<PostWidget> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text("回帖"),
+        title: _buildTitleWidget(),
         actions: <Widget>[
           InkWell(
               onTap: () {
@@ -63,11 +79,11 @@ class _PostState extends State<PostWidget> {
                   ))),
         ],
       ),
-      body: _buildBody(),
+      body: _buildBodyWidget(),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBodyWidget() {
     return Container(
       child: TextField(
         controller: controller,

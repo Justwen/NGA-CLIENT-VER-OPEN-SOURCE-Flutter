@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:toast/toast.dart';
 
 class StringUtils {
@@ -46,5 +47,21 @@ class ContextUtils {
 class ToastUtils {
   static void showToast(String msg) {
     Toast.show(msg, ContextUtils.buildContext);
+  }
+}
+
+class WebViewUtils {
+  static FlutterWebviewPlugin webviewPlugin = new FlutterWebviewPlugin();
+
+  static void showWebView() {
+    webviewPlugin.show();
+  }
+
+  static void hideWebView() {
+    webviewPlugin.hide();
+  }
+
+  static Future<String> getAllCookies(String url) async {
+    return webviewPlugin.getAllCookies(url);
   }
 }
