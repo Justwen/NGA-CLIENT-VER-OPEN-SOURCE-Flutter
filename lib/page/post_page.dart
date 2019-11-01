@@ -24,13 +24,9 @@ class _PostState extends State<PostWidget> {
 
   TopicPostParam postEntity;
 
-  _PostState() {
-    postEntity =
-        new TopicPostParam(widget.action, tid: widget.tid, fid: widget.fid);
-  }
-
   @override
   void initState() {
+    postEntity = new TopicPostParam(widget.action, tid: widget.tid, fid: widget.fid);
     if (!_isActionNew()) {
       WebViewUtils.hideWebView();
     }

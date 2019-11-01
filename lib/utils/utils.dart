@@ -45,8 +45,11 @@ class ContextUtils {
 }
 
 class ToastUtils {
-  static void showToast(String msg) {
-    Toast.show(msg, ContextUtils.buildContext);
+  static void showToast(String msg,{BuildContext context}) {
+    if (context == null) {
+      context = ContextUtils.buildContext;
+    }
+    Toast.show(msg, context);
   }
 }
 

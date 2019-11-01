@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:nga_open_source/bloc/list_view_bloc.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/entity/topic_title_info.dart';
+import 'package:nga_open_source/model/topic_post_model.dart';
+import 'package:nga_open_source/page/post_page.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:nga_open_source/redux/app_state.dart';
 import 'package:nga_open_source/redux/board/board_action.dart';
@@ -11,6 +14,7 @@ import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/res/app_theme.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/empty_widget.dart';
+import 'package:nga_open_source/widget/floating_action_button.dart';
 import 'package:nga_open_source/widget/flutter_widget_ex.dart';
 import 'package:nga_open_source/widget/popup_menu.dart';
 import 'package:nga_open_source/widget/pull_to_refresh.dart';
@@ -22,23 +26,54 @@ import 'topic_content_page.dart';
 class TopicTitleWidget extends StatelessWidget {
   final Board board;
 
+  final ListViewBloc _bloc = new ListViewBloc();
+
+  final ScrollController scrollController = new ScrollController();
+
   TopicTitleWidget(this.board);
 
   @override
   Widget build(BuildContext context) {
     ContextUtils.buildContext = context;
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-          title: _buildTitle(board),
-          actions: _buildActionMenu(),
-        ),
-        backgroundColor: AppColors.BACKGROUND_COLOR,
-        body: _TopicTitleContainer(board));
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        title: _buildTitleWidget(board),
+        actions: _buildActionMenu(),
+      ),
+      backgroundColor: AppColors.BACKGROUND_COLOR,
+      body: _buildBodyWidget(),
+      floatingActionButton: _buildFabWidget(context),
+    );
   }
 
-  Widget _buildTitle(Board board) {
+  Widget _buildBodyWidget() {
+    return _TopicTitleContainer(
+      board,
+      bloc: _bloc,
+      scrollController: scrollController,
+    );
+  }
+
+  Widget _buildTitleWidget(Board board) {
     return Text(board.recommend ? "${board.name} - 精华区" : board.name);
+  }
+
+  Widget _buildFabWidget(BuildContext context) {
+    return AnimationFab(
+      bloc: _bloc,
+      icons: <Widget>[Icon(Icons.refresh), Icon(Icons.add)],
+      callbacks: [
+        () => scrollController.jumpTo(-1),
+        () => Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => PostWidget(
+                      TopicPostParam.TOPIC_POST_ACTION_NEW,
+                      fid: board.fid,
+                    ))),
+      ],
+    );
   }
 
   List<Widget> _buildActionMenu() {
@@ -81,13 +116,12 @@ class TopicTitleWidget extends StatelessWidget {
             case "menu_favor":
               _navigateFavorTopicList(context);
               break;
-
-          }},
-        itemBuilder: (BuildContext context) =>
-        <PopupMenuItem<String>>[
-          new PopupMenuItemEx.create("menu_recommend", '精华区'),
-          new PopupMenuItemEx.create("menu_favor", '收藏夹'),
-        ]);
+          }
+        },
+        itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+              new PopupMenuItemEx.create("menu_recommend", '精华区'),
+              new PopupMenuItemEx.create("menu_favor", '收藏夹'),
+            ]);
   }
 
   void _navigateRecommendTopicList(BuildContext context) {
@@ -110,7 +144,13 @@ class _TopicTitleContainer extends StatelessWidget {
 
   final TopicTitleModel topicModel = new TopicTitleModel();
 
-  _TopicTitleContainer(this.board) {
+  final ListViewBloc bloc;
+
+  PullToRefreshWidget pullToRefreshWidget;
+
+  final ScrollController scrollController;
+
+  _TopicTitleContainer(this.board, {this.bloc, this.scrollController}) {
     _handleRefresh();
   }
 
@@ -125,8 +165,8 @@ class _TopicTitleContainer extends StatelessWidget {
         });
   }
 
-  Widget _buildTopicTitleContainer(BuildContext context,
-      TopicTitleWrapper wrapper) {
+  Widget _buildTopicTitleContainer(
+      BuildContext context, TopicTitleWrapper wrapper) {
     if (wrapper == null) {
       return ProgressBarEx();
     } else if (wrapper.data.isNotEmpty) {
@@ -139,9 +179,17 @@ class _TopicTitleContainer extends StatelessWidget {
   }
 
   Widget _buildTopicList(BuildContext context, TopicTitleWrapper wrapper) {
-    return PullToRefreshWidget(wrapper.data, (context, i) {
-      return _buildTopicListItem(context, wrapper.data[i]);
-    }, refresh: () => _handleRefresh(), loadMore: () => _handleLoadMore());
+    pullToRefreshWidget = PullToRefreshWidget(
+      wrapper.data,
+      (context, i) {
+        return _buildTopicListItem(context, wrapper.data[i]);
+      },
+      refresh: () => _handleRefresh(),
+      loadMore: () => _handleLoadMore(),
+      bloc: bloc,
+      scrollController: scrollController,
+    );
+    return pullToRefreshWidget;
   }
 
   Future<Null> _handleRefresh() async {
@@ -168,7 +216,7 @@ class _TopicTitleContainer extends StatelessWidget {
                   bottom: BorderSide(width: 0.5, color: Color(0xAA9E9E9E)))),
           padding: EdgeInsets.only(left: 14, right: 14, top: 16, bottom: 16),
           child:
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
               padding: EdgeInsets.only(bottom: 16),
               child: _buildTitleRichText(entity),
@@ -223,23 +271,23 @@ class _TopicTitleContainer extends StatelessWidget {
   Widget _buildTitleRichText(TopicTitleInfo info) {
     return RichText(
         text: TextSpan(
-          text: info.title,
-          style: info.titleStyle,
-          children: [_buildRichTitleMethods[0](info, 0)],
-        ));
+      text: info.title,
+      style: info.titleStyle,
+      children: [_buildRichTitleMethods[0](info, 0)],
+    ));
   }
 
   static TextSpan _buildTitleParentBoard(TopicTitleInfo info, int index) {
     String text =
-    StringUtils.isEmpty(info.parentBoard) ? null : " [${info.parentBoard}]";
+        StringUtils.isEmpty(info.parentBoard) ? null : " [${info.parentBoard}]";
     var next = _buildRichTitleMethods[index + 1];
     return StringUtils.isEmpty(text)
         ? next(info, index + 1)
         : TextSpan(
-        text: text,
-        style: TextStyleEx(
-            color: Color(0xFFC4BEAE), decoration: TextDecoration.none),
-        children: [next(info, index + 1)]);
+            text: text,
+            style: TextStyleEx(
+                color: Color(0xFFC4BEAE), decoration: TextDecoration.none),
+            children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleLocked(TopicTitleInfo info, int index) {
@@ -248,9 +296,9 @@ class _TopicTitleContainer extends StatelessWidget {
     return StringUtils.isEmpty(text)
         ? next(info, index + 1)
         : TextSpan(
-        text: text,
-        style: TextStyleEx(color: Colors.red),
-        children: [next(info, index + 1)]);
+            text: text,
+            style: TextStyleEx(color: Colors.red),
+            children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleAssemble(TopicTitleInfo info, int index) {
@@ -259,9 +307,9 @@ class _TopicTitleContainer extends StatelessWidget {
     return StringUtils.isEmpty(text)
         ? next(info, index + 1)
         : TextSpan(
-        text: text,
-        style: TextStyleEx(color: Colors.blue),
-        children: [next(info, index + 1)]);
+            text: text,
+            style: TextStyleEx(color: Colors.blue),
+            children: [next(info, index + 1)]);
   }
 
   static TextSpan _buildTitleComplete(TopicTitleInfo info, int index) {
@@ -277,10 +325,10 @@ class _TopicTitleContainer extends StatelessWidget {
   Widget _buildAuthorName(TopicTitleInfo info) {
     return RichText(
         text: TextSpan(
-          text: info.author,
-          style: CommonTextStyle.TOPIC_SUB_TITLE,
-          children: [_buildAnonyName(info)],
-        ));
+      text: info.author,
+      style: CommonTextStyle.TOPIC_SUB_TITLE,
+      children: [_buildAnonyName(info)],
+    ));
   }
 
   TextSpan _buildAnonyName(TopicTitleInfo info) {

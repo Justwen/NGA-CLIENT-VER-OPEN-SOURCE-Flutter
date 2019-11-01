@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:nga_open_source/bloc/list_view_bloc.dart';
 
 class PullToRefreshWidget<T> extends StatefulWidget {
   final Function loadMore;
@@ -9,10 +12,14 @@ class PullToRefreshWidget<T> extends StatefulWidget {
 
   final List<T> datList;
 
+  final ListViewBloc bloc;
+
   bool _showLoading = false;
 
+  final ScrollController scrollController;
+
   PullToRefreshWidget(this.datList, this.listBuilder,
-      {this.loadMore, this.refresh});
+      {this.loadMore, this.refresh, this.bloc, this.scrollController});
 
   @override
   State<StatefulWidget> createState() => PullToRefreshState();
@@ -21,17 +28,25 @@ class PullToRefreshWidget<T> extends StatefulWidget {
 class PullToRefreshState extends State<PullToRefreshWidget> {
   static const double DISPLACEMENT = 40.0;
 
-  ScrollController _scrollController = ScrollController();
+  static const double MIN_MOVE_DISTANCE = 5;
+
+  ScrollController _scrollController;
 
   Function _updateScrollPosition;
 
   bool get showLoading => widget._showLoading;
 
+  int lastDirection;
+
+  double lastDownY = 0;
+
   @override
   Widget build(BuildContext context) {
+    _scrollController ??= widget.scrollController ?? new ScrollController();
     return RefreshIndicator(
-        onRefresh: () => _refresh(),
-        displacement: DISPLACEMENT,
+      onRefresh: () => _refresh(),
+      displacement: DISPLACEMENT,
+      child: Listener(
         child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount: widget.datList.length + 1,
@@ -45,7 +60,27 @@ class PullToRefreshState extends State<PullToRefreshWidget> {
             }
           },
           controller: _scrollController,
-        ));
+        ),
+        onPointerMove: (event) {
+          var dy = event.position.distance;
+          var diff = dy - lastDownY;
+          lastDownY = dy;
+          if (diff.abs() > MIN_MOVE_DISTANCE) {
+            if (diff < 0 && lastDirection >= 0) {
+              lastDirection = 1;
+              widget.bloc?.scrollDown();
+            } else if (diff > 0 && lastDirection <= 0) {
+              lastDirection = -1;
+              widget.bloc?.scrollUp();
+            }
+          }
+        },
+        onPointerDown: (event) {
+          lastDownY = event.position.distance;
+          lastDirection = 0;
+        },
+      ),
+    );
   }
 
   Widget _buildLoadingWidget() {
