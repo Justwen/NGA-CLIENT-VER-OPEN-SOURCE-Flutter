@@ -59,27 +59,29 @@ class TopicPostParam {
 
   String subject;
 
-  bool anonymous = false;
+  bool anonymous;
 
   TopicPostParam(this.action,
       {this.pid,
       this.subject,
-      this.anonymous,
+      this.anonymous = false,
       this.postContent,
       this.tid,
       this.fid});
 
   String toUrlString() {
     String gbkContent = Uri.encodeQueryComponent(postContent, encoding: gbk);
+    String gbkSubject = Uri.encodeQueryComponent(subject ?? "", encoding: gbk);
     StringBuffer buffer = new StringBuffer("step=2&&__output=14");
 
     buffer
       ..write("&post_content=$gbkContent")
       ..write("&action=$action")
-      ..write("&subject=${subject ?? ""}")
+      ..write("&post_subject=${gbkSubject ?? ""}")
       ..write("&tid=${tid ?? ""}")
       ..write("&fid=${fid ?? ""}")
-      ..write("&pid=${pid ?? ""}");
+      ..write("&pid=${pid ?? ""}")
+      ..write("&anony=${anonymous ? 1 : 0}");
     return buffer.toString();
   }
 }

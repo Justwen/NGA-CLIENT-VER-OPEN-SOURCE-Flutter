@@ -62,9 +62,9 @@ class TopicTitleWidget extends StatelessWidget {
   Widget _buildFabWidget(BuildContext context) {
     return AnimationFab(
       bloc: _bloc,
-      icons: <Widget>[Icon(Icons.refresh), Icon(Icons.add)],
+      icons: <Widget>[Icon(Icons.arrow_upward), Icon(Icons.add)],
       callbacks: [
-        () => scrollController.jumpTo(-1),
+        () => scrollController.jumpTo(1),
         () => Navigator.push(
             context,
             new MaterialPageRoute(

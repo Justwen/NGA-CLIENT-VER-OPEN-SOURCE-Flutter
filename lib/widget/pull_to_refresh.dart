@@ -42,7 +42,6 @@ class PullToRefreshState extends State<PullToRefreshWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController ??= widget.scrollController ?? new ScrollController();
     return RefreshIndicator(
       onRefresh: () => _refresh(),
       displacement: DISPLACEMENT,
@@ -105,6 +104,7 @@ class PullToRefreshState extends State<PullToRefreshWidget> {
 
   @override
   void initState() {
+    _scrollController ??= widget.scrollController ?? new ScrollController();
     _updateScrollPosition = () {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
