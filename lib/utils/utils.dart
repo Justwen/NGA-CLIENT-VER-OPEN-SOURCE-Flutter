@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class ContextUtils {
 }
 
 class ToastUtils {
-  static void showToast(String msg,{BuildContext context}) {
+  static void showToast(String msg, {BuildContext context}) {
     if (context == null) {
       context = ContextUtils.buildContext;
     }
@@ -66,5 +67,11 @@ class WebViewUtils {
 
   static Future<String> getAllCookies(String url) async {
     return webviewPlugin.getAllCookies(url);
+  }
+
+  static void loadLocalUrl(String html) {
+    webviewPlugin.reloadUrl(new Uri.dataFromString(html,
+            mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
+        .toString());
   }
 }

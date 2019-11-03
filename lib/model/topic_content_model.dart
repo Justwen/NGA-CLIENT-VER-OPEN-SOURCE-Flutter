@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:nga_open_source/bloc/topic_content_bloc.dart';
 import 'package:nga_open_source/core/html_convert_factory.dart';
-import 'package:nga_open_source/main.dart';
 import 'package:nga_open_source/model/bean/entity_factory.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:nga_open_source/plugin/WebViewPlugin.dart';
@@ -14,11 +14,14 @@ import 'package:path_provider/path_provider.dart';
 import 'bean/topic_content_bean_entity.dart';
 
 class TopicContentModel {
+
+  TopicContentBloc bloc = new TopicContentBloc();
+
   Dio dio = new Dio();
 
   WebViewPlugin webViewPlugin = new WebViewPlugin();
 
-  void loadContent(int tid, int page, Function callback) async {
+  void loadContent(int tid, int page) async {
     //tid = 18335755;
     String url = _buildUrl();
     print(url + "&page=$page&tid=$tid");
@@ -68,7 +71,13 @@ class TopicContentModel {
       }
       entity.htmlContent =
           await HtmlConvertFactory.convert2Html(entity: entity);
-      callback(entity);
+
+      TopicContentWrapper wrapper = new TopicContentWrapper();
+      wrapper.current = entity;
+      wrapper.totalPage = entity.totalPage;
+
+      bloc.updateTopicContent(wrapper);
+
     } catch (e, s) {
       print(e);
       print(s);
@@ -106,6 +115,18 @@ class TopicContentModel {
     header["Cookie"] = AppRedux.userState.getCookie(); //UserModel.getInstance().getCookie();
     return header;
   }
+}
+
+class TopicContentWrapper {
+
+  TopicContentEntity current;
+
+  TopicContentEntity next;
+
+  int totalPage;
+
+  int currentPage;
+
 }
 
 class TopicContentEntity {
