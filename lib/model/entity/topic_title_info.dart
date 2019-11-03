@@ -41,8 +41,6 @@ class TopicTitleWrapper {
 
   int pageIndex = 0;
 
-  bool hasNextPage = true;
-
   String errorMsg;
 
   void add({

@@ -48,6 +48,8 @@ class TopicTitleModel {
 
   Dio dio = new Dio();
 
+  bool _hasNextPage;
+
   Future<Null> loadPage(Board board, int page, {bool reset = false}) async {
     String url = _buildUrl(board, page);
     print(url);
@@ -70,7 +72,8 @@ class TopicTitleModel {
           wrapper.add(info: topicEntity);
         });
         wrapper.pageIndex = page;
-        wrapper.hasNextPage = bean.result.iTRowsPage > page;
+        int totalPage = (bean.result.iRows / bean.result.iTRowsPage).round();
+        _hasNextPage = totalPage > page;
         bloc.addTopicTitles(wrapper, reset: reset);
       }
     } catch (e, s) {
@@ -168,7 +171,7 @@ class TopicTitleModel {
   }
 
   bool hasNextPage() {
-    return bloc.bean.hasNextPage;
+    return _hasNextPage;
   }
 
   Future<Null> loadNextPage(Board board) async {
