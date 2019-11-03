@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/common/component_index.dart';
@@ -31,6 +30,8 @@ class TopicContentState extends State<TopicContentWidget>
   TabBar tabBar;
 
   Widget webView;
+
+  int pageIndex = 1;
 
   Widget _buildProgressWidget() {
     return Scaffold(
@@ -93,9 +94,22 @@ class TopicContentState extends State<TopicContentWidget>
         });
   }
 
+  Widget _buildErrorWidget() {
+    return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          title: Text("主题详情"),
+        ),
+        backgroundColor: AppColors.BACKGROUND_COLOR,
+        body: GestureDetector(
+          onTap: () => _topicContentModel.loadContent(widget.tid, pageIndex),
+          child: Center(child: Text("加载失败,请点击重试")),
+        ));
+  }
+
   @override
   void initState() {
-    _topicContentModel.loadContent(widget.tid, 1);
+    _topicContentModel.loadContent(widget.tid, pageIndex);
     super.initState();
   }
 
@@ -108,7 +122,9 @@ class TopicContentState extends State<TopicContentWidget>
             AsyncSnapshot<TopicContentWrapper> snapshot) {
           return snapshot.data == null
               ? _buildProgressWidget()
-              : _buildContentWidget(snapshot.data);
+              : snapshot.data.errorMsg != null
+                  ? _buildErrorWidget()
+                  : _buildContentWidget(snapshot.data);
         });
   }
 
@@ -129,7 +145,8 @@ class TopicContentState extends State<TopicContentWidget>
     tabBar = TabBar(
         isScrollable: true,
         onTap: (index) {
-          _topicContentModel.loadContent(widget.tid, index + 1);
+          pageIndex = index + 1;
+          _topicContentModel.loadContent(widget.tid, pageIndex);
         },
         controller: tabController,
         tabs: tabs);

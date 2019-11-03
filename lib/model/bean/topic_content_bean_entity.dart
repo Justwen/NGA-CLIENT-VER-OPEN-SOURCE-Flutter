@@ -244,7 +244,7 @@ class TopicContentBeanDataUid {
 		medal = json['medal'].toString();
 		regdate = json['regdate'];
 		nickname = json['nickname'];
-		muteTime = json['mute_time'];
+		muteTime = json['mute_time'].toString();
 		credit = json['credit'];
 		username = json['username'].toString();
 		memberid = json['memberid'];

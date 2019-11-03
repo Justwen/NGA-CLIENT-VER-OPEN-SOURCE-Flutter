@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:nga_open_source/bloc/topic_content_bloc.dart';
 import 'package:nga_open_source/core/html_convert_factory.dart';
 import 'package:nga_open_source/model/bean/entity_factory.dart';
-import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:nga_open_source/plugin/WebViewPlugin.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:nga_open_source/utils/utils.dart';
@@ -14,7 +14,6 @@ import 'package:path_provider/path_provider.dart';
 import 'bean/topic_content_bean_entity.dart';
 
 class TopicContentModel {
-
   TopicContentBloc bloc = new TopicContentBloc();
 
   Dio dio = new Dio();
@@ -77,10 +76,14 @@ class TopicContentModel {
       wrapper.totalPage = entity.totalPage;
 
       bloc.updateTopicContent(wrapper);
-
     } catch (e, s) {
-      print(e);
-      print(s);
+      TopicContentWrapper wrapper = new TopicContentWrapper();
+      wrapper.errorMsg = e.message;
+      bloc.updateTopicContent(wrapper);
+      ToastUtils.showToast(wrapper.errorMsg);
+      if (!(s is DioError)) {
+        print(s);
+      }
     }
   }
 
@@ -112,13 +115,13 @@ class TopicContentModel {
 
   Map<String, String> _buildHeader() {
     Map<String, String> header = Map();
-    header["Cookie"] = AppRedux.userState.getCookie(); //UserModel.getInstance().getCookie();
+    header["Cookie"] =
+        AppRedux.userState.getCookie();
     return header;
   }
 }
 
 class TopicContentWrapper {
-
   TopicContentEntity current;
 
   TopicContentEntity next;
@@ -127,6 +130,7 @@ class TopicContentWrapper {
 
   int currentPage;
 
+  String errorMsg;
 }
 
 class TopicContentEntity {
@@ -154,7 +158,6 @@ class TopicRowEntity {
 }
 
 class TopicAuthorEntity {
-
   String userName;
 
   bool isAnonymous;
@@ -185,5 +188,4 @@ class TopicAuthorEntity {
   String toDescriptionString() {
     return "级别: $level 威望: $reputation 发帖: $postCount";
   }
-
 }
