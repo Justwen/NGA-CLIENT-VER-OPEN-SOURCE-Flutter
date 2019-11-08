@@ -433,7 +433,8 @@ class TopicContentBeanDataT {
 		tpid = json['tpid'];
 		subject = json['subject'];
 		quoteFrom = json['quote_from'];
-		author = json['author'];
+		print(json['author']);
+		author = json['author'].toString();
 		quoteTo = json['quote_to'].toString();
 		postdate = json['postdate'];
 		recommend = json['recommend'];
