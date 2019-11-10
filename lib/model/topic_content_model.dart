@@ -61,6 +61,8 @@ class TopicContentModel {
         rowEntity.isHidden =
             rowEntity.content == "" && dataBean.alterinfo == "";
 
+        _convertDeviceType(dataBean, rowEntity);
+
         entity.contentList.add(rowEntity);
       });
 
@@ -78,13 +80,25 @@ class TopicContentModel {
       bloc.updateTopicContent(wrapper);
     } catch (e, s) {
       TopicContentWrapper wrapper = new TopicContentWrapper();
-      wrapper.errorMsg = e.message;
+      wrapper.errorMsg = e.toString();
       bloc.updateTopicContent(wrapper);
       ToastUtils.showToast(wrapper.errorMsg);
       if (!(s is DioError)) {
+        print(e);
         print(s);
       }
     }
+  }
+
+  void _convertDeviceType(TopicContentBeanDataRR dataBean, TopicRowEntity entity) {
+    String fromClient = dataBean.fromClient;
+    if (fromClient == null) {
+      return;
+    }
+    int splitIndex = fromClient.indexOf(" ");
+    int clientAppCode = int.parse(fromClient.substring(0, splitIndex));
+    String clientInfo = fromClient.substring(splitIndex + 1);
+    entity.deviceType = [clientAppCode, clientInfo];
   }
 
   void printLog(String log) async {
@@ -148,7 +162,7 @@ class TopicRowEntity {
 
   String floor;
 
-  int deviceType;
+  List<dynamic> deviceType;
 
   String postDate;
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:nga_open_source/core/image_contants.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:sprintf/sprintf.dart';
@@ -62,7 +63,24 @@ class HtmlBuilder {
     return buffer;
   }
 
-  String _getDeviceTypeImage(int type) {
+  String _getDeviceTypeImage(List<dynamic> typeInfo) {
+    int type = typeInfo == null ? 0 : typeInfo[0];
+    switch (type) {
+      case 7:
+        return Base64ImageConstants.DEVICE_TYPE_IOS;
+        break;
+      case 8:
+        return Base64ImageConstants.DEVICE_TYPE_ANDROID;
+        break;
+      case 9:
+        return Base64ImageConstants.DEVICE_TYPE_WINDOWS_PHONE;
+      case 100:
+        break;
+      case 101:
+        break;
+      case 103:
+        break;
+    }
     return "";
   }
 
