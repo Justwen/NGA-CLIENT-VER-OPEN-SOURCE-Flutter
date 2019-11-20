@@ -104,6 +104,42 @@ class TopicContentBeanDataR {
 	}
 }
 
+class TopicContentBeanDataComment {
+	int fid;
+	int tid;
+	int pid;
+	int authorId;
+	String postDate;
+	String content;
+	String fromClient;
+	int lou;
+
+	TopicContentBeanDataComment.fromJson(Map<String, dynamic> json) {
+		fid = json['fid'];
+		fromClient = json['from_client'];
+		postDate = json['postdate'];
+		pid = json['pid'];
+		authorId = json['authorid'];
+		tid = json['tid'];
+		content = json['content'].toString();
+		lou = json['lou'];
+	}
+
+	Map<String, dynamic> toJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		data['fid'] = this.fid;
+		data['from_client'] = this.fromClient;
+		data['postdate'] = this.postDate;
+		data['pid'] = this.pid;
+		data['authorid'] = this.authorId;
+		data['tid'] = this.tid;
+		data['content'] = this.content;
+		data['lou'] = this.lou;
+		return data;
+	}
+
+}
+
 class TopicContentBeanDataRR {
 	int fid;
 	String fromClient;
@@ -121,6 +157,7 @@ class TopicContentBeanDataRR {
 	int lou;
 	String alterinfo;
 	int contentLength;
+	List<TopicContentBeanDataComment> comments;
 
 	TopicContentBeanDataRR({this.fid, this.fromClient, this.subject, this.score2, this.postdate, this.pid, this.recommend, this.postdatetimestamp, this.authorid, this.type, this.tid, this.content, this.score, this.lou, this.alterinfo, this.contentLength});
 
@@ -141,6 +178,19 @@ class TopicContentBeanDataRR {
 		lou = json['lou'];
 		alterinfo = json['alterinfo'];
 		contentLength = json['content_length'] == "" ? 0 : json['content_length'];
+
+		if (json["comment"] != null) {
+			comments = List();
+			int index = 0;
+			Map commentData = json["comment"];
+			while (comments.length < commentData.length) {
+				if (commentData['$index'] != null) {
+					comments.add(new TopicContentBeanDataComment.fromJson(commentData['$index']));
+				}
+				index ++;
+			}
+		}
+
 	}
 
 	Map<String, dynamic> toJson() {
