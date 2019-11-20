@@ -31,7 +31,7 @@ class TopicContentModel {
       Response response = await dio.get(url,
           options: options, queryParameters: _buildParam(tid, page));
 
-      String result = _correct(gbk.decode(response.data));
+      String result = await StringUtils.convertGBK(response.data);
 
       TopicContentBeanEntity bean =
           EntityFactory.generateOBJ<TopicContentBeanEntity>(jsonDecode(result));
@@ -128,12 +128,6 @@ class TopicContentModel {
     Directory tempDir = await getTemporaryDirectory();
     var file = File('${tempDir.path}/counter.txt');
     file.writeAsString(log);
-  }
-
-  String _correct(String data) {
-    // 处理全角空格
-    // 处理空字符
-    return data.replaceAll("	", " ").replaceAll(String.fromCharCode(0), " ");
   }
 
   String _buildUrl() {

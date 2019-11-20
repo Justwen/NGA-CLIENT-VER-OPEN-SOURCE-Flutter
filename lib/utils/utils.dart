@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:toast/toast.dart';
 
 class StringUtils {
@@ -38,6 +39,13 @@ class StringUtils {
           (bytes[i ~/ byteLength] << i % byteLength & 0x80) == 0 ? '0' : '1');
     }
     return builder.toString();
+  }
+
+  static Future<String> convertGBK(dynamic data) async {
+    return gbk
+        .decode(data)
+        .replaceAll("	", " ")
+        .replaceAll(String.fromCharCode(0), " ");
   }
 }
 
