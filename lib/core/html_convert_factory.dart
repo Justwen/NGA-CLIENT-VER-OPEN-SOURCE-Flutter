@@ -21,6 +21,7 @@ class HtmlConvertFactory {
       StringBuffer buffer = new StringBuffer();
 
       entity.contentList.forEach((contentEntity) {
+        buffer.write("<div class='floor'>");
         sHtmlBuilder.buildAuthor(buffer, contentEntity);
         if (!StringUtils.isEmpty(contentEntity.subject)) {
           sHtmlBuilder.buildSubject(buffer, contentEntity.subject);
@@ -29,6 +30,9 @@ class HtmlConvertFactory {
             buffer, sHtmlDecoder.decode(contentEntity.content),
             isHidden: contentEntity.isHidden);
         sHtmlBuilder.buildComment(buffer, contentEntity);
+        buffer.write("</br></br>");
+        buffer.write("</div>");
+        buffer.write("<hr/>");
       });
 
       html = sHtmlBuilder.complete(buffer.toString());

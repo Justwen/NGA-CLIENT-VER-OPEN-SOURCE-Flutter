@@ -68,8 +68,6 @@ class HtmlBuilder {
       buffer.write(sprintf(sHtmlCommentTemplate, [commentBuffer.toString()]));
     }
 
-    buffer.write("</br></br><hr>");
-
     return buffer;
   }
 
