@@ -28,6 +28,7 @@ class HtmlConvertFactory {
         sHtmlBuilder.buildBody(
             buffer, sHtmlDecoder.decode(contentEntity.content),
             isHidden: contentEntity.isHidden);
+        sHtmlBuilder.buildComment(buffer, contentEntity);
       });
 
       html = sHtmlBuilder.complete(buffer.toString());

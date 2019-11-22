@@ -6,10 +6,16 @@ import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:sprintf/sprintf.dart';
 
+import 'html_decoder.dart';
+
 class HtmlBuilder {
   static String sHtmlTemplate;
 
   static String sHtmlAuthorTemplate;
+
+  static String sHtmlCommentTemplate;
+
+  static HtmlDecoder sHtmlDecoder = new HtmlDecoder();
 
   static const String DEFAULT_AVATAR_URL =
       "https://img.nga.178.com/attachments/mon_201909/21/9bQ5-5i2kKyToS5b-5b.png.thumb_s.jpg";
@@ -37,17 +43,39 @@ class HtmlBuilder {
     } else if (body != null && body != "null") {
       buffer.write(body);
     }
+    return buffer;
+  }
 
-    if (body != null && body != "null") {
-      buffer.write("</br></br><hr>");
-    } else {
-      buffer.write("<hr>");
+  StringBuffer buildComment(StringBuffer buffer, TopicRowEntity entity) {
+    StringBuffer commentBuffer;
+    entity.commentList?.forEach((comment) {
+      commentBuffer ??= new StringBuffer();
+      String author = comment.authorEntity.userName;
+      String avatarUrl = comment.authorEntity.avatarUrl;
+      if (StringUtils.isEmpty(avatarUrl)) {
+        avatarUrl = DEFAULT_AVATAR_URL;
+      }
+      String content = comment.content;
+      int end = content.indexOf("[/b]");
+      String time = '(' + comment.postDate + ')';
+      content = content.substring(end + 4);
+      content = sHtmlDecoder.decode(content);
+      commentBuffer.write(
+          "<tr><td class='comment'><img class='comment_circle' src='$avatarUrl' /><span style='font-weight:bold'> $author $time</span>$content</td></tr>");
+    });
+
+    if (commentBuffer != null) {
+      buffer.write(sprintf(sHtmlCommentTemplate, [commentBuffer.toString()]));
     }
+
+    buffer.write("</br></br><hr>");
+
     return buffer;
   }
 
   StringBuffer buildAuthor(StringBuffer buffer, TopicRowEntity entity) {
-    String avatarUrl = StringUtils.isEmpty(entity.author.avatarUrl) || entity.author.isAnonymous
+    String avatarUrl = StringUtils.isEmpty(entity.author.avatarUrl) ||
+            entity.author.isAnonymous
         ? DEFAULT_AVATAR_URL
         : entity.author.avatarUrl;
     buffer.write(sprintf(sHtmlAuthorTemplate, [
@@ -87,10 +115,22 @@ class HtmlBuilder {
   Future init() async {
     if (sHtmlTemplate == null) {
       sHtmlTemplate =
-          await rootBundle.loadString('assets/template/html_template.html');
+      await rootBundle.loadString('assets/template/html_template.html');
       sHtmlAuthorTemplate = await rootBundle
           .loadString('assets/template/html_author_template.html');
+      sHtmlCommentTemplate = await rootBundle
+          .loadString('assets/template/html_comment_template.html');
     }
+
+    sHtmlCommentTemplate = "<br/><br/>评论<hr/><br/>  <table border='1' class='comment'>"
+//        "<style>"
+//        " table {border-collapse:collapse;word-break:break-all; border:1px solid #a1a1a1}"
+//        " td {padding:8px}"
+//        " img.circle { width:32px;height:32px;border-radius:32px;vertical-align:middle}"
+//        " </style>"
+        " %s"
+        "</table>";
+
 
 //    sHtmlAuthorTemplate =
 //    "<table width='100%%'>"
