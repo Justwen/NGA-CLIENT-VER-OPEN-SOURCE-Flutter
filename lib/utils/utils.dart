@@ -67,15 +67,10 @@ class ToastUtils {
 class WebViewUtils {
   static FlutterWebviewPlugin _webviewPlugin = new FlutterWebviewPlugin();
 
-  static StreamSubscription<WebViewStateChanged> _onStateChanged;
-
   static StreamSubscription<String> _onUrlChanged;
 
-  static StreamSubscription<Null> _onBack;
-
   static void startUrlIntercept() {
-    _onStateChanged ??=
-        _webviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
+    _webviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
       if (state.type == WebViewState.abortLoad) {
         canLaunch(state.url).then((value) {
           if (value) {
@@ -86,11 +81,6 @@ class WebViewUtils {
     });
   }
 
-  static void stopUrlIntercept() {
-    _onStateChanged?.cancel();
-    _onStateChanged = null;
-  }
-
   static void startUrlListener(Function(String) listener) {
     _onUrlChanged ??= _webviewPlugin.onUrlChanged.listen(listener);
   }
@@ -98,17 +88,6 @@ class WebViewUtils {
   static void stopUrlListener() {
     _onUrlChanged?.cancel();
     _onUrlChanged = null;
-  }
-
-  static void startBackListener() {
-    _onBack ??= _webviewPlugin.onBack.listen((data) {
-      Navigator.pop(ContextUtils.buildContext);
-    });
-  }
-
-  static void stopBackListener() {
-    _onBack?.cancel();
-    _onBack = null;
   }
 
   static void showWebView() {

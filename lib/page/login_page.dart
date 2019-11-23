@@ -20,7 +20,6 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WebViewUtils.stopUrlIntercept();
     WebViewUtils.startUrlListener((url) {
       this.url = url;
       _parseCookie(url);

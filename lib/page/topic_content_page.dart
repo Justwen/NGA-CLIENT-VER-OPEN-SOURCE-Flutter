@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import "package:flutter/material.dart";
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -7,6 +8,7 @@ import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/model/topic_post_model.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/utils/utils.dart';
+import 'package:nga_open_source/widget/web_view.dart';
 
 import 'post_page.dart';
 
@@ -80,7 +82,7 @@ class TopicContentState extends State<TopicContentWidget>
     if (webView != null) {
       WebViewUtils.loadLocalUrl(data.current.htmlContent);
     } else {
-      webView = WebviewScaffold(
+      webView = WebviewScaffoldEx(
         invalidUrlRegex: "",
         url: new Uri.dataFromString(data.current.htmlContent,
                 mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
@@ -110,10 +112,8 @@ class TopicContentState extends State<TopicContentWidget>
 
   @override
   void initState() {
-    WebViewUtils.startUrlIntercept();
-    WebViewUtils.startBackListener();
-    _topicContentModel.loadContent(widget.tid, pageIndex);
     super.initState();
+    _topicContentModel.loadContent(widget.tid, pageIndex);
   }
 
   @override
