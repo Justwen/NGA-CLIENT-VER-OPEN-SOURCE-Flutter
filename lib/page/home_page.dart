@@ -5,6 +5,7 @@ import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:nga_open_source/redux/app_state.dart';
 import 'package:nga_open_source/redux/board/board_state.dart';
 import 'package:nga_open_source/res/app_colors.dart';
+import 'package:nga_open_source/utils/utils.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../common/component_index.dart';
@@ -40,6 +41,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       vsync: this,
     );
     tabController.addListener(() {
+      WebViewUtils.hideWebView();
       currentTabIndex = tabController.index;
     });
     Widget tabBar = TabBar(

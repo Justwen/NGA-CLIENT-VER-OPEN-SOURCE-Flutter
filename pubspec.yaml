@@ -64,6 +64,10 @@ dependencies:
 
   toast: ^0.1.5
 
+  # 分享
+  share: ^0.6.3
+  url_launcher: ^5.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

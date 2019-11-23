@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StringUtils {
   static const String ANONYMOUS_PART_1 = "甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥";
@@ -63,22 +65,53 @@ class ToastUtils {
 }
 
 class WebViewUtils {
-  static FlutterWebviewPlugin webviewPlugin = new FlutterWebviewPlugin();
+  static FlutterWebviewPlugin _webviewPlugin = new FlutterWebviewPlugin();
+
+  static StreamSubscription<WebViewStateChanged> _onStateChanged;
+
+  static StreamSubscription<String> _onUrlChanged;
+
+  static void startUrlIntercept() {
+    _onStateChanged ??=
+        _webviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
+      if (state.type == WebViewState.abortLoad) {
+        canLaunch(state.url).then((value) {
+          if (value) {
+            launch(state.url);
+          }
+        });
+      }
+    });
+  }
+
+  static void stopUrlIntercept() {
+    _onStateChanged?.cancel();
+    _onStateChanged = null;
+  }
+
+  static void startUrlListener(Function(String) listener) {
+    _onUrlChanged ??= _webviewPlugin.onUrlChanged.listen(listener);
+  }
+
+  static void stopUrlListener() {
+    _onUrlChanged?.cancel();
+    _onUrlChanged = null;
+  }
 
   static void showWebView() {
-    webviewPlugin.show();
+    _webviewPlugin.show();
   }
 
   static void hideWebView() {
-    webviewPlugin.hide();
+    _webviewPlugin.hide();
   }
 
   static Future<String> getAllCookies(String url) async {
-    return webviewPlugin.getAllCookies(url);
+    return _webviewPlugin.getAllCookies(url);
   }
 
   static void loadLocalUrl(String html) {
-    webviewPlugin.reloadUrl(new Uri.dataFromString(html,
+    _webviewPlugin.reloadUrl(new Uri.dataFromString(html,
             mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
         .toString());
   }

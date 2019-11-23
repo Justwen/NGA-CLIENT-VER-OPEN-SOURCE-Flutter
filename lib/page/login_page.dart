@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:nga_open_source/main.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
 import 'package:nga_open_source/redux/user/user_action.dart';
+import 'package:nga_open_source/utils/utils.dart';
 
 import '../model/entity/user_info.dart';
-import '../plugin/WebViewPlugin.dart';
 
 class LoginWidget extends StatelessWidget {
   static const String LOGIN_WEB_PAGE_URL =
@@ -17,16 +16,14 @@ class LoginWidget extends StatelessWidget {
 
   static const String COOKIE_KEY_CID = "ngaPassportCid";
 
-  WebViewPlugin webViewPlugin = new WebViewPlugin();
-
   String url;
 
   @override
   Widget build(BuildContext context) {
-    FlutterWebviewPlugin flutterWebViewPlugin = new FlutterWebviewPlugin();
-    flutterWebViewPlugin.onUrlChanged.listen((url) {
+    WebViewUtils.stopUrlIntercept();
+    WebViewUtils.startUrlListener((url) {
       this.url = url;
-      _parseCookie(flutterWebViewPlugin, url);
+      _parseCookie(url);
     });
     return WillPopScope(
       child: WebviewScaffold(
@@ -43,13 +40,16 @@ class LoginWidget extends StatelessWidget {
           ),
         ), //设置初始化界面
       ),
-      onWillPop: () => _parseCookie(flutterWebViewPlugin, url),
+      onWillPop: () {
+        WebViewUtils.stopUrlListener();
+        return _parseCookie(url);
+
+      },
     );
   }
 
-  Future<bool> _parseCookie(
-      FlutterWebviewPlugin webviewPlugin, String url) async {
-    String cookiesString = await webviewPlugin.getAllCookies(url);
+  Future<bool> _parseCookie(String url) async {
+    String cookiesString = await WebViewUtils.getAllCookies(url);
     String uid;
     String uName;
     String cid;

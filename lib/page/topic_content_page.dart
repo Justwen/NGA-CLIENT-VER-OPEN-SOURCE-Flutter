@@ -81,6 +81,7 @@ class TopicContentState extends State<TopicContentWidget>
       WebViewUtils.loadLocalUrl(data.current.htmlContent);
     } else {
       webView = WebviewScaffold(
+        invalidUrlRegex: "",
         url: new Uri.dataFromString(data.current.htmlContent,
                 mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
             .toString(),
@@ -109,6 +110,7 @@ class TopicContentState extends State<TopicContentWidget>
 
   @override
   void initState() {
+    WebViewUtils.startUrlIntercept();
     _topicContentModel.loadContent(widget.tid, pageIndex);
     super.initState();
   }
