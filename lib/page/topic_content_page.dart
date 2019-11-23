@@ -111,6 +111,7 @@ class TopicContentState extends State<TopicContentWidget>
   @override
   void initState() {
     WebViewUtils.startUrlIntercept();
+    WebViewUtils.startBackListener();
     _topicContentModel.loadContent(widget.tid, pageIndex);
     super.initState();
   }

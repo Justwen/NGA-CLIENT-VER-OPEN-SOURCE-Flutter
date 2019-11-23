@@ -71,6 +71,8 @@ class WebViewUtils {
 
   static StreamSubscription<String> _onUrlChanged;
 
+  static StreamSubscription<Null> _onBack;
+
   static void startUrlIntercept() {
     _onStateChanged ??=
         _webviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
@@ -96,6 +98,17 @@ class WebViewUtils {
   static void stopUrlListener() {
     _onUrlChanged?.cancel();
     _onUrlChanged = null;
+  }
+
+  static void startBackListener() {
+    _onBack ??= _webviewPlugin.onBack.listen((data) {
+      Navigator.pop(ContextUtils.buildContext);
+    });
+  }
+
+  static void stopBackListener() {
+    _onBack?.cancel();
+    _onBack = null;
   }
 
   static void showWebView() {
