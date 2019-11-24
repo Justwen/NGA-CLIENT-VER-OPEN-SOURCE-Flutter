@@ -45,7 +45,7 @@ dependencies:
   flutter_webview_plugin:
     path: plugins/flutter_webview_plugin
 
-  webview_flutter: ^0.3.13
+  webview_flutter: ^0.3.15
 
   # 网络请求库
   dio: 2.1.13  #latest version

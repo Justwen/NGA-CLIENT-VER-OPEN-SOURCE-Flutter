@@ -8,7 +8,7 @@ import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/model/topic_post_model.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/utils/utils.dart';
-import 'package:nga_open_source/widget/web_view.dart';
+import 'package:nga_open_source/widget/webview_widget.dart';
 
 import 'post_page.dart';
 
@@ -31,7 +31,7 @@ class TopicContentState extends State<TopicContentWidget>
 
   TabBar tabBar;
 
-  Widget webView;
+  WebViewEx webView;
 
   int pageIndex = 1;
 
@@ -79,22 +79,15 @@ class TopicContentState extends State<TopicContentWidget>
   }
 
   Widget _buildWebView(TopicContentWrapper data) {
-    if (webView != null) {
-      WebViewUtils.loadLocalUrl(data.current.htmlContent);
-    } else {
-      webView = WebviewScaffoldEx(
-        invalidUrlRegex: "",
-        url: new Uri.dataFromString(data.current.htmlContent,
-                mimeType: 'text/html', encoding: Encoding.getByName("utf-8"))
-            .toString(),
-        withJavascript: true,
+    if (webView == null) {
+      webView = WebViewEx(
+        initialHtml: data.current.htmlContent,
+        useFlutterWebView: true,
       );
+    } else {
+      webView.loadUrl(html: data.current.htmlContent);
     }
-    return WillPopScope(
-        child: webView,
-        onWillPop: () {
-          return new Future.value(true);
-        });
+    return webView;
   }
 
   Widget _buildErrorWidget() {
