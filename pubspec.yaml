@@ -42,7 +42,9 @@ dependencies:
 
   # webview 插件
   # 增加了获取所有Cookie的方法，所以这里采用固定版本
-  flutter_webview_plugin: 0.3.7 #^0.3.1
+  flutter_webview_plugin:
+    path: plugins/flutter_webview_plugin
+
   webview_flutter: ^0.3.13
 
   # 网络请求库
