@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:nga_open_source/bloc/topic_content_bloc.dart';
 import 'package:nga_open_source/core/html_convert_factory.dart';
 import 'package:nga_open_source/model/bean/entity_factory.dart';

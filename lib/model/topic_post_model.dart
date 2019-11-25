@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:gbk2utf8/gbk2utf8.dart';
+import 'package:fast_gbk/fast_gbk.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
 
 class TopicPostModel {
