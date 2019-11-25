@@ -49,12 +49,9 @@ class HtmlBuilder {
   StringBuffer buildComment(StringBuffer buffer, TopicRowEntity entity) {
     StringBuffer commentBuffer;
     entity.commentList?.forEach((comment) {
-      commentBuffer ??= new StringBuffer();
+      commentBuffer ??= new StringBuffer("<br/><br/>评论<hr/><br/>\n<table border='1'  class='comment'>");
       String author = comment.authorEntity.userName;
-      String avatarUrl = comment.authorEntity.avatarUrl;
-      if (StringUtils.isEmpty(avatarUrl)) {
-        avatarUrl = DEFAULT_AVATAR_URL;
-      }
+      String avatarUrl = comment.authorEntity.avatarUrl ?? DEFAULT_AVATAR_URL;
       String content = comment.content;
       int end = content.indexOf("[/b]");
       String time = '(' + comment.postDate + ')';
@@ -65,9 +62,30 @@ class HtmlBuilder {
     });
 
     if (commentBuffer != null) {
-      buffer.write(sprintf(sHtmlCommentTemplate, [commentBuffer.toString()]));
+      commentBuffer.write("</table>");
+      buffer.write(commentBuffer.toString());
     }
 
+    return buffer;
+  }
+
+  StringBuffer buildAttachment(StringBuffer buffer, TopicRowEntity entity) {
+    StringBuffer attachBuffer;
+    entity.attachList?.forEach((attach) {
+      attachBuffer ??= new StringBuffer("<br/><br/>附件<hr/><br/>\n<table border='1'  class='attach'><tr><td>");
+      String url = attach.attachUrl;
+      if (url.endsWith("mp4")) {
+        attachBuffer.write("<video src='$url' controls='controls'></video>");
+      } else if (url.endsWith("mp3")) {
+        attachBuffer.write("<audio src='$url' controls='controls'></audio>");
+      } else {
+        attachBuffer.write("<img class='attach' src='$url' />");
+      }
+    });
+    if (attachBuffer != null) {
+      attachBuffer.write("</td></tr></table>");
+      buffer.write(attachBuffer.toString());
+    }
     return buffer;
   }
 
@@ -116,18 +134,7 @@ class HtmlBuilder {
       await rootBundle.loadString('assets/template/html_template.html');
       sHtmlAuthorTemplate = await rootBundle
           .loadString('assets/template/html_author_template.html');
-      sHtmlCommentTemplate = await rootBundle
-          .loadString('assets/template/html_comment_template.html');
     }
-
-    sHtmlCommentTemplate = "<br/><br/>评论<hr/><br/>  <table border='1' class='comment'>"
-//        "<style>"
-//        " table {border-collapse:collapse;word-break:break-all; border:1px solid #a1a1a1}"
-//        " td {padding:8px}"
-//        " img.circle { width:32px;height:32px;border-radius:32px;vertical-align:middle}"
-//        " </style>"
-        " %s"
-        "</table>";
 
 
 //    sHtmlAuthorTemplate =

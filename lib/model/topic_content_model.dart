@@ -54,6 +54,7 @@ class TopicContentModel {
 
         _convertDeviceType(dataBean, rowEntity);
         _convertComment(dataBean, entity, rowEntity);
+        _convertAttachment(dataBean, bean.data.tGlobal.sAttachBaseView, rowEntity);
 
         entity.contentList.add(rowEntity);
       });
@@ -124,6 +125,16 @@ class TopicContentModel {
     });
   }
 
+  void _convertAttachment(TopicContentBeanDataRR dataBean, String baseUrl, TopicRowEntity entity) {
+    dataBean.attachments?.forEach((bean) {
+      entity.attachList ??= new List();
+      AttachmentEntity attachmentEntity = new AttachmentEntity();
+      attachmentEntity.name = bean.name;
+      attachmentEntity.attachUrl = "http://$baseUrl/${bean.attachUrl}";
+      entity.attachList.add(attachmentEntity);
+    });
+  }
+
   void printLog(String log) async {
     Directory tempDir = await getTemporaryDirectory();
     var file = File('${tempDir.path}/counter.txt');
@@ -189,6 +200,8 @@ class TopicRowEntity {
   bool isHidden;
 
   List<CommentEntity> commentList;
+
+  List<AttachmentEntity> attachList;
 }
 
 class CommentEntity {
@@ -197,6 +210,14 @@ class CommentEntity {
   String postDate;
 
   TopicAuthorEntity authorEntity;
+}
+
+class AttachmentEntity {
+
+  String attachUrl;
+
+  String name;
+
 }
 
 class TopicAuthorEntity {

@@ -29,6 +29,7 @@ class HtmlConvertFactory {
         sHtmlBuilder.buildBody(
             buffer, sHtmlDecoder.decode(contentEntity.content),
             isHidden: contentEntity.isHidden);
+        sHtmlBuilder.buildAttachment(buffer, contentEntity);
         sHtmlBuilder.buildComment(buffer, contentEntity);
         buffer.write("</br></br>");
         buffer.write("</div>");
