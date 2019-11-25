@@ -82,7 +82,7 @@ class TopicContentState extends State<TopicContentWidget>
     if (webView == null) {
       webView = WebViewEx(
         initialHtml: data.current.htmlContent,
-        useFlutterWebView: true,
+       // useFlutterWebView: true,
       );
     } else {
       webView.loadUrl(html: data.current.htmlContent);
