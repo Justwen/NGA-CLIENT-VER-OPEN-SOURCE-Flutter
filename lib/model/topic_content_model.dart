@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:nga_open_source/bloc/topic_content_bloc.dart';
 import 'package:nga_open_source/core/html_convert_factory.dart';
 import 'package:nga_open_source/model/bean/entity_factory.dart';
@@ -18,6 +19,25 @@ class TopicContentModel {
   Dio dio = new Dio();
 
   WebViewPlugin webViewPlugin = new WebViewPlugin();
+
+  void addFavorite(int tid, BuildContext context) async {
+    String url = "https://bbs.nga.cn/nuke.php?__lib=topic_favor&__output=8&noprefix&__act=topic_favor&action=add&tid=$tid";
+    Options options = new Options();
+    options.headers = _buildHeader();
+    options.responseType = ResponseType.bytes;
+
+    Map<String, dynamic> param = Map();
+    param["__output"] = "8";
+    param["__lib"] = "topic_favor";
+    param["__act"] = "topic_favor";
+    param["action"] = "add";
+    param["tid"] = tid;
+
+    Response response = await dio.post(url, options: options,queryParameters: param);
+    String result = await StringUtils.convertGBK(response.data);
+    print(result);
+    ToastUtils.showToast(result);
+  }
 
   void loadContent(int tid, int page) async {
     //tid = 19353310;

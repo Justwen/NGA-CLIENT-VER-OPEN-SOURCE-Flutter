@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
 import "package:flutter/material.dart";
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/model/topic_post_model.dart';
 import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/utils/utils.dart';
+import 'package:nga_open_source/widget/action_menu_widget.dart';
 import 'package:nga_open_source/widget/webview_widget.dart';
 
 import 'post_page.dart';
@@ -51,38 +48,51 @@ class TopicContentState extends State<TopicContentWidget>
             automaticallyImplyLeading: true,
             title: Text("主题详情"),
             bottom: _buildTabBar(data),
-            actions: _buildActionWidget()),
+            actions: _buildActionMenu()),
         body: _buildWebView(data));
   }
 
-  List<Widget> _buildActionWidget() {
+  List<Widget> _buildActionMenu() {
     return <Widget>[
-      InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) => PostWidget(
-                          TopicPostParam.TOPIC_POST_ACTION_REPLY,
-                          tid: widget.tid,
-                        )));
-          },
-          child: Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: Center(
-                child: Text(
-                  "回帖",
-                  style: TextStyle(fontSize: 18),
-                ),
-              ))),
+      _buildReplyMenu(),
+      _buildPopupMenu(ContextUtils.buildContext),
     ];
+  }
+
+  Widget _buildReplyMenu() {
+    return ActionMenuIcon(
+      onClick: () {
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => PostWidget(
+                      TopicPostParam.TOPIC_POST_ACTION_REPLY,
+                      tid: widget.tid,
+                    )));
+      },
+      text: "回帖",
+    );
+  }
+
+  Widget _buildPopupMenu(BuildContext context) {
+    return PopupMenuButton(
+        onSelected: (String value) {
+          switch (value) {
+            case "menu_favor":
+              _topicContentModel.addFavorite(widget.tid, context);
+              break;
+          }
+        },
+        itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+              new PopupMenuItemEx.create("menu_favor", '收藏本帖'),
+            ]);
   }
 
   Widget _buildWebView(TopicContentWrapper data) {
     if (webView == null) {
       webView = WebViewEx(
         initialHtml: data.current.htmlContent,
-       // useFlutterWebView: true,
+        // useFlutterWebView: true,
       );
     } else {
       webView.loadUrl(html: data.current.htmlContent);
@@ -111,6 +121,7 @@ class TopicContentState extends State<TopicContentWidget>
 
   @override
   Widget build(BuildContext context) {
+    ContextUtils.buildContext = context;
     return StreamBuilder<TopicContentWrapper>(
         stream: _topicContentModel.bloc.data,
         initialData: null,

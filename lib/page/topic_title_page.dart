@@ -16,7 +16,7 @@ import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/empty_widget.dart';
 import 'package:nga_open_source/widget/floating_action_button.dart';
 import 'package:nga_open_source/widget/flutter_widget_ex.dart';
-import 'package:nga_open_source/widget/popup_menu.dart';
+import 'package:nga_open_source/widget/action_menu_widget.dart';
 import 'package:nga_open_source/widget/pull_to_refresh.dart';
 
 import '../model/entity/board_info.dart';
