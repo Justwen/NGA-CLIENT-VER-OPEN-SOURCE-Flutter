@@ -25,3 +25,16 @@
 </head>
 <body>%s</body>
 </html>
+
+<script>
+function showAttachment(index) {
+    document.getElementById('attach_btn_'+index).style.display='none';
+    document.getElementById('attach_' + index).style.display='';
+}
+
+function toggleCollapse(index) {
+    document.getElementById('attach_btn_'+index).style.display='none';
+    document.getElementById('attach_' + index).style.display='';
+}
+
+</script>

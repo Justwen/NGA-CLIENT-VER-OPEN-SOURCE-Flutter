@@ -49,7 +49,8 @@ class HtmlBuilder {
   StringBuffer buildComment(StringBuffer buffer, TopicRowEntity entity) {
     StringBuffer commentBuffer;
     entity.commentList?.forEach((comment) {
-      commentBuffer ??= new StringBuffer("<br/><br/>评论<hr/><br/>\n<table border='1'  class='comment'>");
+      commentBuffer ??= new StringBuffer(
+          "<br/><br/>评论<hr/><br/>\n<table border='1'  class='comment'>");
       String author = comment.authorEntity.userName;
       String avatarUrl = comment.authorEntity.avatarUrl ?? DEFAULT_AVATAR_URL;
       String content = comment.content;
@@ -71,19 +72,21 @@ class HtmlBuilder {
 
   StringBuffer buildAttachment(StringBuffer buffer, TopicRowEntity entity) {
     StringBuffer attachBuffer;
+    String index = entity.floor.substring(1, entity.floor.length - 2);
     entity.attachList?.forEach((attach) {
-      attachBuffer ??= new StringBuffer("<br/><br/>附件<hr/><br/>\n<table border='1'  class='attach'><tr><td>");
+      attachBuffer ??= new StringBuffer(
+          "<br/><br/>附件<hr/><br/>\n<table border='1'  class='attach'><tr><td><button  id='attach_btn_$index' type='button' onclick='showAttachment($index)'>点击显示附件</button><div id='attach_$index' style='display:none'>");
       String url = attach.attachUrl;
       if (url.endsWith("mp4")) {
         attachBuffer.write("<video src='$url' controls='controls'></video>");
       } else if (url.endsWith("mp3")) {
         attachBuffer.write("<audio src='$url' controls='controls'></audio>");
       } else {
-        attachBuffer.write("<img class='attach' src='$url' />");
+        attachBuffer.write("<a href='$url'><img class='attach' src='$url' />");
       }
     });
     if (attachBuffer != null) {
-      attachBuffer.write("</td></tr></table>");
+      attachBuffer.write("</div></td></tr></table>");
       buffer.write(attachBuffer.toString());
     }
     return buffer;
@@ -131,11 +134,10 @@ class HtmlBuilder {
   Future init() async {
     if (sHtmlTemplate == null) {
       sHtmlTemplate =
-      await rootBundle.loadString('assets/template/html_template.html');
+          await rootBundle.loadString('assets/template/html_template.html');
       sHtmlAuthorTemplate = await rootBundle
           .loadString('assets/template/html_author_template.html');
     }
-
 
 //    sHtmlAuthorTemplate =
 //    "<table width='100%%'>"
