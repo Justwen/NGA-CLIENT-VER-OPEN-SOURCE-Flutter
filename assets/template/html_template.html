@@ -26,7 +26,8 @@
 <body>%s</body>
 </html>
 
-<script>
+<script type="text/javascript">
+
 function showAttachment(index) {
     document.getElementById('attach_btn_'+index).style.display='none';
     document.getElementById('attach_' + index).style.display='';
@@ -35,6 +36,10 @@ function showAttachment(index) {
 function toggleCollapse(index) {
     document.getElementById('attach_btn_'+index).style.display='none';
     document.getElementById('attach_' + index).style.display='';
+}
+
+function showToast(msg) {
+    flutterShowToast.postMessage(msg);
 }
 
 </script>

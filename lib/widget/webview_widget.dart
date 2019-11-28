@@ -5,9 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart' as prefix1;
 import 'package:nga_open_source/bloc/webview_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter/webview_flutter.dart' as prefix0;
 
 class WebViewEx extends StatefulWidget {
   final String initialUrl;
@@ -18,9 +20,12 @@ class WebViewEx extends StatefulWidget {
 
   final WebViewBloc _webViewBloc = new WebViewBloc();
 
+  final Map<String, Function> jsMap;
+
   WebViewEx({
     this.initialUrl,
     this.initialHtml,
+    this.jsMap,
     this.useFlutterWebView = false,
   });
 
@@ -59,6 +64,18 @@ class _WebViewState extends State<WebViewEx> {
 
   WebView _webView;
 
+  Set<prefix0.JavascriptChannel> _getJavascriptMethods() {
+    Set<prefix0.JavascriptChannel> jsSet = Set();
+    widget.jsMap?.forEach((key, value) {
+      jsSet.add(prefix0.JavascriptChannel(
+          name: key,
+          onMessageReceived: (prefix0.JavascriptMessage msg) {
+            value(msg.message);
+          }));
+    });
+    return jsSet;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<String>(
@@ -78,6 +95,7 @@ class _WebViewState extends State<WebViewEx> {
                 });
                 return NavigationDecision.prevent;
               },
+              javascriptChannels: _getJavascriptMethods(),
               gestureRecognizers: [
                 Factory(() {
                   return _WebViewGestureRecognizer();
@@ -139,9 +157,11 @@ class _WebViewScaffoldState extends State<WebViewEx> {
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (_webviewScaffold == null) {
             _webviewScaffold = WebviewScaffold(
+              hidden: true,
               invalidUrlRegex: "",
               url: snapshot.data,
               withJavascript: true,
+              javascriptChannels: _getJavascriptMethods(),
             );
           } else {
             _webViewPlugin ??= new FlutterWebviewPlugin();
@@ -149,6 +169,18 @@ class _WebViewScaffoldState extends State<WebViewEx> {
           }
           return _webviewScaffold;
         });
+  }
+
+  Set<prefix1.JavascriptChannel> _getJavascriptMethods() {
+    Set<prefix1.JavascriptChannel> jsSet = Set();
+    widget.jsMap?.forEach((key, value) {
+      jsSet.add(prefix1.JavascriptChannel(
+          name: key,
+          onMessageReceived: (prefix1.JavascriptMessage msg) {
+            value(msg.message);
+          }));
+    });
+    return jsSet;
   }
 
   @override

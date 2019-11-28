@@ -32,6 +32,8 @@ class TopicContentState extends State<TopicContentWidget>
 
   int pageIndex = 1;
 
+  Map<String, Function> _jsMap = new Map();
+
   Widget _buildProgressWidget() {
     return Scaffold(
         appBar: AppBar(
@@ -92,7 +94,8 @@ class TopicContentState extends State<TopicContentWidget>
     if (webView == null) {
       webView = WebViewEx(
         initialHtml: data.current.htmlContent,
-        // useFlutterWebView: true,
+      //  useFlutterWebView: true,
+        jsMap: _jsMap,
       );
     } else {
       webView.loadUrl(html: data.current.htmlContent);
@@ -117,6 +120,9 @@ class TopicContentState extends State<TopicContentWidget>
   void initState() {
     super.initState();
     _topicContentModel.loadContent(widget.tid, pageIndex);
+    _jsMap.putIfAbsent("flutterShowToast", () {
+      return ToastUtils.showToast;
+    });
   }
 
   @override

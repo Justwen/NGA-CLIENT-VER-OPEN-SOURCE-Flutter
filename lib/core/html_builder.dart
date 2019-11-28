@@ -104,6 +104,7 @@ class HtmlBuilder {
           : entity.author.userName,
       entity.postDate,
       _getDeviceTypeImage(entity.deviceType),
+      entity.deviceType == null ? "" : entity.deviceType[1],
       entity.floor,
       entity.author.toDescriptionString(),
     ]));
