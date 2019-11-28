@@ -43,11 +43,11 @@ class ActionMenuIcon extends StatelessWidget {
 
   Widget _getActionText() {
     return Padding(
-        padding: EdgeInsets.only(right: 16),
+        padding: EdgeInsets.all(8),
         child: Center(
           child: Text(
             text,
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 16),
           ),
         ));
   }
