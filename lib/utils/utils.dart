@@ -46,7 +46,7 @@ class StringUtils {
 
   static Future<String> convertGBK(dynamic data) async {
     return gbk
-        .decode(data)
+        .decode(data, allowMalformed: true)
         .replaceAll("	", " ")
         .replaceAll(String.fromCharCode(0), " ");
   }
