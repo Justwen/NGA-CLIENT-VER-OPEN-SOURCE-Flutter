@@ -143,6 +143,10 @@
         document.getElementById('attach_' + index).style.display = '';
     }
 
+    function showToast(msg) {
+        flutterShowToast.postMessage(msg);
+    }
+
     function showOptionMenu(index) {
         document.getElementById('option_menu_' + index).style.display = '';
 
