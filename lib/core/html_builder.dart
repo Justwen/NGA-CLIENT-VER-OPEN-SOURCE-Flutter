@@ -113,6 +113,11 @@ class HtmlBuilder {
     return buffer;
   }
 
+  StringBuffer buildBottomBar(StringBuffer buffer, TopicRowEntity entity) {
+    buffer.write(sHtmlBottomTemplate);
+    return buffer;
+  }
+
   String _getDeviceTypeImage(List<dynamic> typeInfo) {
     int type = typeInfo == null ? 0 : typeInfo[0];
     switch (type) {
@@ -135,39 +140,11 @@ class HtmlBuilder {
   }
 
   Future init() async {
-    if (sHtmlTemplate == null) {
-      sHtmlTemplate =
-          await rootBundle.loadString('assets/template/html_template.html');
-      sHtmlAuthorTemplate = await rootBundle
-          .loadString('assets/template/html_author_template.html');
-    }
-
-//    sHtmlAuthorTemplate =
-//    "<table width='100%%'>"
-//        "<tr>"
-//        "  <td rowspan='2' width='48px   '><img style='float:left;width:48px;height:48px;border-radius:48px;' src='%s' /></td>"
-//        "  <td>"
-//        "  </td>"
-//        "<td style='font-size:16px'>%s</td>"
-//        " <td style='font-size:14px;color:#C4BEAE;text-align:right;'>%s</td>"
-//        " </tr>"
-//        "<tr>"
-//        "<td style='font-size:15px;color:#C4BEAE;'>%s</td>"
-//        "<td style='text-align:right;font-size:14px;color:#C4BEAE;'><img class=author_device src='%s'>%s</img></td>"
-//        "</tr>"
-//        "</table>";
-
-//    sHtmlAuthorTemplate = "<table width='100%%'>"
-//        "<tr>"
-//        "  <td  width='48px   '><img style='float:left;width:48px;height:48px;border-radius:48px;' src='%s' /></td>"
-//        "  <td style='padding-left:8px'>"
-//        "  <span style='font-size:16px'>%s</span>"
-//        "  <span style='font-size:15px;color:#C4BEAE;float:right'>%s</span>"
-//        "  <br>"
-//        "  <span style='font-size:15px;color:#C4BEAE;'>%s</span>"
-//        "  <span style='font-size:15px;color:#C4BEAE;float:right'><img class=author_device src='%s'/>%s</span>"
-//        "  </td>"
-//        "</tr>"
-//        "</table>";
+    sHtmlTemplate ??=
+        await rootBundle.loadString('assets/template/html_template.html');
+    sHtmlAuthorTemplate ??= await rootBundle
+        .loadString('assets/template/html_author_template.html');
+    sHtmlBottomTemplate ??= await rootBundle
+        .loadString('assets/template/html_template_bottom.html');
   }
 }
