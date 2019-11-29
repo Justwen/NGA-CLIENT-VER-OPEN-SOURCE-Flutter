@@ -1,45 +1,155 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <meta charset="utf-8">
-    <style>
-     div.title {font-weight:bold;}
-     div.quote {background-color:#E8E8E8;padding:10px;border:1px solid #888}
-     body {margin:1%% 0;font-size:%dpx;word-break:break-all;background-color:#FFF8E7}
-     img { max-width:100%% }
-     h5 { font-size:22px;color:#D00000}
-     div.floor { padding:0 2%%;}
+    <style type="text/css">
+        div.title {
+            font-weight: bold;
+        }
 
-     span.author_title {font-size:16px;}
-     span.author_sub {font-size:15px;color:#C4BEAE; }
-     img.author_avatar {float:left;width:40px;height:40px;border-radius:40px; }
-     img.author_device {width:12px;height:12px}
+        div.quote {
+            background-color: #E8E8E8;
+            padding: 10px;
+            border: 1px solid #888
+        }
 
-     table.comment {border-collapse:collapse;word-break:break-all; border:1px solid #a1a1a1}
-     td.comment {width:10%%;padding:8px}
-     img.comment_circle { width:32px;height:32px;border-radius:32px;vertical-align:middle;}
+        body {
+            margin: 1%% 0;
+            font-size: %dpx;
+            word-break: break-all;
+            background-color: #FFF8E7
+        }
 
-     table.attach { border:1px solid #b9986e;padding:10px;color:#6b2d25;font-size:10;}
-     img.attach {max-width:100%%}
+        img {
+            max-width: 100%%
+        }
+
+        h5 {
+            font-size: 22px;
+            color: #D00000
+        }
+
+        div.floor {
+            padding: 0 2%%;
+        }
+
+        span.author_title {
+            font-size: 16px;
+        }
+
+        span.author_sub {
+            font-size: 15px;
+            color: #C4BEAE;
+        }
+
+        img.author_avatar {
+            float: left;
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+        }
+
+        img.author_device {
+            width: 12px;
+            height: 12px
+        }
+
+        table.comment {
+            border-collapse: collapse;
+            word-break: break-all;
+            border: 1px solid #a1a1a1
+        }
+
+        td.comment {
+            width: 10%%;
+            padding: 8px
+        }
+
+        img.comment_circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 32px;
+            vertical-align: middle;
+        }
+
+        table.attach {
+            border: 1px solid #b9986e;
+            padding: 10px;
+            color: #6b2d25;
+            font-size: 10;
+        }
+
+        img.attach {
+            max-width: 100%%
+        }
+
+        div.option_menu {
+            position: absolute;
+            padding: 4px;
+            background-color: #000000;
+            opacity: 0.5;
+            float: right;
+            left: 80%%;
+            z-index: 1;
+        }
+
+        span.option_menu_text {
+            color: #b9986e;
+        }
+
+        img.option_menu_close {
+            width: 24px;
+            height: 24px;
+        }
+
+        img.bottom_menu_btn {
+            float: right;
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
+
 <body>%s</body>
+
 </html>
 
 <script type="text/javascript">
 
-function showAttachment(index) {
-    document.getElementById('attach_btn_'+index).style.display='none';
-    document.getElementById('attach_' + index).style.display='';
-}
+    initElementAttr();
 
-function toggleCollapse(index) {
-    document.getElementById('attach_btn_'+index).style.display='none';
-    document.getElementById('attach_' + index).style.display='';
-}
+    function initElementAttr() {
+        var bottomMenuBtns = document.getElementsByClassName("bottom_menu_btn");
+        var optionMenus = document.getElementsByClassName("option_menu");
+        var optionMenuCloseBtns = document.getElementsByClassName("option_menu_close");
+        for (i = 0; i < bottomMenuBtns.length; i++) {
+            var index = i;
+            bottomMenuBtns[index].id = "bottom_menu_btn_" + index;
+            bottomMenuBtns[index].index = index;
 
-function showToast(msg) {
-    flutterShowToast.postMessage(msg);
-}
+            optionMenus[index].id = "option_menu_" + index;
+            optionMenuCloseBtns[index].index = index;
+        }
+    }
+
+    function showAttachment(index) {
+        document.getElementById('attach_btn_' + index).style.display = 'none';
+        document.getElementById('attach_' + index).style.display = '';
+    }
+
+    function toggleCollapse(index) {
+        document.getElementById('attach_btn_' + index).style.display = 'none';
+        document.getElementById('attach_' + index).style.display = '';
+    }
+
+    function showOptionMenu(index) {
+        document.getElementById('option_menu_' + index).style.display = '';
+
+    }
+
+    function hideOptionMenu(index) {
+        document.getElementById('option_menu_' + index).style.display = 'none';
+    }
 
 </script>

@@ -15,6 +15,8 @@ class HtmlBuilder {
 
   static String sHtmlCommentTemplate;
 
+  static String sHtmlBottomTemplate;
+
   static HtmlDecoder sHtmlDecoder = new HtmlDecoder();
 
   static const String DEFAULT_AVATAR_URL =
