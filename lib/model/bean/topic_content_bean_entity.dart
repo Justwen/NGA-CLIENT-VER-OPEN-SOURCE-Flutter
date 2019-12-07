@@ -1,3 +1,5 @@
+import 'package:nga_open_source/utils/utils.dart';
+
 class TopicContentBeanEntity {
   String encode;
   TopicContentBeanData data;
@@ -570,7 +572,7 @@ class TopicContentBeanDataTPostMiscVar {
   TopicContentBeanDataTPostMiscVar.fromJson(Map<String, dynamic> json) {
     fid = json['fid'];
     fromClient = json['from_client'];
-    contentLength = json['content_length'];
+    contentLength = StringUtils.parseInt(json['content_length']);
   }
 
   Map<String, dynamic> toJson() {
