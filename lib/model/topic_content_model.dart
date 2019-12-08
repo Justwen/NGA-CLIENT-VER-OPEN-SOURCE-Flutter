@@ -65,6 +65,8 @@ class TopicContentModel {
         rowEntity.subject = dataBean.subject;
         rowEntity.postDate = dataBean.postdate;
         rowEntity.floor = "[${dataBean.lou}楼]";
+        rowEntity.pid = dataBean.pid.toString();
+        rowEntity.page = page;
 
         String uid = dataBean.authorid;
         rowEntity.author = entity.authorMap[uid];
@@ -217,6 +219,10 @@ class TopicRowEntity {
   String subject;
 
   bool isHidden;
+
+  String pid;
+
+  int page;
 
   List<CommentEntity> commentList;
 

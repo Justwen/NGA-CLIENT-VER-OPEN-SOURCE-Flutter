@@ -3,6 +3,7 @@ import 'package:nga_open_source/common/component_index.dart';
 import 'package:nga_open_source/model/topic_content_model.dart';
 import 'package:nga_open_source/model/topic_post_model.dart';
 import 'package:nga_open_source/res/app_colors.dart';
+import 'package:nga_open_source/model/BaseForumTask.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/action_menu_widget.dart';
 import 'package:nga_open_source/widget/webview_widget.dart';
@@ -64,13 +65,7 @@ class TopicContentState extends State<TopicContentWidget>
   Widget _buildReplyMenu() {
     return ActionMenuIcon(
       onClick: () {
-        Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => PostWidget(
-                      TopicPostParam.TOPIC_POST_ACTION_REPLY,
-                      tid: widget.tid,
-                    )));
+        reply(context, widget.tid);
       },
       text: "回帖",
     );
@@ -120,9 +115,13 @@ class TopicContentState extends State<TopicContentWidget>
   void initState() {
     super.initState();
     _topicContentModel.loadContent(widget.tid, pageIndex);
-    _jsMap.putIfAbsent("flutterShowToast", () {
-      return ToastUtils.showToast;
-    });
+
+    _jsMap["flutterShowToast"] = ToastUtils.showToast;
+    _jsMap["flutterReply"] = flutterReply;
+  }
+
+  void flutterReply(String index) {
+    reply(context, widget.tid, entity: _topicContentModel.bloc.bean.current.contentList[int.parse(index)]);
   }
 
   @override

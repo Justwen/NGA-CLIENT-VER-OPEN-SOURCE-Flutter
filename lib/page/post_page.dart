@@ -10,7 +10,9 @@ class PostWidget extends StatefulWidget {
 
   final int fid;
 
-  PostWidget(this.action, {this.tid, this.fid});
+  final String content;
+
+  PostWidget(this.action, {this.tid, this.fid, this.content});
 
   State<StatefulWidget> createState() {
     return new _PostState();
@@ -35,6 +37,8 @@ class _PostState extends State<PostWidget> {
     if (!_isActionNew()) {
       WebViewUtils.hideWebView();
     }
+
+    bodyController.text = widget.content;
     super.initState();
   }
 

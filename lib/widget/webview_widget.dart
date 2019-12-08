@@ -157,7 +157,6 @@ class _WebViewScaffoldState extends State<WebViewEx> {
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (_webviewScaffold == null) {
             _webviewScaffold = WebviewScaffold(
-              hidden: true,
               invalidUrlRegex: "",
               url: snapshot.data,
               withJavascript: true,

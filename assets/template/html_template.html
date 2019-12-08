@@ -90,23 +90,26 @@
             background-color: #000000;
             opacity: 0.5;
             float: right;
-            left: 80%%;
+            left: 70%%;
             z-index: 1;
         }
 
         span.option_menu_text {
             color: #b9986e;
+            font-size: 16px;
         }
 
         img.option_menu_close {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            vertical-align: middle;
+            height: 20px;
         }
 
-        img.bottom_menu_btn {
+        img.option_btn {
             float: right;
-            width: 24px;
-            height: 24px;
+            margin:0px 2px;
+            width: 20px;
+            height: 20px;
         }
     </style>
 </head>
@@ -120,16 +123,24 @@
     initElementAttr();
 
     function initElementAttr() {
-        var bottomMenuBtns = document.getElementsByClassName("bottom_menu_btn");
-        var optionMenus = document.getElementsByClassName("option_menu");
-        var optionMenuCloseBtns = document.getElementsByClassName("option_menu_close");
-        for (i = 0; i < bottomMenuBtns.length; i++) {
-            var index = i;
-            bottomMenuBtns[index].id = "bottom_menu_btn_" + index;
-            bottomMenuBtns[index].index = index;
+        var floors = document.getElementsByClassName("floor");
 
-            optionMenus[index].id = "option_menu_" + index;
-            optionMenuCloseBtns[index].index = index;
+        for (i = 0; i < floors.length; i++) {
+            console.log(i);
+            var index = i;
+            var floor = floors[i];
+            var optionBtns = floor.getElementsByClassName("option_btn");
+
+            for (j = 0; j < optionBtns.length; j++) {
+                optionBtns[j].index = index;
+            }
+            var optionMenuCloseBtn = floor.getElementsByClassName("option_menu_close");
+            optionMenuCloseBtn[0].index = index;
+
+            var optionMenu = floor.getElementsByClassName("option_menu");
+            optionMenu[0].index = index;
+            optionMenu[0].id = "option_menu_" + index;
+
         }
     }
 
@@ -154,6 +165,10 @@
 
     function hideOptionMenu(index) {
         document.getElementById('option_menu_' + index).style.display = 'none';
+    }
+
+    function reply(index) {
+        flutterReply.postMessage(index);
     }
 
 </script>
