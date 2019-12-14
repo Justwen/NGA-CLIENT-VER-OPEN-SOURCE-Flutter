@@ -226,13 +226,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_toast_pk:
-    dependency: "direct main"
-    description:
-      name: flutter_toast_pk
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   flutter_webview_plugin:
     dependency: "direct main"
     description:

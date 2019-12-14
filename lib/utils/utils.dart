@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:fast_gbk/fast_gbk.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_toast_pk/flutter_toast_pk.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -70,8 +69,7 @@ class ToastUtils {
     if (context == null) {
       context = ContextUtils.buildContext;
     }
-    //   Toast.show(msg, context);
-    FlutterToast.showToast(msg);
+    Toast.show(msg, context);
   }
 }
 

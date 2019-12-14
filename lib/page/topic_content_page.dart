@@ -89,7 +89,7 @@ class TopicContentState extends State<TopicContentWidget>
     if (webView == null) {
       webView = WebViewEx(
         initialHtml: data.current.htmlContent,
-      //  useFlutterWebView: true,
+        useFlutterWebView: true,
         jsMap: _jsMap,
       );
     } else {

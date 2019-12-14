@@ -65,8 +65,8 @@ dependencies:
   flutter_redux: ^0.5.3
   redux_thunk: ^0.2.1
 
+  # Toast
   toast: ^0.1.5
-  flutter_toast_pk: 0.0.1
 
   # 分享
   share: ^0.6.3
