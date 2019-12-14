@@ -12,6 +12,7 @@ import 'page/home_page.dart';
 import 'res/app_strings.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   _initialize();
   runApp(ReduxApp());
 }

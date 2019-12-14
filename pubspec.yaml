@@ -31,7 +31,7 @@ dependencies:
 
   build_runner: ^1.0.0
 
-  cached_network_image: ^1.1.1
+  cached_network_image: ^2.0.0-rc.1
 
   # 格式化字符串
   sprintf: ^4.0.2
@@ -45,7 +45,7 @@ dependencies:
   flutter_webview_plugin:
     path: plugins/webview_plugin
 
-  webview_flutter: ^0.3.16
+  webview_flutter: ^0.3.18
 
   # 网络请求库
   dio: 2.1.13  #latest version
