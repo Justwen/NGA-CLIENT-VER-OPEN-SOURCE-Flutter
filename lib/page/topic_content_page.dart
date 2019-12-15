@@ -8,7 +8,6 @@ import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/action_menu_widget.dart';
 import 'package:nga_open_source/widget/webview_widget.dart';
 
-import 'post_page.dart';
 
 class TopicContentWidget extends StatefulWidget {
   final int tid;
@@ -89,11 +88,10 @@ class TopicContentState extends State<TopicContentWidget>
     if (webView == null) {
       webView = WebViewEx(
         initialHtml: data.current.htmlContent,
-        useFlutterWebView: true,
         jsMap: _jsMap,
       );
     } else {
-      webView.loadUrl(html: data.current.htmlContent);
+      webView.loadHtml(data.current.htmlContent);
     }
     return webView;
   }
