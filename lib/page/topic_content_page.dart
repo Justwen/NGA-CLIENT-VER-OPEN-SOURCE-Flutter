@@ -6,22 +6,14 @@ import 'package:nga_open_source/res/app_colors.dart';
 import 'package:nga_open_source/model/BaseForumTask.dart';
 import 'package:nga_open_source/utils/utils.dart';
 import 'package:nga_open_source/widget/action_menu_widget.dart';
+import 'package:nga_open_source/widget/tab_widget.dart';
 import 'package:nga_open_source/widget/webview_widget.dart';
 
-
-class TopicContentWidget extends StatefulWidget {
+class TopicContentWidget extends StatelessWidget {
   final int tid;
 
-  TopicContentWidget(this.tid);
+  BuildContext context;
 
-  @override
-  State<StatefulWidget> createState() {
-    return new TopicContentState();
-  }
-}
-
-class TopicContentState extends State<TopicContentWidget>
-    with TickerProviderStateMixin {
   TopicContentModel _topicContentModel = new TopicContentModel();
 
   TabController tabController;
@@ -33,6 +25,8 @@ class TopicContentState extends State<TopicContentWidget>
   int pageIndex = 1;
 
   Map<String, Function> _jsMap = new Map();
+
+  TopicContentWidget(this.tid);
 
   Widget _buildProgressWidget() {
     return Scaffold(
@@ -56,15 +50,15 @@ class TopicContentState extends State<TopicContentWidget>
 
   List<Widget> _buildActionMenu() {
     return <Widget>[
-      _buildReplyMenu(),
+      _buildReplyMenu(ContextUtils.buildContext),
       _buildPopupMenu(ContextUtils.buildContext),
     ];
   }
 
-  Widget _buildReplyMenu() {
+  Widget _buildReplyMenu(BuildContext context) {
     return ActionMenuIcon(
       onClick: () {
-        reply(context, widget.tid);
+        reply(context, tid);
       },
       text: "回帖",
     );
@@ -75,7 +69,7 @@ class TopicContentState extends State<TopicContentWidget>
         onSelected: (String value) {
           switch (value) {
             case "menu_favor":
-              _topicContentModel.addFavorite(widget.tid, context);
+              _topicContentModel.addFavorite(tid, context);
               break;
           }
         },
@@ -104,27 +98,31 @@ class TopicContentState extends State<TopicContentWidget>
         ),
         backgroundColor: AppColors.BACKGROUND_COLOR,
         body: GestureDetector(
-          onTap: () => _topicContentModel.loadContent(widget.tid, pageIndex),
+          onTap: () => _topicContentModel.loadContent(tid, pageIndex),
           child: Center(child: Text("加载失败,请点击重试")),
         ));
   }
 
-  @override
   void initState() {
-    super.initState();
-    _topicContentModel.loadContent(widget.tid, pageIndex);
-
+    _topicContentModel.loadContent(tid, pageIndex);
     _jsMap["flutterShowToast"] = ToastUtils.showToast;
     _jsMap["flutterReply"] = flutterReply;
   }
 
   void flutterReply(String index) {
-    reply(context, widget.tid, entity: _topicContentModel.bloc.bean.current.contentList[int.parse(index)]);
+    reply(context, tid,
+        entity:
+            _topicContentModel.bloc.bean.current.contentList[int.parse(index)]);
   }
 
   @override
   Widget build(BuildContext context) {
     ContextUtils.buildContext = context;
+    if (this.context == null) {
+      this.context = context;
+      initState();
+    }
+    print("build!!!!");
     return StreamBuilder<TopicContentWrapper>(
         stream: _topicContentModel.bloc.data,
         initialData: null,
@@ -139,27 +137,20 @@ class TopicContentState extends State<TopicContentWidget>
   }
 
   Widget _buildTabBar(TopicContentWrapper data) {
-    if (tabBar != null) {
-      return tabBar;
-    }
-    tabController = new TabController(length: data.totalPage, vsync: this);
-    var tabs = new List<Container>();
-    for (int i = 0; i < data.totalPage; i++) {
-      tabs.add(new Container(
-        height: 36.0,
-        width: 36,
-        alignment: Alignment.center,
-        child: Text((i + 1).toString()),
-      ));
-    }
-    tabBar = TabBar(
-        isScrollable: true,
-        onTap: (index) {
-          pageIndex = index + 1;
-          _topicContentModel.loadContent(widget.tid, pageIndex);
-        },
-        controller: tabController,
-        tabs: tabs);
-    return tabBar;
+    return TabWidget(
+      isScrollable: true,
+      onTap: (index) {
+        pageIndex = index + 1;
+        _topicContentModel.loadContent(tid, pageIndex);
+      },
+      tabCount: data.totalPage,
+      tabBuilder: (context, i) {
+        return new Container(
+            height: 36.0,
+            width: 36,
+            alignment: Alignment.center,
+            child: Text((i + 1).toString()));
+      },
+    );
   }
 }
