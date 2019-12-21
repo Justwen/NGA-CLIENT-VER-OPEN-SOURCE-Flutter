@@ -13,12 +13,18 @@ class TabWidget extends StatefulWidget implements PreferredSizeWidget {
 
   final double indicatorWeight;
 
+  final int initialIndex;
+
+  final Function(TabController) onTabBuild;
+
   TabWidget(
       {this.isScrollable = true,
       this.onTap,
       this.tabCount,
       this.tabBuilder,
       this.tabHeight = 46,
+      this.initialIndex = 0,
+      this.onTabBuild,
       this.indicatorWeight = 2.0});
 
   @override
@@ -48,7 +54,9 @@ class _TabState extends State<TabWidget> with TickerProviderStateMixin {
       tabs ??= new List();
       tabs.add(tabBuilder(context, i));
     }
-    _tabController = new TabController(length: tabCount, vsync: this);
+    _tabController = new TabController(
+        initialIndex: widget.initialIndex, length: tabCount, vsync: this);
+    widget.onTabBuild?.call(_tabController);
     return TabBar(
         isScrollable: isScrollable,
         onTap: onTap,

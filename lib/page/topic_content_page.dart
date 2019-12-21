@@ -16,10 +16,6 @@ class TopicContentWidget extends StatelessWidget {
 
   TopicContentModel _topicContentModel = new TopicContentModel();
 
-  TabController tabController;
-
-  TabBar tabBar;
-
   WebViewEx webView;
 
   int pageIndex = 1;
@@ -122,7 +118,6 @@ class TopicContentWidget extends StatelessWidget {
       this.context = context;
       initState();
     }
-    print("build!!!!");
     return StreamBuilder<TopicContentWrapper>(
         stream: _topicContentModel.bloc.data,
         initialData: null,
@@ -143,6 +138,7 @@ class TopicContentWidget extends StatelessWidget {
         pageIndex = index + 1;
         _topicContentModel.loadContent(tid, pageIndex);
       },
+      initialIndex: pageIndex - 1,
       tabCount: data.totalPage,
       tabBuilder: (context, i) {
         return new Container(
