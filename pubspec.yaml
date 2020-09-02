@@ -45,10 +45,13 @@ dependencies:
   flutter_webview_plugin:
     path: plugins/webview_plugin
 
+  webview_flutter_plus: ^0.1.1
+  webview_cookie_manager: ^1.0.3
+
   webview_flutter: ^0.3.18
 
   # 网络请求库
-  dio: 2.1.13  #latest version
+  dio: ^3.0.10
 
   # GBK解析库
   # gbk2utf8: ^1.0.1

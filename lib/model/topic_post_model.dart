@@ -16,7 +16,7 @@ class TopicPostModel {
     options.headers = _buildHeader(postEntity);
     options.followRedirects = false;
     options.responseType = ResponseType.bytes;
-    options.contentType = ContentType("application", "x-www-form-urlencode");
+    options.contentType = "application/x-www-form-urlencoded";
 
     String path = "$url${postEntity.toUrlString()}";
     dio.interceptors
