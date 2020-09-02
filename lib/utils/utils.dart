@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fast_gbk/fast_gbk.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class StringUtils {
   static const String ANONYMOUS_PART_1 = "甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥";
@@ -107,8 +109,9 @@ class WebViewUtils {
     _webviewPlugin.hide();
   }
 
-  static Future<String> getAllCookies(String url) async {
-    return _webviewPlugin.getAllCookies(url);
+  static Future<List<Cookie>> getAllCookies(String url) async {
+    final cookieManager = WebviewCookieManager();
+    return cookieManager.getCookies(url);
   }
 
   static void loadLocalUrl(String html) {

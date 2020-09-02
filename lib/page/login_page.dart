@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:nga_open_source/redux/app_redux.dart';
@@ -48,18 +50,17 @@ class LoginWidget extends StatelessWidget {
   }
 
   Future<bool> _parseCookie(String url) async {
-    String cookiesString = await WebViewUtils.getAllCookies(url);
+    List<Cookie> cookies = await WebViewUtils.getAllCookies(url);
     String uid;
     String uName;
     String cid;
-    cookiesString?.split(';')?.forEach((String cookie) {
-      final split = cookie.split('=');
-      if (split[0].trim() == COOKIE_KEY_UID) {
-        uid = split[1].trim();
-      } else if (split[0].trim() == COOKIE_KEY_UNAME) {
-        uName = split[1].trim();
-      } else if (split[0].trim() == COOKIE_KEY_CID) {
-        cid = split[1].trim();
+    cookies.forEach((Cookie cookie) {
+      if (cookie.name == COOKIE_KEY_UID) {
+        uid = cookie.value;
+      } else if (cookie.name == COOKIE_KEY_UNAME) {
+        uName = cookie.value;
+      } else if (cookie.name == COOKIE_KEY_CID) {
+        cid = cookie.value;
       }
     });
     print("uid=$uid, uName=$uName, cid=$cid");
