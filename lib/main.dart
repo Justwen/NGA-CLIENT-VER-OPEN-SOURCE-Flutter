@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,6 +9,7 @@ import 'package:nga_open_source/redux/app_state.dart';
 import 'package:nga_open_source/redux/board/board_action.dart';
 import 'package:nga_open_source/redux/user/user_action.dart';
 import 'package:nga_open_source/utils/utils.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'page/home_page.dart';
 import 'res/app_strings.dart';
@@ -21,6 +24,10 @@ void _initialize() {
   setLocalizedSimpleValues(AppStrings.localizedSimpleValues);
   AppRedux.dispatch(UserInitAction());
   AppRedux.dispatch(BoardInitAction());
+  if (Platform.isAndroid) {
+    WebView.platform = SurfaceAndroidWebView();
+  }
+
 }
 
 class ReduxApp extends StatelessWidget {
