@@ -3,6 +3,7 @@
           package="com.flutter_webview_plugin">
 
     <application>
+        <meta-data android:name="flutterEmbedding" android:value="2"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

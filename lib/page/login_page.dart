@@ -10,7 +10,7 @@ import '../model/entity/user_info.dart';
 
 class LoginWidget extends StatelessWidget {
   static const String LOGIN_WEB_PAGE_URL =
-      "https://bbs.nga.cn/nuke.php?__lib=login&__act=account&login";
+      "https://ngabbs.com/nuke.php?__lib=login&__act=account&login";
 
   static const String COOKIE_KEY_UID = "ngaPassportUid";
 

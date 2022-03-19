@@ -31,13 +31,15 @@ class ReduxApp extends StatelessWidget {
       store: AppRedux.store,
       child: MaterialApp(
         theme: ThemeData(primarySwatch: Colors.green),
-        locale: Locale('zh'),
+        locale: Locale('zh',""),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           CustomLocalizations.delegate,
         ],
-        supportedLocales: CustomLocalizations.supportedLocales,
+        // supportedLocales: [
+        //   Locale('zh', ''), // English, no country code
+        // ],
         home: HomePage(),
       ),
     );
