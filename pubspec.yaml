@@ -27,7 +27,7 @@ dependencies:
 
   flukit: ^1.0.0
 
-  json_annotation: ^2.0.0
+  json_annotation: ">=2.0.0 <4.0.0"
 
   build_runner: ^1.0.0
 
@@ -51,7 +51,7 @@ dependencies:
   webview_flutter: ^1.0.7
 
   # 网络请求库
-  dio: ^3.0.10
+  dio: ">=3.0.10 <6.0.0"
 
   # GBK解析库
   # gbk2utf8: ^1.0.1
@@ -82,7 +82,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  json_serializable: ^2.0.0
+  json_serializable: ">=2.0.0 <4.0.0"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
